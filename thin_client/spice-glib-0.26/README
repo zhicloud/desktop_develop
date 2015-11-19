@@ -1,0 +1,175 @@
+介绍：
+    创建时间：2014-12-8
+    创建人：李陈祥
+    此版本是基于SPICE-GTK-0.26修改而来，主要裁剪掉gtk部分,另外添加了WIN32的支持与QT外部接口部分
+
+
+
+目录说明：
+    data：主要存放nsis脚本文件，此文件用于生成安装程序
+    glib：spice主体框架设计,里面包括 channel 主流程的控制代码
+    logger：主要生成日志输出
+    packet：生成的可执行库，头文件和库文件
+    spice-common：标准spice通讯协议解包封包
+    win32：win32支持的接口目录
+    examples：实例程序
+
+
+
+编译说明：
+   在更目录下执行一下命令可以对此安装包执行不同操作
+   1）编译之前需要导入env.sh,这个文件里面的值需要根据不同的环境进行配置(. ./env.sh)
+   2）make help ：查看makefile帮助
+   3）make ：顺序编译全部模块
+   4）make clean ： 清楚所有编译结果
+   5）make install ：安装文件，文件会自动安装到packet目录
+   6）make strip ：对安装的文件进行strip操作
+   7）make installerpacket ：生成安装包程序并且把它放到packet目录的installer目录下
+
+WIN32中生成LIB方法
+   1）在编译动态库时会生成def文件
+   2）使用VC自带的lib.exe工具进行生成.lib文件，命令：lib /machine:i386 /def:name.def
+   3）此处需注意有些文档中说明需要对.def文件进行 sed 's/ @ [0-9]*//g' name.def 操作，但实际测试中
+      不做此操作一样可以连接成功 
+
+WIN32中日志打印方法
+   #pragma comment( linker, "/subsystem:\"console\" /entry:\"WinMainCRTStartup\"")
+
+
+内容版本更新
+   **************************************************************
+   时间：2015-05-13
+   更新人：李陈祥
+   更新内容：
+            1）添加usb对外接口
+               SpiceSetUSBDisconnect
+               SpiceUSBRedirect
+               SpiceSetUSBRedirOnConnectFilter
+               SpiceSetUSBFilter
+               SpiceEnableAutoUSBRedirect   
+
+   **************************************************************
+
+   **************************************************************
+   时间：2015-05-12
+   更新人：李陈祥
+   更新内容：
+            1）添加USB回调处理
+               SPICE_USBConnectFaild
+               SPICE_USBRemove
+               SPICE_USBDeviceErr
+               SPICE_USBAddDev
+                  
+            2）开启USB重定向功能代码。
+
+   **************************************************************
+
+   **************************************************************
+   时间：2014-12-24
+   更新人：李陈祥
+   更新内容：
+            1）在连接时把连接操作attch到main_loop中进行，这样可以不sleep(2)，并且修改掉建立连接时g_object_new段错误。
+            2）修改纤程，在没有切换对象的时候主动切换到主纤程，这个代码暂时没有打开。
+
+   **************************************************************
+
+   **************************************************************
+   时间：2014-12-24
+   更新人：李陈祥
+   更新内容：
+            1）添加光标处理事件
+
+   **************************************************************
+
+   **************************************************************
+   时间：2014-12-22
+   更新人：李陈祥
+   更新内容：
+            1）去掉sipce_without_gtk.exe
+            2）修改图像格式abgr32 ----> rgb32
+
+   **************************************************************
+
+
+   **************************************************************
+   时间：2014-12-19
+   更新人：李陈祥
+   更新内容：
+            1）增加vncdisplaykeymap_win322xtkbd.c按键编码
+            2）修改鼠标映射
+
+   **************************************************************
+
+   **************************************************************
+   时间：2014-12-14
+   更新人：李陈祥
+   更新内容：
+            1）完成如下接口：
+               SpiceRequestResolution
+               SpiceKeyEvent
+               SpiceButtonEvent
+            2) 完成图像回调，主channel回调，设置分辨率回调
+            3）增加examples目录
+
+   **************************************************************
+
+
+
+   **************************************************************
+   时间：2014-12-10
+   更新人：李陈祥
+   更新内容：
+            1）完成如下接口：
+               SpiceInit
+               SpiceUninit
+               SpiceOpenMain
+               SpiceCloseMain
+               SpiceRunMainLoop
+               SpiceStopMainLoop
+               SpiceOpen
+               SpiceSetCalls
+               SpiceClose
+               SpiceConnect
+               SpiceStartSessionFromVvFile
+               SpiceDisconnect
+               SpiceCreateOvirtSession
+               SpiceFetchVmNames
+               SpiceRequestResolution
+            2) 增加env.sh配置文件
+
+   **************************************************************
+
+   **************************************************************
+   时间：2014-12-08
+   更新人：李陈祥
+   更新内容：
+            创建初始版本，此版本中已经初步提交对外接口定义,接口
+            头文件 win32_spice_interface.h 和win32_spice_interface_types.h
+            win32_spice_interface.h：主要函数接口定义
+            win32_spice_interface_types.h：主要数据结构定义
+            注意：具体函数定义内容请查看其文件，里面会对函数，结构做具体的解释
+                  生成文件如下：
+                               spice_without_gtk.exe 可执行测试程序
+                               win32_spice_interface.h ：对外接口文件
+                               win32_spice_interface_types.h ：对外数据类型定义文件
+                               spice_without_gtk-0.26.exe ：安装程序
+                               libspice-common-client.dll ：spice通用协议解析库
+                               libspice_without_gtk.dll ：spice 框架库
+                               libspice_glib.dll ：对外接口库，外部程序应该在程序中连接此库
+                               *.def ：def导出文件
+                               *.dll.a ：linux中使用的到连接文件,对于windows不应该使用
+   **************************************************************
+
+
+   **************************************************************
+   时间：2015-03-24
+   更新人：毛孝楷
+   更新内容：
+			增添linux环境编译成库的版本，
+			make目录下保留有windows环境的makefile和config.h 、
+										linux环境的makefile和config.h 。
+										因为环境不同需要的文件不同，所以有两个版本。
+			注意：在编译windows之前需要先运行source env.sh，配置环境，让makefile区分工作。
+					在瘦客机上编译先安装celt-0.7.1， sudo apt-get install libgstreamer-plugins-base0.10-dev，\
+					使用linux编译的spice-glib库的时候，需要在pro文件中添加 DEFINES += LINUX
+	**************************************************************

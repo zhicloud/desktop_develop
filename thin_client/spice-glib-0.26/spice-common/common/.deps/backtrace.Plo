@@ -1,0 +1,142 @@
+backtrace.lo: backtrace.c ../config.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/unistd.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/io.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/crtdefs.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_mac.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_secapi.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/vadefs.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_directx.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_ddk.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/string.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/string_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_off_t.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/io_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/process.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sys/types.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/getopt.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/pthread_unistd.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stdlib.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/limits.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/syslimits.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/limits.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdlib_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/malloc.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stdio.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_print_push.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/swprintf.inl \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdio_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_print_pop.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/errno.h spice_common.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stdint.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stdint.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stddef.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stddef.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/time.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_timeval.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/time_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sys/timeb.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/sys/timeb_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/pthread_time.h \
+ ../spice-protocol/spice/macros.h ../spice-protocol/spice/types.h \
+ backtrace.h log.h /usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stdarg.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stdarg.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_stdarg.h macros.h
+
+../config.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/unistd.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/io.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/crtdefs.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_mac.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_secapi.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/vadefs.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_directx.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_ddk.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/string.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/string_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_off_t.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/io_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/process.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sys/types.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/getopt.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/pthread_unistd.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stdlib.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/limits.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/syslimits.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/limits.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdlib_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/malloc.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stdio.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_print_push.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/swprintf.inl:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdio_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_print_pop.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/errno.h:
+
+spice_common.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stdint.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stdint.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stddef.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stddef.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/time.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_timeval.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/time_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sys/timeb.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/sys/timeb_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/pthread_time.h:
+
+../spice-protocol/spice/macros.h:
+
+../spice-protocol/spice/types.h:
+
+backtrace.h:
+
+log.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stdarg.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stdarg.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_stdarg.h:
+
+macros.h:

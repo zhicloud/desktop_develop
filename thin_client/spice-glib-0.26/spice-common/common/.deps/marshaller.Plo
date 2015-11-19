@@ -1,0 +1,73 @@
+marshaller.lo: marshaller.c ../config.h marshaller.h \
+ ../spice-protocol/spice/macros.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stddef.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stddef.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/crtdefs.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_mac.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_secapi.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/vadefs.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_directx.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_ddk.h \
+ ../spice-protocol/spice/types.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stdint.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stdint.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/limits.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/syslimits.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/limits.h mem.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stdlib.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdlib_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/malloc.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/string.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/string_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/assert.h
+
+../config.h:
+
+marshaller.h:
+
+../spice-protocol/spice/macros.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stddef.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stddef.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/crtdefs.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_mac.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_secapi.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/vadefs.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_directx.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_ddk.h:
+
+../spice-protocol/spice/types.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stdint.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stdint.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/limits.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/syslimits.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/limits.h:
+
+mem.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stdlib.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdlib_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/malloc.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/string.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/string_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/assert.h:

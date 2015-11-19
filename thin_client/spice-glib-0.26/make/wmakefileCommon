@@ -1,0 +1,75 @@
+
+
+
+
+#vpath %.h ./glib  ./spice-common ./win32/ ./spice-common/common
+#vpath %.c ./glib ./spice-common/common ./win32/ ./spice-common/ 
+#vpath %.o ./glib ./spice-common/common ./win32/
+
+#APPS=libspice-common-client.a
+APPS=libspice-common-client.dll
+
+OBJS=generated_server_marshallers.o   mem.o backtrace.o generated_server_demarshallers.o \
+	  lz.o  log.o snd_codec.o rop3.o pixman_utils.o lines.o glc.o  \
+	  generated_client_marshallers.o generated_client_demarshallers1.o quic.o \
+	  ssl_verify.o canvas_utils.o  generated_client_demarshallers.o region.o marshaller.o generated_client_marshallers1.o 
+#OBJS=$(patsubst %.c,%.o,$(wildcard *.c))
+#OBJS+=$(patsubst ./glib/%.c,./glib/%.o,$(wildcard ./glib/*.c))
+#OBJS+=$(patsubst ./spice-common/common/%.c,./spice-common/common/%.o,$(wildcard ./spice-common/common/*.c))
+#OBJS+=$(patsubst ./glib/%.c,./win32/%.o,$(wildcard ./win32/*.c))
+
+CFLAGS = -std=gnu99
+
+ifeq ($(SPICE_DEBUG), y)
+	CFLAGS += -g -DSPICE_LOG_INFO 
+else
+	CFLAGS += -O2
+endif
+
+
+DEFINE_FLAG= -UHAVE_SYS_SHM_H -DHAVE_CONFIG -D_REENTRANT -DWITH_GSTAUDIO -DWIN32 -DHAVE_CONFIG_H -DBUILD_DLL 
+#-DG_OS_WIN32 -DSW_CANVAS_CACHE
+
+INC_PATH= -I../ \
+			 -I../spice-protocol/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/gstreamer-0.10/gst/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/gstreamer-0.10/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/libxml2/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/pixman-1/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/glib-2.0 \
+			 -I$(INCLUDE_PATH_PREFIX)/lib/glib-2.0/include/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/gio-win32-2.0/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/libusb-1.0/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/opus/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/GL 
+
+LIB_PATH=-L$(LIB_PATH_PREFIX)/lib
+
+
+LIBS= -lglib-2.0 -lintl -lgio-2.0 -lgmodule-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lintl -lgobject-2.0 -lglib-2.0 -lintl \
+		-lpixman-1 -lssl -lcrypto -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lxml2 -lopus -lcelt051 -lm \
+		-lGLESv2 -lpixman-1 -lws2_32 -lgdi32 -ljpeg -lopengl32 -lglu32 
+
+
+#LIBS=  -lpixman-1 -lssl -lcrypto   -lintl -lxml2 -lopus -lcelt051 -lm \
+		-lGLESv2 -lpixman-1 -lws2_32 -lgdi32 -ljpeg -lopengl32 -lglu32 
+
+CC=$(CROSS_PREFIX)-gcc
+AR=$(CROSS_PREFIX)-ar
+
+.PHONY:clean all
+
+
+all:$(APPS)
+
+
+$(APPS):$(OBJS)	
+	$(CC) -o $@  -shared $(CFLAGS)  $(INCLUDES)  $(LIB_PATH) $(INC_PATH) $(DEFINE_FLAG) $^ $(LIBS) -Wl,--output-def,libspice-common-client.def,--out-implib,libspice-common-client.dll.a  
+	#/bin/sh ../libtool --silent --tag=CC   --mode=link i686-w64-mingw32-gcc -std=gnu99  -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4   -o libspice-common-client.a $(OBJS)   
+
+%.o:%.c	
+	$(CC) -c $< $(CFLAGS)   $(INCLUDES) $(LIBS) $(LIB_PATH) $(INC_PATH) $(DEFINE_FLAG)
+
+
+clean:	
+	$(RM) $(OBJS)  $(APPS) *.bak *.o libspice-common-client.def libspice-common-client.dll.a

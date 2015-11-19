@@ -1,0 +1,26 @@
+---- socket Matches (25 in 10 files) ----
+Channel-main.c (glib):     * use spice_channel_open_fd() once the socket is created.
+Channel-webdav.c (glib):        g_critical("socket creation failed %s", err->message);
+Channel-webdav.c (glib):        g_critical("socket creation failed %s", err->message);
+Channel-webdav.c (glib):        g_warning("bad initial socket read: %d", status);
+Config.h:/* Define to 1 if you have the <sys/socket.h> header file. */
+Config.h (glib):/* Define to 1 if you have the <sys/socket.h> header file. */
+Config.h (spice-common):/* Define to 1 if you have the <sys/socket.h> header file. */
+Config.h (win32):/* Define to 1 if you have the <sys/socket.h> header file. */
+Decode-glz.c (glib):             * uses its own socket there is no guarantee that images
+Spice-channel.c (glib):#include <sys/socket.h>
+Spice-channel.c (glib):    /* Windows socket seems to give early CONNRESET errors. The server
+Spice-channel.c (glib):       does not linger when closing the socket if the protocol is
+Spice-channel.c (glib):        /* We don't want to report an error if the socket was closed gracefully
+Spice-channel.c (glib):                CHANNEL_DEBUG(channel, "Failed to open socket from fd %d", c->fd);
+Spice-channel.c (glib): * @fd: a file descriptor (socket) or -1.
+Spice-channel.c (glib): * Connect the channel using @fd socket.
+Spice-channel.c (glib): * Close the socket and reset connection specific data. Finally, emit
+Spice-session.c (glib): * @fd: a file descriptor (socket) or -1
+Spice-session.c (glib): * Open the session using the provided @fd socket file
+Spice-session.c (glib):        GSocket *socket;
+Spice-session.c (glib):        socket = g_socket_connection_get_socket(open_host.connection);
+Spice-session.c (glib):        g_socket_set_timeout(socket, 0);
+Spice-session.c (glib):        g_socket_set_blocking(socket, FALSE);
+Spice-session.c (glib):        g_socket_set_keepalive(socket, TRUE);
+Ssl_verify.c (spice-common\common):#include <sys/socket.h>

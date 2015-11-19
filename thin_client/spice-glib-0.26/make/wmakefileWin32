@@ -1,0 +1,61 @@
+.PHONY:clean all
+
+
+LIB_PATH=-L$(LIB_PATH_PREFIX)/lib  \
+			-L../glib \
+			-L../spice-common/common
+
+CC=$(CROSS_PREFIX)-gcc
+
+
+LIB_DEFINE_FLAG= -DSW_CANVAS_CACHE -UHAVE_SYS_SHM_H -DHAVE_CONFIG -D_REENTRANT -DWITH_GSTAUDIO -DWIN32 \
+					  -DSPICE_GTK_LOCALEDIR=\"/usr/local/share/locale\" 
+
+CFLAGS = -std=gnu99
+
+ifeq ($(SPICE_DEBUG), y)
+	CFLAGS += -g -DSPICE_LOG_INFO
+else
+	CFLAGS += -O2
+endif
+
+
+INC_PATH=-I../glib \
+			-I../spice-common/spice-protocol\
+			-I../spice-common\
+			-I$(INCLUDE_PATH_PREFIX)/include/glib-2.0 \
+			-I$(INCLUDE_PATH_PREFIX)/sys-root/mingw/include/glib-2.0 \
+			-I$(INCLUDE_PATH_PREFIX)/lib/glib-2.0/include/ \
+			-I$(INCLUDE_PATH_PREFIX) \
+			-I$(INCLUDE_PATH_PREFIX)/include/gstreamer-0.10/gst/ \
+			-I$(INCLUDE_PATH_PREFIX)/include/spice-client-glib-2.0/ \
+			-I$(INCLUDE_PATH_PREFIX)/include/glib-2.0/glib/ \
+			-I$(INCLUDE_PATH_PREFIX)/include/libxml2/ \
+			-I../logger/
+
+
+SRC=win32-spicy.c win32-spicy.h win32-spice-widget.h win32-spice-widget.c win32-spice-widget-priv.h config.h \
+	 spice-gtk-session.h spice-common.h spice-cmdline.c spice-cmdline.h spice-widget-enums.c spice-widget-enums.h \
+	 win32_service.c win32_service.h virt-viewer-file.c virt-viewer-file.h virt-viewer-util.c virt-viewer-util.h \
+	 win32_io.c win32_io.h create_bmp.c create_bmp.h win32_spice_interface.c win32_spice_interface.h \
+	 win32_spice_interface_priv.h win32_spice_interface_types.h
+
+OBJS= win32-spicy.o spice-cmdline.o spice-widget-enums.o win32_service.o virt-viewer-file.o virt-viewer-util.o \
+		win32_io.o create_bmp.o win32_spice_interface.o 
+
+#spice-grabsequence.h spice-grabsequence.c 
+LIBS=-lglib-2.0 -lintl -lgio-2.0 -lgmodule-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lintl -lgobject-2.0 -lglib-2.0 -lintl \
+	  -lpixman-1 -lssl -lcrypto -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 \
+	  -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lxml2 -lspice-common-client \
+	  -lspice_without_gtk  -lusb-1.0 -lusbredirhost -lusbredirparser      -lws2_32 -lgdi32
+
+all:libspice_glib.dll  
+
+
+libspice_glib.dll:$(SRC)
+	$(CC) -o $@  -shared -DBUILD_DLL $(CFLAGS)  $(INC_PATH)  $(LIB_PATH) $(INC_PATH) $(LIB_DEFINE_FLAG) $^ \
+		$(LIBS) -Wl,--output-def,libspice_glib.def,--out-implib,libspice_glib.dll.a  
+
+
+clean:
+	rm -rf  *.o libspice_glib.def libspice_glib.dll.a libspice_glib.dll

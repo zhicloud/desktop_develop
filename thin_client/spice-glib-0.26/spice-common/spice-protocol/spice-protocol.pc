@@ -1,0 +1,9 @@
+prefix=/usr/i686-w64-mingw32/sys-root/mingw
+includedir=/usr/i686-w64-mingw32/sys-root/mingw/include
+
+Name: spice-protocol
+Description: SPICE protocol headers
+Version: 0.12.6
+
+Libs:
+Cflags: -I${includedir}/spice-1

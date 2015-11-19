@@ -1,0 +1,72 @@
+
+
+
+
+#vpath %.h ./glib  ./spice-common ./win32/ ./spice-common/common
+#vpath %.c ./glib ./spice-common/common ./win32/ ./spice-common/ 
+#vpath %.o ./glib ./spice-common/common ./win32/
+
+APPS=libspice_without_gtk.dll
+
+OBJS=spice-gstaudio.o gio-coroutine.o spice-util.o spice-glib-enums.o bio-gio.o usbutil.o \
+	  decode-jpeg.o channel-port.o channel-display.o channel-inputs.o spice-channel.o spice-audio.o \
+	  channel-display-mjpeg.o spice-marshal.o decode-zlib.o coroutine_winfibers.o channel-webdav.o \
+	  client_sw_canvas.o win-usb-dev.o spice-session.o spice-client.o spice-uri.o wocky-http-proxy.o \
+	  decode-glz.o win-usb-driver-install.o spice-option.o vmcstream.o channel-smartcard.o channel-cursor.o \
+	  channel-base.o channel-main.o glib-compat.o channel-usbredir.o channel-record.o usb-device-manager.o channel-playback.o smartcard-manager.o
+#OBJS=$(patsubst %.c,%.o,$(wildcard *.c))
+#OBJS+=$(patsubst ./glib/%.c,./glib/%.o,$(wildcard ./glib/*.c))
+#OBJS+=$(patsubst ./spice-common/common/%.c,./spice-common/common/%.o,$(wildcard ./spice-common/common/*.c))
+#OBJS+=$(patsubst ./glib/%.c,./win32/%.o,$(wildcard ./win32/*.c))
+
+
+CFLAGS = -std=gnu99
+
+ifeq ($(SPICE_DEBUG), y)
+	CFLAGS += -g -DSPICE_LOG_INFO
+else
+	CFLAGS += -O2
+endif
+
+
+DEFINE_FLAG= -UHAVE_SYS_SHM_H -DHAVE_CONFIG -D_REENTRANT -DWITH_GSTAUDIO -DWIN32 -DHAVE_CONFIG_H -DBUILD_DLL 
+#-DG_OS_WIN32 -DSW_CANVAS_CACHE
+
+INC_PATH= -I../ \
+			 -I../logger \
+			 -I../spice-common \
+			 -I../spice-common/spice-protocol/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/gstreamer-0.10/gst/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/gstreamer-0.10/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/libxml2/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/pixman-1/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/glib-2.0 \
+			 -I$(INCLUDE_PATH_PREFIX)/lib/glib-2.0/include/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/gio-win32-2.0/ \
+			 -I$(INCLUDE_PATH_PREFIX)/include/libusb-1.0/ 
+
+LIB_PATH=-L$(LIB_PATH_PREFIX)/lib \
+			-L../spice-common/common
+
+
+LIBS=-lspice-common-client -lglib-2.0 -lintl -lgio-2.0 -lgmodule-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lintl -lgobject-2.0 -lglib-2.0 -lintl \
+	  -lpixman-1 -lssl -lcrypto -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 \
+	  -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lxml2  -lusb-1.0 -lusbredirhost -lusbredirparser -lz  -lws2_32 -lgdi32 -ljpeg 
+
+CC=$(CROSS_PREFIX)-gcc
+
+.PHONY:clean all
+
+
+all:$(APPS)
+
+
+$(APPS):$(OBJS)
+	$(CC) -o $@  -shared $(CFLAGS)  $(INCLUDES)  $(LIB_PATH) $(INC_PATH) $(DEFINE_FLAG) $^ $(LIBS) -Wl,--output-def,libspice_without_gtk.def,--out-implib,libspice_without_gtk.dll.a  
+
+%.o:%.c	
+	$(CC) -c $< $(CFLAGS)   $(INCLUDES) $(LIBS) $(LIB_PATH) $(INC_PATH) $(DEFINE_FLAG)
+
+
+clean:	
+	$(RM) $(OBJS)  $(APPS) *.bak *.o libspice_without_gtk.def libspice_without_gtk.dll.a

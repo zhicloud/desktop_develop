@@ -1,0 +1,116 @@
+generated_client_marshallers1.lo: generated_client_marshallers1.c \
+ ../config.h ../common/messages.h ../spice-protocol/spice/protocol.h \
+ ../spice-protocol/spice/types.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stdint.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stdint.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/crtdefs.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_mac.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_secapi.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/vadefs.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_directx.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_ddk.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stddef.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stddef.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/limits.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/syslimits.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/limits.h \
+ ../spice-protocol/spice/enums.h ../spice-protocol/spice/start-packed.h \
+ ../spice-protocol/spice/end-packed.h ../spice-protocol/spice/macros.h \
+ ../common/draw.h ../common/mem.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stdlib.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdlib_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/malloc.h \
+ client_marshallers.h marshaller.h mem.h messages.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/string.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/string_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/assert.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/stdio.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_print_push.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_off_t.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/swprintf.inl \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdio_s.h \
+ /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_print_pop.h \
+ ../common/marshaller.h
+
+../config.h:
+
+../common/messages.h:
+
+../spice-protocol/spice/protocol.h:
+
+../spice-protocol/spice/types.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stdint.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stdint.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/crtdefs.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_mac.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_secapi.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/vadefs.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_directx.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sdks/_mingw_ddk.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include/stddef.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stddef.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/limits.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.8.3/include-fixed/syslimits.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/limits.h:
+
+../spice-protocol/spice/enums.h:
+
+../spice-protocol/spice/start-packed.h:
+
+../spice-protocol/spice/end-packed.h:
+
+../spice-protocol/spice/macros.h:
+
+../common/draw.h:
+
+../common/mem.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stdlib.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdlib_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/malloc.h:
+
+client_marshallers.h:
+
+marshaller.h:
+
+mem.h:
+
+messages.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/string.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/string_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/assert.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/stdio.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_print_push.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_off_t.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/swprintf.inl:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/sec_api/stdio_s.h:
+
+/usr/i686-w64-mingw32/sys-root/mingw/include/_mingw_print_pop.h:
+
+../common/marshaller.h:

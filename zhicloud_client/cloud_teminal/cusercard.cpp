@@ -28,7 +28,7 @@ CUserCard::CUserCard(int state, QWidget *parent, int noedit, int nodel, int hove
 
 	username = new QLabel(this);
 	username->setFixedSize(65, 15);
-	username->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:10px;border:0px;QToolTip{background-color:white}");
+	username->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:15px;border:0px;QToolTip{background-color:white}");
 	username->setAlignment(Qt::AlignCenter);
 
 	if (!nodel)
@@ -148,7 +148,7 @@ void CUserCard::midclickfunc()
 	{
 		main_win->secondwuserpic->setPixmap(strpixpath);
 		main_win->edit->inputEdit->setText("");
-		main_win->secondwuserpic->setText(strnickname);
+		main_win->secondwuserpic->setText(struname);
 		main_win->uname = struname;
 		main_win->changeWidgetTo(main_win->secondLoginWidget);
 	}

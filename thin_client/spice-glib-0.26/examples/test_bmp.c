@@ -19,9 +19,7 @@ void* settingchanges(void * ctx,void* ud)
 void * invalidates(void * ctx,void *ud)
 {
     SPICE_LOG("\n");
-    printf("?????????????\n");
-    SPICE_Invalidate* pud = (SPICE_Invalidate*)ud;
-    pud->free_bitmap(pud->bitmap);
+    printf("?????????????");
     /*
     static int i  = 0;
     static int b = 100;
@@ -90,11 +88,10 @@ int main(int argc,char **argv)
 
 
         SpiceSetCalls(handle,hspice,scbs,3);
-        SpiceConnect(handle,hspice,argv[1],argv[2],NULL,"bQjH9saacnBmFIjU",NULL,NULL,1);
+        SpiceConnect(handle,hspice,argv[1],argv[2],NULL,"",NULL,NULL,1);
 
         SPICE_LOG("lcx ===================================== \n");
-        while(1)
-            sleep(1000000);
+        sleep(2);
         SPICE_LOG("lcx2 ===================================== \n");
 
         SpiceDisconnect(handle,hspice);

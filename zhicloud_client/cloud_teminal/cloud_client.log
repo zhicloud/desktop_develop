@@ -1,0 +1,52 @@
+01:45:01 AM †Ú€L}—æh [INFO ] - http://172.18.10.8:8080/CloudDeskTopMS/interface/version?version_number=0.0.0.0
+01:45:01 AM ‡ ‚dw—æh [INFO ] - {"status":"success","message":"","need_update":false}
+01:45:10 AM hM‚Ïw—æh [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:45:10 AM ên„tv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:45:11 AM ên„tv—æh [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:45:11 AM ên„îw—æh [INFO ] - openspice return value is 1
+01:45:22 AM x≈ÍÑz—æh [INFO ] - spice channel error link 
+01:45:25 AM ∏+ËÏw—æh [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:45:25 AM ÿOÓtv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:45:26 AM ÿOÓtv—æh [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:45:26 AM ÿOÓîw—æh [INFO ] - openspice return value is 1
+01:45:36 AM PıˆÑz—æh [INFO ] - spice channel error link 
+01:46:15 AM 0¯ˆÏw—æh [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:46:15 AM à§ˆtv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:46:16 AM ¯?∑tv—æh [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:46:16 AM à§ˆîw—æh [INFO ] - openspice return value is 1
+01:46:26 AM `ãÊÑz—æh [INFO ] - spice channel error link 
+01:46:27 AM Ä∆‰Ïw—æh [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:46:27 AM H˚ˆtv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:46:28 AM H˚ˆtv—æh [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:46:28 AM H˚ˆîw—æh [INFO ] - openspice return value is 1
+01:46:38 AM @fˇÑz—æh [INFO ] - spice channel error link 
+01:46:45 AM ÚÁÏw—æh [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:46:45 AM  ‚tv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:46:46 AM  ‚tv—æh [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:46:46 AM Píˇîw—æh [INFO ] - openspice return value is 1
+01:46:56 AM ¯·Ñz—æh [INFO ] - spice channel error link 
+01:48:37 AM  [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:48:37 AM h„tv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:48:38 AM  [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:48:38 AM É„îw—æh [INFO ] - openspice return value is 1
+01:48:48 AM ∞ŸÍÑz—æh [INFO ] - spice channel error link 
+01:48:53 AM ÿ˛Ïw—æh [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:48:53 AM Ä∞Êtv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:48:54 AM Ä∞Êtv—æh [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:48:54 AM Ä∞Êîw—æh [INFO ] - openspice return value is 1
+01:49:05 AM ∞ªÎÑz—æh [INFO ] - spice channel error link 
+01:50:11 AM 0uˇÏw—æh [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:50:11 AM X¿Ótv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:50:12 AM  +ÿtv—æh [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:50:12 AM  [INFO ] - openspice return value is 1
+01:50:22 AM `ÿÔÑz—æh [INFO ] - spice channel error link 
+01:51:15 AM ∞Ü„Ïw—æh [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:51:15 AM –(Átv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:51:16 AM `ÿÔtv—æh [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:51:16 AM –(Áîw—æh [INFO ] - openspice return value is 1
+01:51:26 AM –âÂÑz—æh [INFO ] - spice channel error link 
+01:54:35 AM  [INFO ] - Login=2 :{"status":"success","message":"","hosts":[{"uuid":"c543f6701870405e8dd37320b2765e79","host_name":"112`10","account":"warehouse","password":"82LlaLVnLveeFQcw","cpu_core":1,"cpu_usage":0,"memory":1073741824,"memory_usage":0,"sys_disk":0,"sys_disk_usage":0,"data_disk":10737418240,"data_disk_usage":0,"bandwidth":1000000,"running_status":2,"status":2,"ip":"172.18.10.14","port":5904,"sysImageName":"Desktop_Windows7_x64_publish"}],"messages":[],"name":"Ê∏©Â∑¶Ë∞ä","user_status":0,"usb":1}
+01:54:35 AM xÂtv—æh [INFO ] - m_OpMutex[OPEN].lock(); 
+01:54:36 AM  +ÿtv—æh [INFO ] - m_OpMutex[OPEN].unlock(); 
+01:54:36 AM 8É∏îw—æh [INFO ] - openspice return value is 1
+01:54:46 AM `⁄ÔÑz—æh [INFO ] - spice channel error link 

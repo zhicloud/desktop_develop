@@ -201,6 +201,8 @@ static SpiceWindow *create_spice_window(spice_connection *conn, SpiceChannel *ch
     win->spice = (spice_display_new(conn->session, id));
     //add by lcx for remember global_display
     conn->global_display = win->spice;
+
+   printf("[file:%s] [line:%d] [function:%s]\n", __FILE__, __LINE__, __FUNCTION__);
     return win;
 }
 
@@ -241,130 +243,48 @@ static void main_channel_event(SpiceChannel *channel, SpiceChannelEvent event,
     }
     SpiceCallBacks * main_cb  = &conn->callback[CB_MAIN_CHANNEL_EVENT];
     SPICE_MainChannelEvent smet;
+    
 
     switch (event) {
     case SPICE_CHANNEL_OPENED:
-   
-        if(SPICE_IS_MAIN_CHANNEL(channel))
-        {
-            g_message("main channel: opened");
-            smet.et = LCX_SPICE_CHANNEL_OPENED; 
-
-            main_cb->lcb._ud = &smet;
-            if(main_cb->lcb._cb)
-            {
-                 main_cb->lcb._cb(main_cb->lcb._ctx,main_cb->lcb._ud);
-            }
-        }
+        g_message("main channel: opened");
+        SPICE_LOG("main channel: opened\n");
+        smet.et = LCX_SPICE_CHANNEL_OPENED; 
         break;
     case SPICE_CHANNEL_SWITCHING:
-        if(SPICE_IS_MAIN_CHANNEL(channel))
-        {
-            g_message("main channel: switching host");
-            //SPICE_LOG("main channel: switching host\n");        
+        g_message("main channel: switching host");
+        SPICE_LOG("main channel: switching host\n");
             smet.et = LCX_SPICE_CHANNEL_SWITCHING; 
-            
-            main_cb->lcb._ud = &smet;
-            if(main_cb->lcb._cb)
-            {
-                 main_cb->lcb._cb(main_cb->lcb._ctx,main_cb->lcb._ud);
-            }
-        }
         break;
     case SPICE_CHANNEL_CLOSED:
         /* this event is only sent if the channel was succesfully opened before */
-
-        //g_message("main channel: closed");
-        //SPICE_LOG("main channel: closed\n");
-        if(SPICE_IS_MAIN_CHANNEL(channel) || SPICE_IS_DISPLAY_CHANNEL(channel) || SPICE_IS_INPUTS_CHANNEL(channel) || SPICE_IS_CURSOR_CHANNEL(channel))
-        {
-            printf("main channel: closed yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\n");
-            smet.et = LCX_SPICE_CHANNEL_CLOSED; 
-
-            main_cb->lcb._ud = &smet;
-            if(main_cb->lcb._cb)
-            {
-                printf("main channel: closed dddddddddddddddddddddddddddddddddddddddddddddddddddd\n");
-                main_cb->lcb._cb(main_cb->lcb._ctx,main_cb->lcb._ud);
-            }
-            for (int i = 0; i < CB_NULL; i++)
-            {
-                SpiceCallBacks * _cb  = &conn->callback[i];
-                _cb->lcb._cb = NULL;
-            }
-
-        }
-
-        g_signal_handlers_disconnect_by_func( channel,
-                main_channel_event,conn);                                 
+        g_message("main channel: closed");
+        SPICE_LOG("main channel: closed\n");
+        smet.et = LCX_SPICE_CHANNEL_CLOSED; 
         //connection_disconnect(conn);
         break;
     case SPICE_CHANNEL_ERROR_IO:
-        {
-            g_message("channel: error io");
-            if(SPICE_IS_MAIN_CHANNEL(channel) || SPICE_IS_DISPLAY_CHANNEL(channel) || SPICE_IS_INPUTS_CHANNEL(channel) || SPICE_IS_CURSOR_CHANNEL(channel))
-            {
-                printf("main channel: error io yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\n");
-                smet.et = LCX_SPICE_CHANNEL_ERROR_IO; 
-
-                main_cb->lcb._ud = &smet;
-                if(main_cb->lcb._cb)
-                {
-                    printf("main channel: error io dddddddddddddddddddddddddddddddddddddddddddddddddddd\n");
-                    main_cb->lcb._cb(main_cb->lcb._ctx,main_cb->lcb._ud);
-
-                }
-                for (int i = 0; i < CB_NULL; i++)
-                {
-                    SpiceCallBacks * _cb  = &conn->callback[i];
-                    _cb->lcb._cb = NULL;
-                }
-
-
-            }
-            g_signal_handlers_disconnect_by_func( channel,
-                    main_channel_event,conn);                                 
-
-            break;
-        }
+        smet.et = LCX_SPICE_CHANNEL_ERROR_IO; 
+        //abort();
+        //connection_disconnect(conn);
+        break;
     case SPICE_CHANNEL_ERROR_TLS:
     case SPICE_CHANNEL_ERROR_LINK:
     case SPICE_CHANNEL_ERROR_CONNECT:
-        {
+        SPICE_LOG("main channel: failed to connect\n");
+        g_message("main channel: failed to connect");
 
-            g_message("main channel: failed to connect");
-            if(SPICE_IS_MAIN_CHANNEL(channel) || SPICE_IS_DISPLAY_CHANNEL(channel) || SPICE_IS_INPUTS_CHANNEL(channel) || SPICE_IS_CURSOR_CHANNEL(channel))
-            {
-                printf("main channel: error tls yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\n");
-
-
-                smet.et = (event == SPICE_CHANNEL_ERROR_TLS) ? LCX_SPICE_CHANNEL_ERROR_TLS : 
-                    (event == SPICE_CHANNEL_ERROR_LINK) ? LCX_SPICE_CHANNEL_ERROR_LINK : LCX_SPICE_CHANNEL_ERROR_CONNECT; 
-
-                main_cb->lcb._ud = &smet;
-                if(main_cb->lcb._cb)
-                {
-                    printf("main channel: error tls dddddddddddddddddddddddddddddddddddddddddddddddddddd\n");
-                    main_cb->lcb._cb(main_cb->lcb._ctx,main_cb->lcb._ud);
-                }
-                for (int i = 0; i < CB_NULL; i++)
-                {
-                    SpiceCallBacks * _cb  = &conn->callback[i];
-                    _cb->lcb._cb = NULL;
-                }
-
-            }
-
-            g_signal_handlers_disconnect_by_func( channel,
-                    main_channel_event,conn);                                 
-            break;
+            smet.et = (event == SPICE_CHANNEL_ERROR_TLS) ? LCX_SPICE_CHANNEL_ERROR_TLS : 
+                (event == SPICE_CHANNEL_ERROR_LINK) ? LCX_SPICE_CHANNEL_ERROR_LINK : LCX_SPICE_CHANNEL_ERROR_CONNECT; 
+        /*
+        //rc = connect_dialog(conn->session);
+        if (rc == 0) {
+        connection_connect(conn);
+        } else {
+        connection_disconnect(conn);
         }
-        /* //rc = connect_dialog(conn->session); if (rc == 0) {
-           connection_connect(conn);
-           } else {
-           connection_disconnect(conn);
-           }
-           */
+        */
+        break;
     case SPICE_CHANNEL_ERROR_AUTH:
         g_warning("main channel: auth failure (wrong password?)");
         SPICE_LOG("main channel: auth failure (wrong password?\n");
@@ -374,12 +294,7 @@ static void main_channel_event(SpiceChannel *channel, SpiceChannelEvent event,
         //              _("Please enter the spice server password"),
         //              password, sizeof(password), true);
 
-        smet.et = LCX_SPICE_CHANNEL_ERROR_AUTH; 
-        main_cb->lcb._ud = &smet;
-        if(main_cb->lcb._cb)
-        {
-            main_cb->lcb._cb(main_cb->lcb._ctx,main_cb->lcb._ud);
-        }
+            smet.et = LCX_SPICE_CHANNEL_ERROR_AUTH; 
         /*
            if (rc == 0) {
            g_object_set(conn->session, "password", password, NULL);
@@ -388,32 +303,21 @@ static void main_channel_event(SpiceChannel *channel, SpiceChannelEvent event,
            connection_disconnect(conn);
            }
            */
-
-        g_signal_handlers_disconnect_by_func( channel,
-                main_channel_event,conn);                                 
         break;
     default:
         /* TODO: more sophisticated error handling */
         g_warning("unknown main channel event: %d", event);
         SPICE_LOG("unknown main channel event: %d\n",event);
         smet.et = LCX_SPICE_CHANNEL_NONE;
-        main_cb->lcb._ud = &smet;
-        if(main_cb->lcb._cb)
-        {
-            main_cb->lcb._cb(main_cb->lcb._ctx,main_cb->lcb._ud);
-        }
         /* connection_disconnect(conn); */
         break;
     }
+    main_cb->lcb._ud = &smet;
+    if(main_cb->lcb._cb)
+    {
+        main_cb->lcb._cb(main_cb->lcb._ctx,main_cb->lcb._ud);
+    }
     g_rec_mutex_unlock(&global_wsgi->rec_mutex_conn);
-    /*
-       main_cb->lcb._ud = &smet;
-       if(main_cb->lcb._cb)
-       {
-       main_cb->lcb._cb(main_cb->lcb._ctx,main_cb->lcb._ud);
-       }
-       g_rec_mutex_unlock(&global_wsgi->rec_mutex_conn);
-       */
 }
 
 static void channel_new(SpiceSession *s, SpiceChannel *channel, gpointer data)
@@ -427,24 +331,19 @@ static void channel_new(SpiceSession *s, SpiceChannel *channel, gpointer data)
     SPICE_DEBUG("new channel (#%d)", id);
     SPICE_LOG("new channel (#%d)\n",id);
 
-    g_signal_connect(channel, "channel-event",
-            G_CALLBACK(main_channel_event), conn);
-
-
     if (SPICE_IS_MAIN_CHANNEL(channel)) {
-        //SPICE_LOG("new main channel\n");
-        //SPICE_DEBUG("new main channel");
+        SPICE_LOG("new main channel\n");
+        SPICE_DEBUG("new main channel");
         conn->main = SPICE_MAIN_CHANNEL(channel);
-        //        g_signal_connect(channel, "channel-event",
-        //               G_CALLBACK(main_channel_event), conn);
-
+        g_signal_connect(channel, "channel-event",
+                G_CALLBACK(main_channel_event), conn);
         //g_signal_connect(channel, "main-mouse-update",
         //                 G_CALLBACK(main_mouse_update), conn);
         //g_signal_connect(channel, "main-agent-update",
         //                 G_CALLBACK(main_agent_update), conn);
         //main_mouse_update(channel, conn);
         //main_agent_update(channel, conn);
-        //SPICE_LOG("111111111111111111111111111111111111111111111111\n");
+        SPICE_LOG("111111111111111111111111111111111111111111111111\n");
     }
 
     if (SPICE_IS_DISPLAY_CHANNEL(channel)) {
@@ -459,6 +358,7 @@ static void channel_new(SpiceSession *s, SpiceChannel *channel, gpointer data)
         SPICE_LOG("new display channel\n");
         SPICE_DEBUG("new display channel (#%d)", id);
         conn->wins[id] = create_spice_window(conn, channel, id);
+
         //g_signal_connect(channel, "display-mark",
         //                 G_CALLBACK(display_mark), conn->wins[id]);
         //update_auto_usbredir_sensitive(conn);
@@ -501,18 +401,18 @@ static void channel_destroy(SpiceSession *s, SpiceChannel *channel, gpointer dat
 
     spice_connection *conn = data;
     int id;
-
-    //printf("[file :%s][fun : %s][line : %d] ======  !!!!!!!!!!!!!!!!!!!!!\n",__FILE__,__FUNCTION__,__LINE__);
+    
+//    printf("[file :%s][fun : %s][line : %d] ======  !!!!!!!!!!!!!!!!!!!!!\n",__FILE__,__FUNCTION__,__LINE__);
 
     g_object_get(channel, "channel-id", &id, NULL);
-   
-    if (SPICE_IS_MAIN_CHANNEL(channel))
-    {
+    if (SPICE_IS_MAIN_CHANNEL(channel)) {
+//        printf("[file :%s][fun : %s][line : %d] SPICE_IS_MAIN_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
+        SPICE_DEBUG("zap main channel");
         conn->main = NULL;
     }
 
     if (SPICE_IS_DISPLAY_CHANNEL(channel)) {
-        //printf("[file :%s][fun : %s][line : %d] SPICE_IS_DISPLAY_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
+//        printf("[file :%s][fun : %s][line : %d] SPICE_IS_DISPLAY_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
         if (id >= SPICE_N_ELEMENTS(conn->wins))
             return;
         if (conn->wins[id] == NULL)
@@ -522,17 +422,69 @@ static void channel_destroy(SpiceSession *s, SpiceChannel *channel, gpointer dat
         conn->wins[id] = NULL;
     }
 
-    g_signal_handlers_disconnect_by_func(channel, main_channel_event,conn);                                 
-   
+    if (SPICE_IS_PLAYBACK_CHANNEL(channel)) {
+  //      printf("[file :%s][fun : %s][line : %d] SPICE_IS_PLAYBACK_CHANNEL \n",__FILE__,__FUNCTION__,__LINE__);
+        SPICE_DEBUG("zap audio channel");
+
+
+    }
+
+    if(SPICE_IS_INPUTS_CHANNEL(channel)) {
+  //      printf("[file :%s][fun : %s][line : %d] SPICE_IS_INPUTS_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
+    }
+    if(SPICE_IS_RECORD_CHANNEL(channel)) {
+  //      printf("[file :%s][fun : %s][line : %d] SPICE_IS_RECORD_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
+    }
+
+    if(SPICE_IS_PORT_CHANNEL(channel)) {
+   //     printf("[file :%s][fun : %s][line : %d] SPICE_IS_PORT_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
+    }
+
+    if(SPICE_IS_SMARTCARD_CHANNEL(channel)) {
+   //     printf("[file :%s][fun : %s][line : %d] SPICE_IS_SMARTCARD_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
+    }
+
+    if(SPICE_IS_USBREDIR_CHANNEL(channel)) {
+     //   printf("[file :%s][fun : %s][line : %d] SPICE_IS_USBREDIR_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
+    }
+
+    if(SPICE_IS_WEBDAV_CHANNEL(channel)) {
+    //    printf("[file :%s][fun : %s][line : %d] SPICE_IS_USBREDIR_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
+    }
+
+
+
+
+    //if (SPICE_IS_USBREDIR_CHANNEL(channel)) {
+    //    update_auto_usbredir_sensitive(conn);
+    //}
+
+    //if (SPICE_IS_PORT_CHANNEL(channel)) {
+    //    if (SPICE_PORT_CHANNEL(channel) == stdin_port)
+    //        stdin_port = NULL;
+    //}
     conn->channels--;
-
-    // char buf[100];
-    // snprintf (buf, 100, "Number of channels: %d", conn->channels);
-    //printf("[file :%s][fun : %s][line : %d] %s \n",__FILE__,__FUNCTION__,__LINE__,buf);
-
+//    char buf[100];
+//    snprintf (buf, 100, "Number of channels: %d", conn->channels);
+//    printf("[file :%s][fun : %s][line : %d] %s \n",__FILE__,__FUNCTION__,__LINE__,buf);
     if (conn->channels > 0) {
         return;
     }
+    SpiceUsbDeviceManager *manager;
+    manager = spice_usb_device_manager_get(conn->session, NULL);
+    if(manager)
+    {
+        g_signal_handlers_disconnect_by_func( manager,
+                device_added_cb,conn);                                 
+
+        g_signal_handlers_disconnect_by_func( manager,
+                usb_connect_failed,conn);
+        g_signal_handlers_disconnect_by_func( manager,
+                usb_device_error,conn);
+        g_signal_handlers_disconnect_by_func( manager,
+                device_removed_cb,conn);
+    }
+
     connection_destroy(conn);
 }
 
@@ -581,35 +533,6 @@ spice_connection *connection_new(void)
     return conn;
 }
 
-static void connection_destroy(spice_connection *conn)
-{
-    SpiceUsbDeviceManager *manager = spice_usb_device_manager_get(conn->session, NULL);
-    if(manager)
-    {
-        g_signal_handlers_disconnect_by_func( manager,
-                device_added_cb,conn);                                 
-        g_signal_handlers_disconnect_by_func( manager,
-                usb_connect_failed,conn);
-        g_signal_handlers_disconnect_by_func( manager,
-                usb_device_error,conn);
-        g_signal_handlers_disconnect_by_func( manager,
-                device_removed_cb,conn);
-    }
-
-    g_signal_handlers_disconnect_by_func(conn->session,
-            migration_state, conn);
-    g_signal_handlers_disconnect_by_func(conn->session,
-            channel_destroy, conn);
-    g_signal_handlers_disconnect_by_func(conn->session,
-            channel_new, conn);
-
-    g_object_unref(conn->session);
-    conn->session = NULL;
-   
-    free(conn);
-    conn = NULL;
-}
-
 void connection_connect(spice_connection *conn)
 {
     conn->disconnecting = false;
@@ -624,3 +547,45 @@ void connection_disconnect(spice_connection *conn)
     conn->disconnecting = true;
     spice_session_disconnect(conn->session);
 }
+
+static void connection_destroy(spice_connection *conn)
+{
+    SPICE_LOG("\n");
+   // g_rec_mutex_lock(&global_wsgi->rec_mutex_conn);
+   // 
+   // for(int i = 0; i < MAX_SPICE_CONNECT ; i++)
+   // {
+   //     if(global_wsgi->SpiceConnList[i] && global_wsgi->SpiceConnList[i]->conn )
+   //     {
+   //         if(global_wsgi->SpiceConnList[i]->conn == conn)
+   //         {
+   //             global_wsgi->SpiceConnList[i]->conn->callback = NULL;
+   //             global_wsgi->SpiceConnList[i]->conn = NULL;
+   //             break;
+   //         }
+   //     }
+   // }
+   // g_rec_mutex_unlock(&global_wsgi->rec_mutex_conn);
+    
+//    printf("[file :%s][fun : %s][line : %d] begin g_object_unref(conn->session)\n",__FILE__,__FUNCTION__,__LINE__);
+    g_object_unref(conn->session);
+//    printf("[file :%s][fun : %s][line : %d] end g_object_unref(conn->session)\n",__FILE__,__FUNCTION__,__LINE__);
+    conn->session = NULL;
+    free(conn);
+    conn = NULL;
+
+    SPICE_LOG("====== end\n");
+    //add callback all connections free
+
+    //connections--;
+    //SPICE_DEBUG("%s (%d)", __FUNCTION__, connections);
+    //if (connections > 0) {
+    //    return;
+    //}
+
+    //here add function to update message
+    //g_main_loop_quit(mainloop);
+}
+
+
+

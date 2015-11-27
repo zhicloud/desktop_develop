@@ -1,4 +1,4 @@
-ï»¿#include "getway.h"
+#include "getway.h"
 
 // if_name like "ath0", "eth0". Notice: call this function
 // need root privilege.
@@ -32,21 +32,21 @@ int readNlSock(int sockFd, char *bufPtr, int seqNum, int pId)
     struct nlmsghdr *nlHdr;
     int readLen = 0, msgLen = 0;
     do{
-        //æ”¶åˆ°å†…æ ¸çš„åº”ç­”
+        //ÊÕµ½ÄÚºËµÄÓ¦´ğ
         if((readLen = recv(sockFd, bufPtr, BUFSIZE - msgLen, 0)) < 0)
         {
             perror("SOCK READ: ");
-//æ ‡ç­¾ï¼šLinuxç³»ç»Ÿ C++ è·å–ç½‘ç»œæ¥å£ï¼Œä»¥åŠä¸»æœºç½‘å…³IPï¼Œ ç½‘ç»œ,ç½‘å…³,IP
+//±êÇ©£ºLinuxÏµÍ³ C++ »ñÈ¡ÍøÂç½Ó¿Ú£¬ÒÔ¼°Ö÷»úÍø¹ØIP£¬ ÍøÂç,Íø¹Ø,IP
             return -1;
         }
         nlHdr = (struct nlmsghdr *)bufPtr;
-        //æ£€æŸ¥headeræ˜¯å¦æœ‰æ•ˆ
+        //¼ì²éheaderÊÇ·ñÓĞĞ§
         if((NLMSG_OK(nlHdr, readLen) == 0) || (nlHdr->nlmsg_type == NLMSG_ERROR))
         {
             perror("Error in recieved packet");
             return -1;
         }
-//æ ‡ç­¾ï¼šLinuxç³»ç»Ÿ C++ è·å–ç½‘ç»œæ¥å£ï¼Œä»¥åŠä¸»æœºç½‘å…³IPï¼Œ ç½‘ç»œ,ç½‘å…³,IP
+//±êÇ©£ºLinuxÏµÍ³ C++ »ñÈ¡ÍøÂç½Ó¿Ú£¬ÒÔ¼°Ö÷»úÍø¹ØIP£¬ ÍøÂç,Íø¹Ø,IP
         if(nlHdr->nlmsg_type == NLMSG_DONE)
         {
             break;
@@ -58,7 +58,7 @@ int readNlSock(int sockFd, char *bufPtr, int seqNum, int pId)
             msgLen += readLen;
         }
         if((nlHdr->nlmsg_flags & NLM_F_MULTI) == 0)
-//æ ‡ç­¾ï¼šLinuxç³»ç»Ÿ C++ è·å–ç½‘ç»œæ¥å£ï¼Œä»¥åŠä¸»æœºç½‘å…³IPï¼Œ ç½‘ç»œ,ç½‘å…³,IP
+//±êÇ©£ºLinuxÏµÍ³ C++ »ñÈ¡ÍøÂç½Ó¿Ú£¬ÒÔ¼°Ö÷»úÍø¹ØIP£¬ ÍøÂç,Íø¹Ø,IP
         {
             break;
         }
@@ -66,12 +66,12 @@ int readNlSock(int sockFd, char *bufPtr, int seqNum, int pId)
     return msgLen;
 }
  
-//åˆ†æè¿”å›çš„è·¯ç”±ä¿¡æ¯
+//·ÖÎö·µ»ØµÄÂ·ÓÉĞÅÏ¢
 void parseRoutes(struct nlmsghdr *nlHdr, struct route_info *rtInfo,char *gateway, char *ifName)
 {
     struct rtmsg *rtMsg;
     struct rtattr *rtAttr;
-//æ ‡ç­¾ï¼šLinuxç³»ç»Ÿ C++ è·å–ç½‘ç»œæ¥å£ï¼Œä»¥åŠä¸»æœºç½‘å…³IPï¼Œ ç½‘ç»œ,ç½‘å…³,IP
+//±êÇ©£ºLinuxÏµÍ³ C++ »ñÈ¡ÍøÂç½Ó¿Ú£¬ÒÔ¼°Ö÷»úÍø¹ØIP£¬ ÍøÂç,Íø¹Ø,IP
     int rtLen;
     char *tempBuf = NULL;
     struct in_addr dst;
@@ -83,7 +83,7 @@ void parseRoutes(struct nlmsghdr *nlHdr, struct route_info *rtInfo,char *gateway
     //then return.
     if((rtMsg->rtm_family != AF_INET) || (rtMsg->rtm_table != RT_TABLE_MAIN))
         return;
-//ï¼Œæ ‡ç­¾ï¼šLinuxç³»ç»Ÿ C++ è·å–ç½‘ç»œæ¥å£ï¼Œä»¥åŠä¸»æœºç½‘å…³IPï¼Œ ç½‘ç»œ,ç½‘å…³,IP
+//£¬±êÇ©£ºLinuxÏµÍ³ C++ »ñÈ¡ÍøÂç½Ó¿Ú£¬ÒÔ¼°Ö÷»úÍø¹ØIP£¬ ÍøÂç,Íø¹Ø,IP
  
     rtAttr = (struct rtattr *)RTM_RTA(rtMsg);
     rtLen = RTM_PAYLOAD(nlHdr);
@@ -93,7 +93,7 @@ void parseRoutes(struct nlmsghdr *nlHdr, struct route_info *rtInfo,char *gateway
             if_indextoname(*(int *)RTA_DATA(rtAttr), rtInfo->ifName);
             break;
         case RTA_GATEWAY:
-//ï¼Œæ ‡ç­¾ï¼šLinuxç³»ç»Ÿ C++ è·å–ç½‘ç»œæ¥å£ï¼Œä»¥åŠä¸»æœºç½‘å…³IPï¼Œ ç½‘ç»œ,ç½‘å…³,IP
+//£¬±êÇ©£ºLinuxÏµÍ³ C++ »ñÈ¡ÍøÂç½Ó¿Ú£¬ÒÔ¼°Ö÷»úÍø¹ØIP£¬ ÍøÂç,Íø¹Ø,IP
             rtInfo->gateWay = *(u_int *)RTA_DATA(rtAttr);
             break;
         case RTA_PREFSRC:
@@ -102,7 +102,7 @@ void parseRoutes(struct nlmsghdr *nlHdr, struct route_info *rtInfo,char *gateway
         case RTA_DST:
             rtInfo->dstAddr = *(u_int *)RTA_DATA(rtAttr);
             break;
-//æ ‡ç­¾ï¼šLinuxç³»ç»Ÿ C++ è·å–ç½‘ç»œæ¥å£ï¼Œä»¥åŠä¸»æœºç½‘å…³IPï¼Œ ç½‘ç»œ,ç½‘å…³,IP
+//±êÇ©£ºLinuxÏµÍ³ C++ »ñÈ¡ÍøÂç½Ó¿Ú£¬ÒÔ¼°Ö÷»úÍø¹ØIP£¬ ÍøÂç,Íø¹Ø,IP
         }
     }
     dst.s_addr = rtInfo->dstAddr;
@@ -112,7 +112,7 @@ void parseRoutes(struct nlmsghdr *nlHdr, struct route_info *rtInfo,char *gateway
         //printf("oif:%s",rtInfo->ifName);
         gate.s_addr = rtInfo->gateWay;
         sprintf(gateway, "%s", (char *)inet_ntoa(gate));
-//æ ‡ç­¾ï¼šLinuxç³»ç»Ÿ C++ è·å–ç½‘ç»œæ¥å£ï¼Œä»¥åŠä¸»æœºç½‘å…³IPï¼Œ ç½‘ç»œ,ç½‘å…³,IP
+//±êÇ©£ºLinuxÏµÍ³ C++ »ñÈ¡ÍøÂç½Ó¿Ú£¬ÒÔ¼°Ö÷»úÍø¹ØIP£¬ ÍøÂç,Íø¹Ø,IP
         //printf("%sn",gateway);
         gate.s_addr = rtInfo->srcAddr;
         //printf("src:%sn",(char *)inet_ntoa(gate));
@@ -125,7 +125,7 @@ void parseRoutes(struct nlmsghdr *nlHdr, struct route_info *rtInfo,char *gateway
 }
  
 int get_gateway(char *gateway, char *ifName)
-//æ ‡ç­¾ï¼šLinuxç³»ç»Ÿ C++ è·å–ç½‘ç»œæ¥å£ï¼Œä»¥åŠä¸»æœºç½‘å…³IPï¼Œ ç½‘ç»œ,ç½‘å…³,IP
+//±êÇ©£ºLinuxÏµÍ³ C++ »ñÈ¡ÍøÂç½Ó¿Ú£¬ÒÔ¼°Ö÷»úÍø¹ØIP£¬ ÍøÂç,Íø¹Ø,IP
 {
     struct nlmsghdr *nlMsg;
     struct rtmsg *rtMsg;
@@ -155,13 +155,13 @@ int get_gateway(char *gateway, char *ifName)
  
 
     if(send(sock, nlMsg, nlMsg->nlmsg_len, 0) < 0){
-        printf("Write To Socket Failedâ€¦n");
+        printf("Write To Socket Failed¡­n");
         return -1;
     }
  
 
     if((len = readNlSock(sock, msgBuf, msgSeq, getpid())) < 0) {
-        printf("Read From Socket Failedâ€¦n");
+        printf("Read From Socket Failed¡­n");
         return -1;
     }
     rtInfo = (struct route_info *)malloc(sizeof(struct route_info));
@@ -174,41 +174,6 @@ int get_gateway(char *gateway, char *ifName)
     return 0;
 }
 
-bool IsIPaddress(QString ip)
-{
-    QRegExp rx2("(//d+)(//.)(//d+)(//.)(//d+)(//.)(//d +)");
-    int pos = rx2.indexIn(ip);
-    printf("pos=%d",pos);
-    if(pos>-1)
-    {
-         for(int i=0;i<4;i++)
-        {
-            if( rx2.cap(i*2+1).toInt()>=255 )
-            {
-                return false;
-            }
-        }
-        if(rx2.cap(7).toInt()==0)
-        {           
-           
-            return false;
-        }
-
-        if(rx2.cap(7).toInt()==0)
-        {
-            
-            return false;
-        }
-    }
-    else
-    {
-        
-        return false;
-    }
-    return true;
-}
-
-
 bool getmaskAddress(QString &ip, QString &netmask,QString &mac)
 {
 	QList<QNetworkInterface> list = QNetworkInterface::allInterfaces();
@@ -218,13 +183,13 @@ bool getmaskAddress(QString &ip, QString &netmask,QString &mac)
 	for (i=0; i < count; i++)
 	{
 			interfaceq = list[i];
-			//qDebug() << "Device:" << interfaceq.name();//è®¾å¤‡åç§°
+			qDebug() << "Device:" << interfaceq.name();//Éè±¸Ãû³Æ
 			if(interfaceq.name() == QString("eth0"))
 			{
 			  mac = interfaceq.hardwareAddress();
 			}
-			//qDebug() << "HardwareAddress:" << interfaceq.hardwareAddress();//è·å–ç¡¬ä»¶åœ°å€
-			QList<QNetworkAddressEntry> entryList = interfaceq.addressEntries();//è·å–ipåœ°å€å’Œå­ç½‘æ©ç å’Œå¹¿æ’­åœ°å€
+			qDebug() << "HardwareAddress:" << interfaceq.hardwareAddress();//»ñÈ¡Ó²¼şµØÖ·
+			QList<QNetworkAddressEntry> entryList = interfaceq.addressEntries();//»ñÈ¡ipµØÖ·ºÍ×ÓÍøÑÚÂëºÍ¹ã²¥µØÖ·
 			for (int ii = 0; ii < entryList.size(); ii++)
 			{
 					QNetworkAddressEntry entry = entryList[ii];
@@ -238,18 +203,9 @@ bool getmaskAddress(QString &ip, QString &netmask,QString &mac)
 
 						if (QString("eth0") == interfaceq.name())
 						{
-							ip= entry.ip().toString();//é ip
-							netmask = entry.netmask().toString();//é é é 
-							entry.broadcast().toString();//é é é 
-							//qDebug() << ip;
-							if(!ip.contains("."))
-							{
-			//					printf("riiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n");
-								ip = QStringLiteral("è·å–å¤±è´¥.....");
-								netmask = QStringLiteral("è·å–å¤±è´¥.....");
-							}
-                			
-
+							ip= entry.ip().toString();//¿¿ip
+							netmask = entry.netmask().toString();//¿¿¿¿¿¿
+							entry.broadcast().toString();//¿¿¿¿¿¿
 						}
 						else
 						{

@@ -23,6 +23,8 @@
 
 #include "channel-display-priv.h"
 
+static int  file_index = 1;
+
 static void mjpeg_src_init(struct jpeg_decompress_struct *cinfo)
 {
     display_stream *st = SPICE_CONTAINEROF(cinfo->src, display_stream, mjpeg_src);
@@ -61,6 +63,16 @@ void stream_mjpeg_init(display_stream *st)
     st->mjpeg_src.resync_to_restart   = jpeg_resync_to_restart;
     st->mjpeg_src.term_source         = mjpeg_src_term;
     st->mjpeg_cinfo.src               = &st->mjpeg_src;
+    st->total_frames = 0;
+
+    char mjpeg_file_name[1024] = {0};
+    sprintf(mjpeg_file_name, "./de_dir/mjpeg-channel%d.ts", file_index++);
+
+    st->log_file = fopen(mjpeg_file_name, "wb+");
+    if(st->log_file == NULL)
+    {
+       printf("open h264 file lost!\n");
+    }
 }
 
 G_GNUC_INTERNAL
@@ -71,6 +83,21 @@ void stream_mjpeg_data(display_stream *st)
     int height;
     uint8_t *dest;
     uint8_t *lines[4];
+
+    if(st->msg_data->psize <= 0)
+    {
+       printf("msg_data' s psize <= 0\n");
+       return;   
+    }
+
+    char* mjpeg_frame = (char*)(st->msg_data->data + 12);
+    int* mjpeg_frame_size =(int*)(st->msg_data->data + 8);  
+     
+    if(st->log_file != NULL)
+    {
+         fwrite(mjpeg_frame, 1, *mjpeg_frame_size, st->log_file);
+         fflush(st->log_file);
+    }
 
     stream_get_dimensions(st, &width, &height);
     dest = g_malloc0(width * height * 4);
@@ -142,6 +169,7 @@ void stream_mjpeg_data(display_stream *st)
             }
         }
 #endif
+
         dest = &st->out_frame[st->mjpeg_cinfo.output_scanline * width * 4];
     }
     jpeg_finish_decompress(&st->mjpeg_cinfo);
@@ -153,4 +181,10 @@ void stream_mjpeg_cleanup(display_stream *st)
     jpeg_destroy_decompress(&st->mjpeg_cinfo);
     g_free(st->out_frame);
     st->out_frame = NULL;
+
+   if(st->log_file != NULL)
+   {
+      fclose(st->log_file);
+      st->log_file = NULL;
+   }
 }

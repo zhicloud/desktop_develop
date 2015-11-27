@@ -1,0 +1,14 @@
+prefix=/home/ffmpeg/
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavfilter
+Description: FFmpeg audio/video filtering library
+Version: 5.32.100
+Requires: libswscale >= 3.1.101, libpostproc >= 53.3.100, libavformat >= 56.40.101, libavcodec >= 56.57.100, libswresample >= 1.2.101, libavutil >= 54.30.100
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavfilter -lva -lva-x11 -lva -lxcb -lXau -lXdmcp -lxcb-shm -lxcb -lXau -lXdmcp -lxcb-xfixes -lxcb-render -lxcb-shape -lxcb -lXau -lXdmcp -lxcb-shape -lxcb -lXau -lXdmcp -lX11 -lasound -lSDL -lasound -lm -ldl -lpulse-simple -lpulse -lX11 -lXext -lcaca -lpthread -lx264 -lpthread -lm -ldl -lm -lz -pthread
+Libs.private: 
+Cflags: -I${includedir}

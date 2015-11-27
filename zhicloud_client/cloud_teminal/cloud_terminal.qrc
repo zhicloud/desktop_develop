@@ -6,8 +6,7 @@
         <file alias="btn_pressed">Resources/first_login_res/btn_pressed.png</file>
         <file alias="default_photo">Resources/first_login_res/default_photo.png</file>
         <file alias="input">Resources/first_login_res/input.png</file>
-        <file alias="zylogo">Resources/first_login_res/zylogo.png</file>
-        <file alias="zslogo">Resources/first_login_res/zslogo.png</file>
+        <file alias="logo">Resources/first_login_res/logo.png</file>
         <file alias="save_user_check">Resources/first_login_res/save_user_check.png</file>
         <file alias="save_user_uncheck">Resources/first_login_res/save_user_uncheck.png</file>
         <file alias="csclick">Resources/first_login_res/cs_click.png</file>
@@ -269,25 +268,5 @@
         <file alias="1920X1080-choose">Resources/sysset_res/1920X1080-choose.png</file>
         <file alias="1920X1080-ICON">Resources/sysset_res/1920X1080-ICON.png</file>
     </qresource>
- <qresource prefix="/toolbox">
-        <file alias="againclick">Resources/toolbox/againclick.png</file>
-        <file alias="againmove">Resources/toolbox/againmove.png</file>
-        <file alias="againnomal">Resources/toolbox/againnomal.png</file>
-        <file alias="bg">Resources/toolbox/bg.png</file>
-        <file alias="cancelclick">Resources/toolbox/cancelclick.png</file>
-        <file alias="cancelmove">Resources/toolbox/cancelmove.png</file>
-        <file alias="cancelnomal">Resources/toolbox/cancelnomal.png</file>
-        <file alias="fankuiclick">Resources/toolbox/fankuiclick.png</file>
-        <file alias="fankuimove">Resources/toolbox/fankuimove.png</file>
-        <file alias="fankuinomal">Resources/toolbox/fankuinomal.png</file>
-        <file alias="pointer">Resources/toolbox/pointer.png</file>
-        <file alias="speedbtnclick">Resources/toolbox/speedbtnclick.png</file>
-        <file alias="speedbtnmove">Resources/toolbox/speedbtnmove.png</file>
-        <file alias="speedbtnnomal">Resources/toolbox/speedbtnnomal.png</file>
-        <file alias="startclick">Resources/toolbox/startclick.png</file>
-        <file alias="startmove">Resources/toolbox/startmove.png</file>
-        <file alias="startnomal">Resources/toolbox/startnomal.png</file>
-        <file alias="toolboxclick">Resources/toolbox/toolboxclick.png</file>
-        <file alias="toolboxnomal">Resources/toolbox/toolboxnomal.png</file>
-    </qresource>
+
 </RCC>

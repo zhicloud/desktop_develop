@@ -111,7 +111,7 @@ static void spice_playback_channel_init(SpicePlaybackChannel *channel)
 static void spice_playback_channel_finalize(GObject *obj)
 {
 
-    //printf("[file :%s][fun : %s][line : %d] ?????????????????  begin =========\n",__FILE__,__FUNCTION__,__LINE__);
+//    printf("[file :%s][fun : %s][line : %d] ?????????????????  begin =========\n",__FILE__,__FUNCTION__,__LINE__);
     SpicePlaybackChannelPrivate *c = SPICE_PLAYBACK_CHANNEL(obj)->priv;
 
     //add by lcx
@@ -185,7 +185,7 @@ static void spice_playback_channel_reset(SpiceChannel *channel, gboolean migrati
 
 static void spice_playback_channel_class_init(SpicePlaybackChannelClass *klass)
 {
-    //printf("[file :%s][fun : %s][line : %d] !!!!!!!!!!!!!!!!!!!!!!!!!!?????????????????  begin =========\n",__FILE__,__FUNCTION__,__LINE__);
+//    printf("[file :%s][fun : %s][line : %d] !!!!!!!!!!!!!!!!!!!!!!!!!!?????????????????  begin =========\n",__FILE__,__FUNCTION__,__LINE__);
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
     SpiceChannelClass *channel_class = SPICE_CHANNEL_CLASS(klass);
 
@@ -462,6 +462,7 @@ void spice_playback_channel_set_delay(SpicePlaybackChannel *channel, guint32 del
 
     g_return_if_fail(SPICE_IS_PLAYBACK_CHANNEL(channel));
 
+    CHANNEL_DEBUG(channel, "playback set_delay %u ms", delay_ms);
 
     c = channel->priv;
     c->latency = delay_ms;

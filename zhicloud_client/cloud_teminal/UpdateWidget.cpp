@@ -10,14 +10,12 @@ CUpdateWidget::CUpdateWidget(QWidget *parent)
 {
 	
 	createupdateNow();
-	createcomfirmUpdate();
 	createupdating();
 	
 	update_stack_layout = new QStackedLayout();
 	update_stack_layout->setContentsMargins(0, 0, 0, 0);
 	update_stack_layout->addWidget(_updateNowWidget);
 	update_stack_layout->addWidget(_updatingWidget);
-	update_stack_layout->addWidget(_comfirmUpdateWidget);
 	update_stack_layout->setCurrentWidget(_updateNowWidget);
 
 	this->setLayout(update_stack_layout);
@@ -54,7 +52,7 @@ void CUpdateWidget::createupdateNow()
 	upnowButton->setStyleSheet("QPushButton#btn{border-image: url(:/upgrade/upnomal);}"
 		"QPushButton#btn:hover{border-image: url(:/upgrade/upmove);}"
 		"QPushButton#btn:pressed{border-image: url(:/upgrade/upclick);}");
-	connect(upnowButton, SIGNAL(clicked()), SLOT(okBtnClickSlot()));
+	connect(upnowButton, SIGNAL(clicked()), SLOT(downloadWindowSlot()));
 
 	//cancel btn
 	cancelButton = new QPushButton();
@@ -86,60 +84,6 @@ void CUpdateWidget::createupdateNow()
 	v_layout->addStretch();
 	v_layout->addLayout(btn_l);
 	_updateNowWidget->setLayout(v_layout);
-}
-
-void CUpdateWidget::createcomfirmUpdate()
-{
-	_comfirmUpdateWidget = new QWidget();
-	_comfirmUpdateWidget->setAutoFillBackground(true);
-	_comfirmUpdateWidget->setFixedSize(315, 257);
-	_comfirmUpdateWidget->setObjectName("_comfirmUpdateWidget");
-	_comfirmUpdateWidget->setStyleSheet("QWidget#_comfirmUpdateWidget{border-image: url(:/upgrade/upbg);}");
-	
-	
-	//upgrade btn
-	comfirmOkButton = new QPushButton();
-	comfirmOkButton->setObjectName("comfirmOkButton");
-	comfirmOkButton->setFixedSize(70, 26);
-	comfirmOkButton->setStyleSheet("QPushButton#comfirmOkButton{border-image: url(:/upgrade/upnomal);}"
-		"QPushButton#comfirmOkButton:hover{border-image: url(:/upgrade/upmove);}"
-		"QPushButton#comfirmOkButton:pressed{border-image: url(:/upgrade/upclick);}");
-	connect(comfirmOkButton, SIGNAL(clicked()), SLOT(downloadWindowSlot()));
-
-	//cancel btn
-	comfirmCancelButton = new QPushButton();
-	comfirmCancelButton->setObjectName("comfirmCancelButton");
-	comfirmCancelButton->setFixedSize(70, 26);
-	comfirmCancelButton->setStyleSheet("QPushButton#comfirmCancelButton{border-image: url(:/upgrade/cancelnomal);}"
-		"QPushButton#comfirmCancelButton:hover{border-image: url(:/upgrade/cancelmove);}"
-		"QPushButton#comfirmCancelButton:pressed{border-image: url(:/upgrade/cancelclick);}");
-	connect(comfirmCancelButton, SIGNAL(clicked()), SLOT(closeUpdateWindowSlot()));
-
-	//显示文本框
-	_imformationInfo = new QLabel();
-	_imformationInfo->setStyleSheet("font-size:20px;color:rgb(232,86,86);");
-	_imformationInfo->setFixedSize(250, 200);
-	_imformationInfo->setWordWrap(true);
-	QPalette palette2;
-    	palette2.setColor(QPalette::WindowText, QColor(255, 0, 0));
-    	_imformationInfo->setPalette(palette2);
-	_imformationInfo->setText(QStringLiteral("升级过程可能会出现长时间黑屏或多次重启，请不要做任何操作!!!!!!!!!!"));
-	QHBoxLayout* label_l = new QHBoxLayout;
-	label_l->setAlignment(Qt::AlignCenter);
-	label_l->addWidget(_imformationInfo);
-	QHBoxLayout* btn_l = new QHBoxLayout;
-	btn_l->setAlignment(Qt::AlignCenter);
-	btn_l->addStretch(91);
-	btn_l->addWidget(comfirmCancelButton);
-	btn_l->addWidget(comfirmOkButton);
-	btn_l->addStretch(9);
-	QVBoxLayout* v_layout = new QVBoxLayout;
-	v_layout->setContentsMargins(20, 0,0 , 20);
-	v_layout->setAlignment(Qt::AlignCenter);
-	v_layout->addLayout(label_l);
-	v_layout->addStretch();
-	v_layout->addLayout(btn_l);
-	_comfirmUpdateWidget->setLayout(v_layout);
 }
 
 
@@ -230,12 +174,6 @@ void CUpdateWidget::downloadWindowSlot()
 	startRequest(_url);
 
 }
-
-void CUpdateWidget::okBtnClickSlot()
-{
-	update_stack_layout->setCurrentWidget(_comfirmUpdateWidget);
-}
-
 void CUpdateWidget::startRequest(QUrl url)
 {
 	isSizeSet = false;

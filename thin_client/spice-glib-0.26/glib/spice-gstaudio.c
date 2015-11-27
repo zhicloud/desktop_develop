@@ -93,7 +93,7 @@ void stream_dispose(struct stream *s)
 
 static void spice_gstaudio_dispose(GObject *obj)
 {
-    //:printf("[file :%s][fun : %s][line : %d] begin ================\n",__FILE__,__FUNCTION__,__LINE__);
+   // printf("[file :%s][fun : %s][line : %d] begin ================\n",__FILE__,__FUNCTION__,__LINE__);
     SpiceGstaudio *gstaudio = SPICE_GSTAUDIO(obj);
     SpiceGstaudioPrivate *p;
     SPICE_DEBUG("%s", __FUNCTION__);
@@ -105,7 +105,7 @@ static void spice_gstaudio_dispose(GObject *obj)
     if (p->pchannel != NULL) {
         g_signal_handlers_disconnect_by_func(p->pchannel,
                                              channel_event, obj);
-/*
+
         g_signal_handlers_disconnect_by_func(p->pchannel,
                                             playback_start,obj);
         g_signal_handlers_disconnect_by_func(p->pchannel,
@@ -116,7 +116,6 @@ static void spice_gstaudio_dispose(GObject *obj)
                                             playback_volume_changed,obj);
         g_signal_handlers_disconnect_by_func(p->pchannel,
                                             playback_mute_changed,obj);
-        */
         g_object_unref(p->pchannel);
         p->pchannel = NULL;
         printf("[file :%s][fun : %s][line : %d] ==== p->pchannel)\n",__FILE__,__FUNCTION__,__LINE__);
@@ -129,14 +128,13 @@ static void spice_gstaudio_dispose(GObject *obj)
         p->rchannel = NULL;
         printf("[file :%s][fun : %s][line : %d] ==== p->rchannel != NULL)\n",__FILE__,__FUNCTION__,__LINE__);
     }
-/*
     //add by lcx 
     if (p->mmtime_id != 0) {
         printf("[file :%s][fun : %s][line : %d] ==== g_source_remove(p->mmtime_id)\n",__FILE__,__FUNCTION__,__LINE__);
         g_source_remove(p->mmtime_id);
         p->mmtime_id = 0;
     }
-  */  //add end
+    //add end
     if (G_OBJECT_CLASS(spice_gstaudio_parent_class)->dispose)
         G_OBJECT_CLASS(spice_gstaudio_parent_class)->dispose(obj);
 }
@@ -148,7 +146,7 @@ static void spice_gstaudio_init(SpiceGstaudio *pulse)
 
 static void spice_gstaudio_class_init(SpiceGstaudioClass *klass)
 {
-    //printf("[file :%s][fun : %s][line : %d] new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
+//    printf("[file :%s][fun : %s][line : %d] new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
     SpiceAudioClass *audio_class = SPICE_AUDIO_CLASS(klass);
 
@@ -280,11 +278,11 @@ static void channel_event(SpiceChannel *channel, SpiceChannelEvent event,
         break;
     case SPICE_CHANNEL_CLOSED:
         if (channel == p->pchannel) {
-            //printf("[file :%s][fun : %s][line : %d] !!!!!!!!!!!!!!!!!!!!!!!!!!?????????????????  begin =========\n",__FILE__,__FUNCTION__,__LINE__);
+//            printf("[file :%s][fun : %s][line : %d] !!!!!!!!!!!!!!!!!!!!!!!!!!?????????????????  begin =========\n",__FILE__,__FUNCTION__,__LINE__);
             p->pchannel = NULL;
             g_object_unref(channel);
         } else if (channel == p->rchannel) {
-            //printf("[file :%s][fun : %s][line : %d] !!!!!!!!!!!!!!!!!!!!!!!!!!?????????????????  begin =========\n",__FILE__,__FUNCTION__,__LINE__);
+//            printf("[file :%s][fun : %s][line : %d] !!!!!!!!!!!!!!!!!!!!!!!!!!?????????????????  begin =========\n",__FILE__,__FUNCTION__,__LINE__);
             record_stop(SPICE_RECORD_CHANNEL(channel), gstaudio);
             p->rchannel = NULL;
             g_object_unref(channel);

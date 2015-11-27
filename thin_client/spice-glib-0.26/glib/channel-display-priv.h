@@ -1,3 +1,4 @@
+
 /* -*- Mode: C; c-basic-offset: 4; indent-tabs-mode: nil -*- */
 /*
    Copyright (C) 2010 Red Hat, Inc.
@@ -31,6 +32,8 @@
 #include "common/ring.h"
 #include "common/quic.h"
 #include "common/rop3.h"
+
+#include "h264_decoder.h"
 
 G_BEGIN_DECLS
 
@@ -71,6 +74,19 @@ typedef struct display_stream {
     struct jpeg_decompress_struct  mjpeg_cinfo;
     struct jpeg_error_mgr          mjpeg_jerr;
 
+    /*H264 decoder*/
+    H264Decoder                    *h264_decoder;
+    H264StreamInfo                 *h264_info;
+    FILE                           *log_file;
+    unsigned long                   total_frames;               
+
+
+    gboolean                g_thread_exit;
+    GCond			g_queue_cond;
+    GRecMutex 		g_queue_rec_mutex;
+    GQueue 		*g_queue_msg;
+    GThread		*g_thread_decoding;
+
     uint8_t                     *out_frame;
     GQueue                      *msgq;
     guint                       timeout;
@@ -108,6 +124,10 @@ void stream_mjpeg_init(display_stream *st);
 void stream_mjpeg_data(display_stream *st);
 void stream_mjpeg_cleanup(display_stream *st);
 
+/*display h264 stream*/
+void stream_h264_init(display_stream* st);
+void stream_h264_data(display_stream* st,  SpiceRect* rc);
+void stream_h264_cleanup(display_stream* st);
 G_END_DECLS
 
 #endif // CHANNEL_DISPLAY_PRIV_H_

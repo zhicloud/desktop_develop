@@ -4,7 +4,6 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include "mainwindow.h"
-#include "SpiceMulViewer.h"
 #include <QDesktopWidget>
 #include <memory>
 #include "menu_box.h"
@@ -14,7 +13,6 @@ CMenuWidget* g_menu_ptr = NULL;
 CMenuWidget::CMenuWidget(QWidget *parent, CMainWindow* main_win)
 	: QWidget(parent)
 {
-	toolbox = NULL;
 	g_menu_ptr = this;
 	feedbackwid = NULL;
 	mailwid = NULL;
@@ -30,14 +28,14 @@ CMenuWidget::CMenuWidget(QWidget *parent, CMainWindow* main_win)
 	name = new QLabel;
 
 	mail = new QPushButton;
-	QPushButton* toolbox = new QPushButton;
+	QPushButton* feedback = new QPushButton;
 
 	QPushButton* changeuser = new QPushButton;
 	QPushButton* reboot = new QPushButton;
 	QPushButton* shutd = new QPushButton;
 	QPushButton* exit = new QPushButton;
 	mail->setToolTip(QStringLiteral("邮件"));
-	toolbox->setToolTip(QStringLiteral("工具箱"));
+	feedback->setToolTip(QStringLiteral("反馈"));
 	changeuser->setToolTip(QStringLiteral("切换用户"));
 	reboot->setToolTip(QStringLiteral("重启"));
 	shutd->setToolTip(QStringLiteral("关机"));
@@ -54,14 +52,12 @@ CMenuWidget::CMenuWidget(QWidget *parent, CMainWindow* main_win)
 	mail->setObjectName("mail");
 	if (main_win->ishasmail)
 	{
-		mail_status = 1;
 		mail->setStyleSheet("QPushButton#mail{border-image: url(:/menu/msghave);}"
 			"QPushButton#mail:hover{border-image: url(:/menu/msghave);}"
 			"QPushButton#mail:pressed{border-image: url(:/menu/msghaveclick);}");
 	}
 	else
 	{
-		mail_status = 0;
 		mail->setStyleSheet("QPushButton#mail{border-image: url(:/menu/msgno);}"
 			"QPushButton#mail:hover{border-image: url(:/menu/msgno);}"
 			"QPushButton#mail:pressed{border-image: url(:/menu/msgnoclick);}");
@@ -70,12 +66,12 @@ CMenuWidget::CMenuWidget(QWidget *parent, CMainWindow* main_win)
 	
 	connect(mail, SIGNAL(clicked()), this, SLOT(clickmail()));
 
-	toolbox->setFixedSize(15, 11);
-	toolbox->setObjectName("toolbox");
-	toolbox->setStyleSheet("QPushButton#toolbox{border-image: url(:/toolbox/toolboxnomal);}"
-		"QPushButton#toolbox:hover{border-image: url(:/toolbox/toolboxnomal);}"
-		"QPushButton#toolbox:pressed{border-image: url(:/toolbox/toolboxclick);}");
-	connect(toolbox, SIGNAL(clicked()), this, SLOT(clicktoolbox()));
+	feedback->setFixedSize(26, 18);
+	feedback->setObjectName("feedback");
+	feedback->setStyleSheet("QPushButton#feedback{border-image: url(:/menu/fankuinomal);}"
+		"QPushButton#feedback:hover{border-image: url(:/menu/fankuinomal);}"
+		"QPushButton#feedback:pressed{border-image: url(:/menu/fankuiclick);}");
+	connect(feedback, SIGNAL(clicked()), this, SLOT(clickfankui()));
 
 	changeuser->setFixedSize(66, 12);
 	changeuser->setObjectName("changeuser");
@@ -117,7 +113,7 @@ CMenuWidget::CMenuWidget(QWidget *parent, CMainWindow* main_win)
 	main_layout->addWidget(name);
 	main_layout->addWidget(mail);
 	main_layout->addSpacing(20);
-	main_layout->addWidget(toolbox);
+	main_layout->addWidget(feedback);
 	main_layout->addStretch();
 	main_layout->addWidget(changeuser);
 	main_layout->addSpacing(20);
@@ -187,38 +183,17 @@ void CMenuWidget::clickmail()
 	mailwid->ShowMail();
 	mailwid->show();
 
-	//mail->setStyleSheet("QPushButton#mail{border-image: url(:/menu/msgno);}"
-	//	"QPushButton#mail:hover{border-image: url(:/menu/msgno);}"
-	//	"QPushButton#mail:pressed{border-image: url(:/menu/msgnoclick);}");
+	mail->setStyleSheet("QPushButton#mail{border-image: url(:/menu/msgno);}"
+		"QPushButton#mail:hover{border-image: url(:/menu/msgno);}"
+		"QPushButton#mail:pressed{border-image: url(:/menu/msgnoclick);}");
 }
 
-void CMenuWidget::clicktoolbox()
+void CMenuWidget::clickfankui()
 {
-	
-
-	if (!toolbox)
+	if (!feedbackwid)
 	{
-		toolbox = new CToolBox(main_w);
-		toolbox->setUnamePwd(main_w->lastsucuname,main_w->lastsucupwd);
-		connect(toolbox,SIGNAL(closeSignal()),this,SLOT(viewerGrabSlot()));
+		feedbackwid = new FeedbackWidget(main_w);
 	}
-	toolbox->grabKey();
-	toolbox->show();
-}
-void CMenuWidget::delBtn()
-{
-	delete mailwid;
-	mailwid = NULL;
-	delete toolbox;
-	toolbox = NULL;	
-}
-
-void CMenuWidget::viewerGrabSlot()
-{
-	m_viewer->grabKeyboard();
-}
-
-void CMenuWidget::setViewer(CSpiceMultVEx *viewer)
-{
-	m_viewer = viewer;
+	
+	feedbackwid->show();
 }

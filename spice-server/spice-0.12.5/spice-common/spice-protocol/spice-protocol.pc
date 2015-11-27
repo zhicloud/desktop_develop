@@ -1,0 +1,9 @@
+prefix=/home/lichenxiang/opt
+includedir=${prefix}/include
+
+Name: spice-protocol
+Description: SPICE protocol headers
+Version: 0.12.6
+
+Libs:
+Cflags: -I${includedir}/spice-1

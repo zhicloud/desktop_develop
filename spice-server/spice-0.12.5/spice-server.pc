@@ -1,0 +1,13 @@
+prefix=/home/lichenxiang/opt
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: spice
+Description: SPICE server library
+Version: 0.12.5
+
+Requires.private:  glib-2.0 >= 2.22 pixman-1 >= 0.17.7 celt051 >= 0.5.1.1 openssl xinerama
+Libs: -L${libdir} -lspice-server
+Libs.private:  -pthread -lm -lrt 
+Cflags: -I${includedir}/spice-server

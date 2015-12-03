@@ -1,0 +1,10 @@
+channel TestChannel {
+   message {
+      uint32 data_size;
+      uint64 *data[data_size] @marshall;
+   } ShortDataSubMarshall;
+};
+
+protocol Spice {
+    TestChannel main = 1;
+};

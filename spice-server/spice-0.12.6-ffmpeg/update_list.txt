@@ -1,14 +1,16 @@
 #################################################
-Spice-Server 0.12.7#20151201-1
+Spice-Server 0.12.7#20151203-1
 修改人：黄睿
 修改时间：2015/12/1
 修改文件：
+server/ffmpeg_encoder.c
 server/display-channel.*
 server/red_workder.c
 server/stream.*
 
 修改内容：
-1、为每个DisplayChannelClient建立独立的渲染画布及图片缓冲，客户端渲染调整为渲染到服务器端画布，再视频编码发送，降低带宽占用。
+1、为每个DisplayChannelClient建立独立的图片缓冲，主要绘制指令调整为服务器端强制渲染（red_process_draw->red_draw_qxl_drawable），再视频编码发送，降低带宽占用。
+2、FFMpegEncoder增加流量控制，根据客户端反馈数据动态调整FPS
 
 #################################################
 Spice-Server 0.12.7#20151130-1

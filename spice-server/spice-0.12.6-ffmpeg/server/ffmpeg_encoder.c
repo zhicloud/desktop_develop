@@ -27,6 +27,20 @@ typedef struct FFMpegEncoder {
     int height;
     uint64_t bit_rate;
     
+    //fps control
+    uint32_t current_fps;
+    uint32_t max_fps;
+    uint32_t min_fps;
+    uint32_t last_frame_mm_time;
+    uint32_t frame_interval;//in milliseconds
+    uint32_t increase_fps_counter;
+    uint32_t decrease_fps_counter;
+    uint32_t increase_fps_threshold;
+    uint32_t decrease_fps_threshold;
+    uint32_t increase_fps_step;
+    uint32_t decrease_fps_step;
+    
+    
     //context
     AVCodecContext* context;
     AVFrame* rgb_frame;
@@ -34,6 +48,13 @@ typedef struct FFMpegEncoder {
     struct SwsContext* yuv_convertor; 
     
 }FFMpegEncoder;
+
+inline uint32_t get_elapsed_milliseconds(void)
+{
+    struct timespec time_space;
+    clock_gettime(CLOCK_MONOTONIC, &time_space);
+    return time_space.tv_sec * 1000 + time_space.tv_nsec / 1000 / 1000;
+}
 
 static void ffmpeg_free_video_buffer(VideoBuffer *video_buffer)
 {   
@@ -171,6 +192,15 @@ static int ffmpeg_encode_frame(VideoEncoder *video_encoder, const SpiceBitmap *b
     }
 		spice_info("new resolution adopted, %d x %d", width, height);
 	}
+	if( 0 != encoder->last_frame_mm_time){
+		//check interval
+		if( (get_elapsed_milliseconds() - encoder->last_frame_mm_time) < encoder->frame_interval){
+			//too frequent
+			//spice_warning("ignore frame due to FPS control, current fps %d, interval %d ms", encoder->current_fps, encoder->frame_interval );
+			return VIDEO_ENCODER_FRAME_DROP;
+			
+		}
+	}
 	if( (encoder->width != width) || (encoder->height != height)){
 		spice_error("invalid bitmap region %d x %d, must be %d x %d", width, height, encoder->width, encoder->height);
 		return VIDEO_ENCODER_FRAME_UNSUPPORTED;
@@ -209,6 +239,7 @@ static int ffmpeg_encode_frame(VideoEncoder *video_encoder, const SpiceBitmap *b
   	memcpy((*buffer)->data, avpacket.data, avpacket.size);  	
   }
   av_packet_unref(&avpacket);
+  encoder->last_frame_mm_time = get_elapsed_milliseconds();
   return VIDEO_ENCODER_FRAME_ENCODE_DONE;	
 }
 
@@ -232,13 +263,53 @@ static int ffmpeg_encode_frame(VideoEncoder *video_encoder, const SpiceBitmap *b
      * @audio delay: The latency of the audio playback or MAX_UINT if it is not
      *              tracked.
      */
-static void ffmpeg_client_stream_report(VideoEncoder *encoder,
+static void ffmpeg_client_stream_report(VideoEncoder *video_encoder,
                                  uint32_t num_frames, uint32_t num_drops,
                                  uint32_t start_frame_mm_time,
                                  uint32_t end_frame_mm_time,
                                  int32_t end_frame_delay, uint32_t audio_delay)
 {
-	//spice_warning("client stream report not implement");
+	FFMpegEncoder *encoder = (FFMpegEncoder*)video_encoder;
+	if(0 == num_drops){
+		//good 
+		if(encoder->current_fps < encoder->max_fps){
+			encoder->increase_fps_counter++;
+			encoder->decrease_fps_counter = 0;
+			if(encoder->increase_fps_counter >= encoder->increase_fps_threshold){
+				encoder->current_fps += encoder->increase_fps_step;
+				if(encoder->current_fps > encoder->max_fps)
+					encoder->current_fps = encoder->max_fps;
+				encoder->frame_interval = 1000/encoder->current_fps;  
+  			AVRational time_base = { 1, encoder->current_fps};
+				encoder->context->time_base = time_base;
+				spice_info("increase fps to %d, interval %d milliseconds", encoder->current_fps, encoder->frame_interval);
+			}
+		}
+	}
+	else{
+		//frame drop
+		if(encoder->current_fps > encoder->min_fps){
+			encoder->increase_fps_counter = 0;
+			encoder->decrease_fps_counter++;
+			if(encoder->decrease_fps_counter >= encoder->decrease_fps_threshold){
+				encoder->current_fps -= encoder->decrease_fps_step;
+				if(encoder->current_fps < encoder->min_fps)
+					encoder->current_fps = encoder->min_fps;
+				encoder->frame_interval = 1000/encoder->current_fps;
+  			AVRational time_base = { 1, encoder->current_fps};
+				encoder->context->time_base = time_base;
+				spice_info("decrease fps to %d, interval %d milliseconds", encoder->current_fps, encoder->frame_interval);
+			}
+		}		
+	}
+	
+//	//debug info
+//	if(start_frame_mm_time != end_frame_mm_time)
+//	{
+//		int fps = num_frames*1000/(end_frame_mm_time - start_frame_mm_time);
+//		spice_info("client report %d frame(s)( %d drops) in %d millisecond(s), fps %d, delay %d", 
+//								num_frames, num_drops, (end_frame_mm_time - start_frame_mm_time), fps, end_frame_delay);
+//	}
 }
 
     /* This notifies the video encoder each time a frame is dropped due to pipe
@@ -254,7 +325,7 @@ static void ffmpeg_client_stream_report(VideoEncoder *encoder,
      * @encoder:    The video encoder.
      */
 static void ffmpeg_notify_server_frame_drop(VideoEncoder *encoder){
-	//spice_warning("notify server frame drop not implement");
+	//ignore frame dropped by detach stream	
 }
 
     /* This queries the video encoder's current bit rate.
@@ -331,14 +402,34 @@ VideoEncoder* ffmpeg_encoder_new(SpiceVideoCodecType codec_type,
   	default_gop_size = 200,
   	default_max_b_frames = 3,
   	default_thread_count = 1,
-  	default_fps = 25,
   	default_qmin = 18,
   	default_qmax = 28,
+  	default_fps = 25,
+  	default_max_fps = 30,
+  	default_min_fps = 15,
+  	
+  	default_fps_increase_threshold = 50,
+  	default_fps_increase_step = 2,
+  	default_fps_decrease_threshold = 25,
+  	default_fps_decrease_step = 3,
+  	
   };
   const float default_qcompress = 0.5;
   const float default_qblur = 0.5;
   
   AVRational time_base = { 1, default_fps};
+  
+  encoder->current_fps = default_fps;
+  encoder->max_fps = default_max_fps;
+  encoder->min_fps = default_min_fps;
+  encoder->last_frame_mm_time = 0;
+  encoder->frame_interval = 1000/default_fps;
+  encoder->increase_fps_counter = 0;
+  encoder->decrease_fps_counter = 0;
+  encoder->increase_fps_threshold = default_fps_increase_threshold;
+  encoder->decrease_fps_threshold = default_fps_decrease_threshold;
+  encoder->increase_fps_step = default_fps_increase_step;
+  encoder->decrease_fps_step = default_fps_decrease_step;
   
   //CRF
 	encoder->context->bit_rate = default_bit_rate;

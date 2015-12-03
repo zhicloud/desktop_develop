@@ -329,8 +329,8 @@ flags8 path_flags { /* TODO: C enum names changes */
 
 enum8 video_codec_type {
     MJPEG = 1,
-    VP8,
     H264,
+    VP8,
 };
 
 flags8 stream_flags {

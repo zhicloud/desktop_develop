@@ -1,6 +1,6 @@
 prefix=@prefix@
 includedir=@includedir@
-datadir=${prefix}/share
+datadir=@datarootdir@
 codegendir=${datadir}/spice-protocol
 
 Name: spice-protocol

@@ -1496,7 +1496,7 @@ static inline void red_process_draw(RedWorker *worker, RedDrawable *red_drawable
         red_pipes_add_drawable(worker->display_channel, drawable);
         //force render all
         //akumas 2015.12.2
-        //red_draw_qxl_drawable(worker->display_channel, drawable);
+        red_draw_qxl_drawable(worker->display_channel, drawable);
     }
 cleanup:
     display_channel_drawable_unref(display, drawable);
@@ -5323,8 +5323,8 @@ static inline int red_marshall_stream_data(RedChannelClient *rcc,
 //		struct timeval begin_time, end_time;
 //		gettimeofday(&begin_time,NULL); 
     //fetch canvas
-    SpiceCanvas* canvas = dcc->render_canvas;
-    //SpiceCanvas* canvas = display->surfaces[0].context.canvas;
+    //SpiceCanvas* canvas = dcc->render_canvas;
+    SpiceCanvas* canvas = display->surfaces[0].context.canvas;
 		canvas->ops->read_bits(canvas, dcc->render_bitmap.data->chunk[0].data, 
 																			dcc->render_bitmap.stride, &dcc->render_area);
 //		gettimeofday(&end_time,NULL); 
@@ -5358,46 +5358,46 @@ static inline int red_marshall_stream_data(RedChannelClient *rcc,
         return FALSE;
     }
 		
-		//dump stream
-		{
-			FILE* p = fopen("/tmp/stream.264", "a");
-			if(NULL != p){
-				int written = fwrite( outbuf->data, sizeof(uint8_t), outbuf->size, p);
-				if(written != outbuf->size){
-					spice_warning("dump stream exception, %d / %d written", written, outbuf->size);
-				}
-				fclose(p);
-			}
-		}
+//		//dump stream
+//		{
+//			FILE* p = fopen("/tmp/stream.264", "a");
+//			if(NULL != p){
+//				int written = fwrite( outbuf->data, sizeof(uint8_t), outbuf->size, p);
+//				if(written != outbuf->size){
+//					spice_warning("dump stream exception, %d / %d written", written, outbuf->size);
+//				}
+//				fclose(p);
+//			}
+//		}
 		
 		
 //    if (!drawable->sized_stream) {
-//		SpiceMsgDisplayStreamData stream_data;
-//		
-//		red_channel_client_init_send_data(rcc, SPICE_MSG_DISPLAY_STREAM_DATA, NULL);
-//		
-//		stream_data.base.id = get_stream_id(display, stream);
-//		stream_data.base.multi_media_time = frame_mm_time;
-//		stream_data.data_size = outbuf->size;
-//		
-//		spice_marshall_msg_display_stream_data(base_marshaller, &stream_data);
+		SpiceMsgDisplayStreamData stream_data;
+		
+		red_channel_client_init_send_data(rcc, SPICE_MSG_DISPLAY_STREAM_DATA, NULL);
+		
+		stream_data.base.id = get_stream_id(display, stream);
+		stream_data.base.multi_media_time = frame_mm_time;
+		stream_data.data_size = outbuf->size;
+		
+		spice_marshall_msg_display_stream_data(base_marshaller, &stream_data);
 		    
 //		    spice_info("send %d bytes to stream %d",(uint32_t)outbuf->size, stream_data.base.id);
 //    } else {
 //    		
-        SpiceMsgDisplayStreamDataSized stream_data;
-
-        red_channel_client_init_send_data(rcc, SPICE_MSG_DISPLAY_STREAM_DATA_SIZED, NULL);
-
-        stream_data.base.id = get_stream_id(display, stream);
-        stream_data.base.multi_media_time = frame_mm_time;
-        stream_data.data_size = outbuf->size;
-        stream_data.width = dcc->render_width;
-        stream_data.height = dcc->render_height;
-        stream_data.dest = dcc->render_area;
-        
-				//spice_info("send %d bytes to sized stream %d",(uint32_t)outbuf->size, stream_data.base.id);
-        spice_marshall_msg_display_stream_data_sized(base_marshaller, &stream_data);
+//        SpiceMsgDisplayStreamDataSized stream_data;
+//
+//        red_channel_client_init_send_data(rcc, SPICE_MSG_DISPLAY_STREAM_DATA_SIZED, NULL);
+//
+//        stream_data.base.id = get_stream_id(display, stream);
+//        stream_data.base.multi_media_time = frame_mm_time;
+//        stream_data.data_size = outbuf->size;
+//        stream_data.width = dcc->render_width;
+//        stream_data.height = dcc->render_height;
+//        stream_data.dest = dcc->render_area;
+//        
+//				//spice_info("send %d bytes to sized stream %d",(uint32_t)outbuf->size, stream_data.base.id);
+//        spice_marshall_msg_display_stream_data_sized(base_marshaller, &stream_data);
 //    }
     
     spice_marshaller_add_ref_full(base_marshaller, outbuf->data, outbuf->size,
@@ -5519,8 +5519,8 @@ static inline void marshall_qxl_drawable(RedChannelClient *rcc,
     DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
     
     //render_qxl_drawable(dcc, m, item);
-		//red_marshall_stream_data(rcc, m, item);
-		//return;
+		red_marshall_stream_data(rcc, m, item);
+		return;
 		
     //render red drawable 
     if(( (item->stream)||( item->sized_stream) )&& (render_qxl_drawable(dcc, m, item) )){

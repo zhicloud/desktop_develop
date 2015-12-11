@@ -20,6 +20,7 @@
 #include "spice-client.h"
 #include "spice-common.h"
 #include "spice-channel-priv.h"
+#include <X11/Xlib.h>
 
 /**
  * SECTION:channel-inputs
@@ -226,6 +227,26 @@ static void send_motion(SpiceInputsChannel *channel)
     spice_msg_out_send(msg);
 }
 
+static void sync_key_modifiers(SpiceChannel *channel, gpointer data)
+{
+    guint32 modifiers = 0;
+    Display *dpy = XOpenDisplay(":0");
+    XKeyboardState x;
+    XGetKeyboardControl(dpy, &x);
+    XCloseDisplay(dpy);
+    //printf("led_mask=%lx\n", x.led_mask);
+
+    if(x.led_mask & 1) {
+        modifiers |= SPICE_INPUTS_CAPS_LOCK;
+    }
+
+    if(x.led_mask & 2) {
+        modifiers |= SPICE_INPUTS_NUM_LOCK;
+    }
+
+    spice_inputs_set_key_locks(SPICE_INPUTS_CHANNEL(channel), modifiers);
+}
+
 /* coroutine context */
 static void inputs_handle_init(SpiceChannel *channel, SpiceMsgIn *in)
 {
@@ -234,6 +255,9 @@ static void inputs_handle_init(SpiceChannel *channel, SpiceMsgIn *in)
 
     c->modifiers = init->keyboard_modifiers;
     g_coroutine_signal_emit(channel, signals[SPICE_INPUTS_MODIFIERS], 0);
+    sync_key_modifiers(channel, channel);
+    spice_g_signal_connect_object(channel, "state-changed", \
+        G_CALLBACK(sync_key_modifiers), channel, 0);
 }
 
 /* coroutine context */

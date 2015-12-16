@@ -266,3 +266,4 @@ void spice_timer_queue_cb(void)
         }
     }
 }
+

@@ -101,6 +101,7 @@ typedef struct _H264StreamInfo
     int qmin;
     int qmax;
     float qcompress;  
+    int compression_level
 
 }H264StreamInfo;
 

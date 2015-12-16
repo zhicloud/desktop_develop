@@ -6,6 +6,14 @@
 #include <common/log.h>
 
 
+static void *start_run(void * args)
+{
+    RedBaseThreading* basethreading = (RedBaseThreading*)args;
+    basethreading->start_rtn(basethreading->thread_data);
+    return 0xdead;
+}
+
+
 void init_spice_base_threading(RedBaseThreading * basethreading,void* (*start_rtn)(void*))
 {
     set_spice_base_threading_status(basethreading,RED_THREADING_STOPPING);
@@ -26,7 +34,7 @@ void set_spice_base_threading_run(RedBaseThreading* basethreading,void* (*start_
 int start_spice_base_threading(RedBaseThreading* basethreading)
 {
     int r;
-    if ((r = pthread_create(&basethreading->g_base_thread, NULL, basethreading->start_rtn, basethreading->thread_data))) {
+    if ((r = pthread_create(&basethreading->g_base_thread, NULL, start_run, basethreading))) {
         spice_printerr("create thread base failed %d", r);
         return r;
     }
@@ -41,8 +49,21 @@ void init_spice_base_threading_data(RedBaseThreading* basethreading,void* thread
 
 void stop_wait_spice_base_threading(RedBaseThreading * basethreading)
 {
+    set_spice_base_threading_close(basethreading,true);
     pthread_join(basethreading->g_base_thread,NULL);
     set_spice_base_threading_status(basethreading,RED_THREADING_STOPPING);
+}
+
+void set_spice_base_threading_close(RedBaseThreading * basethreading,bool bClose)
+{
+    basethreading->bClose = bClose;
+}
+
+int get_spice_base_threading_close(RedBaseThreading * basethreading)
+{
+    
+    return basethreading->bClose;
+
 }
 
 RedBaseThreading * spice_base_threading_new()
@@ -62,5 +83,6 @@ void spice_base_threading_delete(RedBaseThreading * basethreading)
         free(basethreading);
     }
 }
+
 
 

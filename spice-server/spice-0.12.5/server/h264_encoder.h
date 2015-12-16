@@ -17,12 +17,20 @@
 //add by lcx
 #define BIT_RATE  1024 * 1024 * 2 
 #define BIT_RATE_MAX 1024 * 1024 * 20
+#define FRAME_RATE 11 
 
 //#define RC_BUFFER_SIZE_FF ( (float) (BIT_RATE) / 6000000 * 56 * 1024 * 8) //6M时为56kbytes
 #define RC_BUFFER_SIZE_FF ( (float) (BIT_RATE_MAX) / 6000000 * 56 * 1024 * 8) //6M时为56kbytes
 #define GOP_SIZE 200 
 #define MAX_B_FRAME 10 
 #define THREAD_COUNT 9 
+
+#ifndef OUTPUT_BUF_SIZE_H264
+#define OUTPUT_BUF_SIZE_H264  4096 * 4096 * 2
+#endif 
+#ifndef MAX_RGB_SIZE
+#define MAX_RGB_SIZE 1920 * 1080 * 4 * 9 
+#endif
 
 
 typedef struct _H264Encoder

@@ -8,7 +8,9 @@ red_threading.lo: red_threading.c red_threading.h /usr/include/pthread.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/include/stddef.h \
  /usr/include/time.h /usr/include/bits/sched.h /usr/include/bits/time.h \
  /usr/include/xlocale.h /usr/include/bits/pthreadtypes.h \
- /usr/include/bits/setjmp.h ../spice-common/common/log.h \
+ /usr/include/bits/setjmp.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.4.7/include/stdbool.h \
+ ../spice-common/common/log.h \
  ../spice-common/spice-protocol/spice/macros.h \
  ../spice-common/spice-protocol/spice/types.h /usr/include/stdint.h \
  /usr/include/bits/wchar.h \
@@ -62,6 +64,8 @@ red_threading.h:
 /usr/include/bits/pthreadtypes.h:
 
 /usr/include/bits/setjmp.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.4.7/include/stdbool.h:
 
 ../spice-common/common/log.h:
 

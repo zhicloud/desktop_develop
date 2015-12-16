@@ -3,6 +3,8 @@
 
 
 #include <pthread.h>
+#include <stdbool.h>
+
 #include "common/log.h"
 
 #define RED_SPICE_BASE_THREADING_INIT(threading) do{\
@@ -12,6 +14,8 @@
    threading->set_spice_base_threading_run = set_spice_base_threading_run;\
    threading->start_spice_base_threading = start_spice_base_threading;\
    threading->stop_wait_spice_base_threading = stop_wait_spice_base_threading;\
+   threading->set_spice_base_threading_close = set_spice_base_threading_close;\
+   threading->get_spice_base_threading_close = get_spice_base_threading_close;\
 }while(0)
 
 
@@ -26,6 +30,7 @@ typedef struct RedBaseThreading RedBaseThreading;
 typedef struct RedBaseThreading
 {
    RedBaseThreadingStatus status;
+   bool bClose;
    pthread_t g_base_thread;
    void * thread_data;
    void* (*start_rtn)(void*);
@@ -36,6 +41,8 @@ typedef struct RedBaseThreading
    void (*set_spice_base_threading_run)(RedBaseThreading* basethreading,void* (*start_rtn)(void*));
    int (*start_spice_base_threading)(RedBaseThreading* basethreading);
    void (*stop_wait_spice_base_threading)(RedBaseThreading * basethreading);
+   void (*set_spice_base_threading_close)(RedBaseThreading * basethreading,bool bClose);
+   int (*get_spice_base_threading_close)(RedBaseThreading * basethreading);
 };
 
 
@@ -49,5 +56,7 @@ void set_spice_base_threading_status(RedBaseThreading * basethreading,RedBaseThr
 void set_spice_base_threading_run(RedBaseThreading* basethreading,void* (*start_rtn)(void*));
 int start_spice_base_threading(RedBaseThreading* basethreading);
 void stop_wait_spice_base_threading(RedBaseThreading * basethreading);
+void set_spice_base_threading_close(RedBaseThreading * basethreading,bool bClose);
+int get_spice_base_threading_close(RedBaseThreading * basethreading);
 
 #endif 

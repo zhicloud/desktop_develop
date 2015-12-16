@@ -361,6 +361,7 @@ static void red_peer_handle_outgoing(RedsStream *stream, OutgoingHandler *handle
         if (n == -1) {
             switch (errno) {
             case EAGAIN:
+                continue;
             case EINTR:
                 continue;
             case EPIPE:

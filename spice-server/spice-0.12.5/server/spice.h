@@ -506,17 +506,20 @@ enum {
     SPICE_STREAM_VIDEO_INVALID,
     SPICE_STREAM_VIDEO_OFF,
     SPICE_STREAM_VIDEO_ALL,
-    SPICE_STREAM_VIDEO_FILTER
+    SPICE_STREAM_VIDEO_FILTER,
+    SPICE_STREAM_VIDEO_H264_ALL
 };
 
 //add by lcx for h264
 enum {
    SPICE_STREAM_VIDEO_COMPRESSION_INVALID,
    SPICE_STREAM_VIDEO_COMPRESSION_MJPEG,
-   SPICE_STREAM_VIDEO_COMPRESSION_H264
+   SPICE_STREAM_VIDEO_COMPRESSION_H264,
+   SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL
 };
 
 int spice_server_set_streaming_compression(SpiceServer *s, int value);
+int spice_server_set_streaming_h264_info(SpiceServer *s, int vfps,int vbit_rate);
 
 int spice_server_set_streaming_video(SpiceServer *s, int value);
 int spice_server_set_playback_compression(SpiceServer *s, int enable);

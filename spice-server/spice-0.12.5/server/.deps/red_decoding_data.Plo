@@ -84,9 +84,13 @@ red_decoding_data.lo: red_decoding_data.c red_decoding_data.h \
  /home/lichenxiang/opt//include/libavutil/mathematics.h \
  /home/lichenxiang/opt//include/libswscale/swscale.h \
  /home/lichenxiang/opt//include/libswscale/version.h h264_type.h \
+ red_spice_common_defines.h \
  ../spice-common/spice-protocol/spice/protocol.h \
  ../spice-common/spice-protocol/spice/start-packed.h \
- ../spice-common/spice-protocol/spice/end-packed.h
+ ../spice-common/spice-protocol/spice/end-packed.h /usr/include/unistd.h \
+ /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
+ /usr/include/bits/confname.h /usr/include/getopt.h \
+ /usr/include/sys/time.h
 
 red_decoding_data.h:
 
@@ -340,8 +344,22 @@ h264_encoder.h:
 
 h264_type.h:
 
+red_spice_common_defines.h:
+
 ../spice-common/spice-protocol/spice/protocol.h:
 
 ../spice-common/spice-protocol/spice/start-packed.h:
 
 ../spice-common/spice-protocol/spice/end-packed.h:
+
+/usr/include/unistd.h:
+
+/usr/include/bits/posix_opt.h:
+
+/usr/include/bits/environments.h:
+
+/usr/include/bits/confname.h:
+
+/usr/include/getopt.h:
+
+/usr/include/sys/time.h:

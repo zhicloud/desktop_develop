@@ -180,6 +180,10 @@ typedef struct RedWorkerMessageSetStreamingVideoCompression {
     uint32_t streaming_video_compression;
 } RedWorkerMessageSetStreamingVideoCompression;
 
+typedef struct RedWorkerMessageSetStreamingVideoInfo{
+   int fps;
+   int bit_rate;
+} RedWorkerMessageSetStreamingVideoInfo;
 
 
 typedef struct RedWorkerMessageSetMouseMode {

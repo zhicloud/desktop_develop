@@ -11,6 +11,7 @@
 #include "common/ring.h"
 #include "red_threading.h"
 #include "h264_encoder.h"
+#include "red_spice_common_defines.h"
 
 #define RED_SPICE_DECODING_THREADING_INIT(threading) do{\
    RED_SPICE_BASE_THREADING_INIT(threading->tbase);\
@@ -43,15 +44,18 @@ struct H264DataItem
    RingItem  item;
    char * slice;
    int size;
+   uint32_t frame_mm_time;
 };
 
 struct RedDecodingThreading
 {
    RedBaseThreading *tbase;
-   bool bClose;
+   int fd[2];
    void *worker;
    pthread_mutex_t _lock;
    SpiceDecodingData g_decoding_data; 
+   
+   LCXCALLBACK job;
    
    Ring h264_data_list;
    int list_size;
@@ -59,7 +63,7 @@ struct RedDecodingThreading
    H264Encoder *g_h264_encoder;
 
    //interface
-   void (*init_spice_decoding_threading)(RedDecodingThreading * threading,void *worker,int bits_size,SpiceRect *bbox,void* (*start_rtn)(void*),enum AVPixelFormat pix_fmt);
+   void (*init_spice_decoding_threading)(RedDecodingThreading * threading,void *worker,int bits_size,SpiceRect *bbox,LCXCALLBACK *job,enum AVPixelFormat pix_fmt,int fr,int br);
    void (*init_spice_decoding_threading_data)(RedDecodingThreading* threading,int bits_size,SpiceRect *bbox);
    void (*set_spice_decoding_threading_run)(RedDecodingThreading * threading,void* (*start_rtn)(void*));
    void (*start_spice_decoding_threading)(RedDecodingThreading * threading);
@@ -75,7 +79,7 @@ RedDecodingThreading * decoding_threading_new();
 void decoding_threading_delete(RedDecodingThreading * threading);
 
 
-void init_spice_decoding_threading(RedDecodingThreading * threading,void *worker,int bits_size,SpiceRect *bbox,void* (*start_rtn)(void*),enum AVPixelFormat pix_fmt);
+void init_spice_decoding_threading(RedDecodingThreading * threading,void *worker,int bits_size,SpiceRect *bbox,LCXCALLBACK *job,enum AVPixelFormat pix_fmt,int fr,int br);
 void init_spice_decoding_threading_data(RedDecodingThreading* threading,int bits_size,SpiceRect *bbox);
 void set_spice_decoding_threading_run(RedDecodingThreading * threading,void* (*start_rtn)(void*));
 void start_spice_decoding_threading(RedDecodingThreading * threading);

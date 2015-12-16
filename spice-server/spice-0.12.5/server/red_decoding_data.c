@@ -1,17 +1,210 @@
 #include "red_decoding_data.h"
-#include <spice/protocol.h>
+#include "h264_type.h"
 
+#include <spice/protocol.h>
+#include <errno.h>
+#include<unistd.h>
+#include <sys/time.h>
+#include <sys/types.h>
+
+
+static void get_h264_slice_data_from_decoding_threading(RedDecodingThreading * threading,
+        char * slice,int *outbuf_size,char *bits)
+{
+    int width, height;
+    int ret;
+    int bpp;
+    //pthread_mutex_lock(&threading->_lock);
+    if (!threading->g_h264_encoder)
+    {
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"g_h264_encoder === NULL");
+        return;
+        //goto down;
+    }
+    
+    width = threading->g_decoding_data.bbox.right - threading->g_decoding_data.bbox.left;
+    height = threading->g_decoding_data.bbox.bottom - threading->g_decoding_data.bbox.top;
+
+    if (threading->g_h264_encoder->codec_context->width != width || 
+            threading->g_h264_encoder->codec_context->height != height || 
+            threading->g_h264_encoder->codec_context->pix_fmt != threading->g_decoding_data.pix_fmt)
+    {
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : \
+                width (%d,%d) , height ( %d ,%d) fmt(%d,%d)",
+                __FILE__,__FUNCTION__,__LINE__,
+                width,
+                threading->g_h264_encoder->codec_context->width, 
+                height,
+                threading->g_h264_encoder->codec_context->height,
+                threading->g_h264_encoder->codec_context->pix_fmt,
+                threading->g_decoding_data.pix_fmt
+                );
+        return;
+        //goto down;
+    }
+
+    GET_FORMAT_BYTES(threading->g_decoding_data.pix_fmt,bpp) ;
+    ret = h264_encode(threading->g_h264_encoder,bits,width * height * bpp,
+            slice,&outbuf_size);
+    if (H264_NOT_GET_SLICE == ret)
+    {
+
+    }
+    else if(H264_ENCODER_OK == ret)
+    {
+#if 1
+        char filename[1000] = "";
+        sprintf(filename,"/home/lichenxiang/stream_before/h264_0x%xh264",threading->g_h264_encoder);
+        FILE *fp = fopen(filename,"a");
+        fwrite(slice,1,outbuf_size,fp);
+        fclose(fp);
+#endif
+    }
+    else 
+    {
+        spice_printerr("h264_encode error");
+    }
+//down:
+//    pthread_mutex_unlock(&threading->_lock);
+}
+
+static void do_callback(RedDecodingThreading * threading,char * slice,int outbuf_size)
+{
+    int call_flag = 0;
+    pthread_mutex_lock(&threading->_lock);
+    
+    call_flag =  threading->list_size; 
+    insert_h264_slice_in_decoding_threading(threading,slice,outbuf_size);
+    
+    if(call_flag == 0)
+    {
+        threading->job._cb(threading->job._ctx,threading->job._ud);
+    }
+    
+    pthread_mutex_unlock(&threading->_lock);
+
+}
+
+static void * start_run(void * args)
+{
+    RedDecodingThreading * threading = (RedDecodingThreading * )args;
+    int ret = 0;
+    fd_set rfds;
+    struct timeval tv_si;
+    struct timeval tv_ti0;
+    struct timeval tv_ti1;
+    int retval;
+    int maxfd = 0;
+
+    suseconds_t ofr_t = 0; 
+
+    size_t outbuf_size;
+    char * slice = NULL;
+    char * bits = NULL;
+    outbuf_size = OUTPUT_BUF_SIZE_H264;
+    slice = malloc(OUTPUT_BUF_SIZE_H264);
+    bits = malloc(threading->g_decoding_data.max_bits_size);
+
+    memset(&tv_si,0,sizeof(struct timeval ));
+    memset(&tv_ti0,0,sizeof(struct timeval ));
+    memset(&tv_ti1,0,sizeof(struct timeval ));
+
+
+    pthread_mutex_lock(&threading->_lock);
+
+    threading->g_h264_encoder->codec_context->time_base;
+    ofr_t = 1000 * 1000 / threading->g_h264_encoder->codec_context->time_base.den * 
+        threading->g_h264_encoder->codec_context->time_base.num ; 
+
+    pthread_mutex_unlock(&threading->_lock);
+
+    while(threading->tbase->get_spice_base_threading_close(threading->tbase))
+    {
+        FD_ZERO(&rfds);
+        FD_SET(threading->fd[0], &rfds);
+        maxfd = threading->fd[0] + 1; 
+
+
+        gettimeofday (&tv_ti0, NULL);
+        retval = select(maxfd,&rfds,NULL,NULL,&tv_si);
+        if (retval < 0)
+        {
+            if(errno == EINTR || errno == EAGAIN)
+            {
+                gettimeofday (&tv_ti1, NULL);
+                suseconds_t diff = 0;
+                diff = (tv_ti1.tv_sec * 1000 * 1000 + tv_ti1.tv_usec) - (tv_ti0.tv_sec * 1000 * 1000 + tv_ti0.tv_usec);
+                tv_si.tv_sec = diff / (1000 * 1000);
+                tv_si.tv_usec =  diff % (1000 * 1000);
+            }
+            else
+            {
+                tv_si.tv_sec = 1;
+                tv_si.tv_usec = 0;
+            }
+            continue;
+        }
+        else if (retval == 0)
+        {
+            //time out begin to codec
+            pthread_mutex_lock(&threading->_lock);
+            memcpy(bits,threading->g_decoding_data.bits,threading->g_decoding_data.max_bits_size);
+            pthread_mutex_unlock(&threading->_lock);
+
+            get_h264_slice_data_from_decoding_threading(threading,slice,&outbuf_size,bits);
+            do_callback(threading,slice,outbuf_size);
+
+            gettimeofday (&tv_ti1, NULL);
+            suseconds_t diff = 0;
+            diff = (tv_ti1.tv_sec * 1000 * 1000 + tv_ti1.tv_usec) - (tv_ti0.tv_sec * 1000 * 1000 + tv_ti0.tv_usec);
+            diff = ofr_t - diff; 
+            if (diff >= 0)
+            {
+                tv_si.tv_sec = diff / (1000 * 1000);
+                tv_si.tv_usec =  diff % (1000 * 1000);
+            }
+            else
+            {
+                tv_si.tv_sec = 0;
+                tv_si.tv_usec = 0;
+            }
+        }
+        else
+        {
+            spice_printerr("recv a signal from rfds");
+
+            if (FD_ISSET(threading->fd[0],&rfds))
+            {
+                char buf[100] = "";
+                read(threading->fd[0],buf,100);
+            }
+            continue;
+        }
+    }
+
+    if(slice)
+    {
+        free(slice);
+        slice = NULL;
+    }
+    if(bits)
+    {
+        free(bits);
+        bits = NULL;
+    }
+
+    return 0Xdead;
+}
 
 static void create_spice_decoding_threading_h264_streaming(H264Encoder* h264_encoder,enum AVPixelFormat pix_fmt,
-        int width,int height)
+        int width,int height,int fr,int br)
 {
     uint32_t frame_mm_time;
     int n;
-    int ret;
 
     H264StreamInfo info;
-    AVRational rate = { 1, 30};
-    info.bit_rate = BIT_RATE; 
+    AVRational rate = { 1, fr};
+    info.bit_rate = br; 
     info.rc_max_rate = info.bit_rate;
     info.rc_min_rate = info.bit_rate / 2;
     info.rc_buffer_size = RC_BUFFER_SIZE_FF;
@@ -44,14 +237,15 @@ static void create_spice_decoding_threading_h264_streaming(H264Encoder* h264_enc
 }
 
 void init_spice_decoding_threading(RedDecodingThreading * threading,void *worker,int bits_size,SpiceRect *bbox,
-        void* (*start_rtn)(void*),enum AVPixelFormat pix_fmt)
+        LCXCALLBACK *job,enum AVPixelFormat pix_fmt,int fr,int br)
 {
-    threading->bClose = false;
+    int ret = 0;
+    threading->tbase->set_spice_base_threading_close(threading->tbase,false);
     threading->worker = worker;
     //threading->g_h264_encoder = NULL;
 
-    
-    threading->tbase->init_spice_base_threading(threading->tbase,start_rtn);
+
+    threading->tbase->init_spice_base_threading(threading->tbase,start_run);
     threading->tbase->init_spice_base_threading_data(threading->tbase,(void*)threading);
 
 
@@ -65,19 +259,32 @@ void init_spice_decoding_threading(RedDecodingThreading * threading,void *worker
     threading->list_size = 0;
 
     init_spice_decoding_threading_data(threading,bits_size,bbox);
-    set_spice_decoding_threading_run(threading,start_rtn);
-    
+    set_spice_decoding_threading_run(threading,start_run);
+
+    threading->job._cb = job->_cb;
+    threading->job._ctx = job->_ctx;
+    threading->job._ud = job->_ud;
+
     threading->g_h264_encoder =  h264_encoder_new(); 
     threading->g_decoding_data.pix_fmt = pix_fmt;
     create_spice_decoding_threading_h264_streaming(threading->g_h264_encoder,
             threading->g_decoding_data.pix_fmt,
             threading->g_decoding_data.bbox.right - threading->g_decoding_data.bbox.left,
-            threading->g_decoding_data.bbox.bottom - threading->g_decoding_data.bbox.top);
+            threading->g_decoding_data.bbox.bottom - threading->g_decoding_data.bbox.top,fr,br);
+    ret = pipe(threading->fd);
+    if(ret != 0)
+    {
+        spice_error("create pipe error = %d",errno);
+    
+    }
    
 }
 
 void uninit_spice_decoding_threading(RedDecodingThreading * threading)
 {
+    RingItem *item_local, *next;
+    H264DataItem *dataitem = NULL;
+    
     if (threading->g_h264_encoder)
     {
         h264_encoder_uninit(threading->g_h264_encoder);
@@ -93,13 +300,23 @@ void uninit_spice_decoding_threading(RedDecodingThreading * threading)
         free(threading->g_decoding_data.bits);
         threading->g_decoding_data.bits = NULL;
     }
-    if(threading->tbase)
-    {
-        free(threading->tbase);
-        threading->tbase = NULL;
-    }
+    
     threading->g_decoding_data.max_bits_size = 0;
     threading->worker = NULL;
+    
+    
+    RING_FOREACH_SAFE(item_local,next,&threading->h264_data_list){
+        dataitem = SPICE_CONTAINEROF(item_local, H264DataItem, item);
+        if(dataitem)
+        {
+            if(dataitem->slice)
+            {
+                free(dataitem->slice);        
+            }
+            free(dataitem);
+        }
+    }
+    threading->list_size = 0;
 
 }
 
@@ -130,7 +347,7 @@ void set_spice_decoding_threading_run(RedDecodingThreading * threading,void* (*s
 void start_spice_decoding_threading(RedDecodingThreading * threading)
 {
     int r;
-    threading->bClose = false;
+    threading->tbase->set_spice_base_threading_close(threading->tbase,false);
     r = threading->tbase->start_spice_base_threading(threading->tbase);
     if (r)
     {
@@ -140,7 +357,7 @@ void start_spice_decoding_threading(RedDecodingThreading * threading)
 
 void stop_wait_spice_decoding_threading(RedDecodingThreading * threading)
 {
-    threading->bClose = true;
+    threading->tbase->set_spice_base_threading_close(threading->tbase,true);
     threading->tbase->stop_wait_spice_base_threading(threading->tbase);
     uninit_spice_decoding_threading(threading);
 }
@@ -158,7 +375,7 @@ void copy_bits_to_decoding_threading(RedDecodingThreading * threading,char* bits
                 threading->g_decoding_data.bbox.bottom == bbox->bottom)
         {
             memcpy(threading->g_decoding_data.bits,bits,size);
-        
+
         }
         else
         {
@@ -227,24 +444,31 @@ RedDecodingThreading * decoding_threading_new()
     {
         return NULL;
     }
-
+    memset(basethreading,0,sizeof(RedBaseThreading));
     RedDecodingThreading * threading = (RedDecodingThreading *)malloc(sizeof(RedDecodingThreading));
     if (!threading)
     {
         if (basethreading)
         {
-            free(basethreading);
+            spice_base_threading_delete(basethreading);
         }
         return NULL;
     }
+    memset(threading,0,sizeof(RedDecodingThreading));
     threading->tbase = basethreading;
     RED_SPICE_DECODING_THREADING_INIT(threading);
+    threading->tbase->set_spice_base_threading_status(threading->tbase,RED_THREADING_STOPPING);
 }
 
 void decoding_threading_delete(RedDecodingThreading * threading)
 {
     if(threading)
     {
+        if(threading->tbase)
+        {
+            spice_base_threading_delete(threading->tbase);
+            threading->tbase = NULL;
+        }
         free(threading);
     }
 }

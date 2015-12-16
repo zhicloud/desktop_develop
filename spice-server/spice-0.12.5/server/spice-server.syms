@@ -33,6 +33,7 @@ global:
     spice_server_set_port;
     spice_server_set_streaming_video;
     spice_server_set_streaming_compression;
+    spice_server_set_streaming_h264_info;
     spice_server_set_ticket;
     spice_server_set_tls;
     spice_server_set_zlib_glz_compression;

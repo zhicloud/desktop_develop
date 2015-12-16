@@ -249,6 +249,10 @@ private:
 	QWidget				*netwidget;
 	QWidget				*aboutwidget;
 	QWidget				*netdiagnosewidget;
+	QLabel* netset_ipaddr;
+	QLabel* netset_mask;
+	QLabel* netset_gateway;
+	QLabel* netset_dnslable;
 protected:
 	virtual void customEvent(QEvent *event);
 public slots:
@@ -265,6 +269,7 @@ public slots:
 	void changepwd();
 	void changepwdret();
 	void changepwdsure();
+	void netsetreadonly(bool isreadonly);
 	void checkurl();
 	void clicklogin();
 	void logintohost();

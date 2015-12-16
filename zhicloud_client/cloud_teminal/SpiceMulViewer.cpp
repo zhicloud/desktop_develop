@@ -327,10 +327,10 @@ bool CSpiceMultVEx::CloseSpice()
 
 	if (m_hspice >= 0)
 	{
-		SpiceDisconnect(CSpiceMultVEx::m_hContext, m_hspice);
-		SpiceClose(CSpiceMultVEx::m_hContext, m_hspice);
+      SpiceDisconnect(CSpiceMultVEx::m_hContext, m_hspice);
+      SpiceClose(CSpiceMultVEx::m_hContext, m_hspice);
 		m_hspice = -1;
-	}
+   }
 
 
 
@@ -795,15 +795,17 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
 				SpiceKeyEvent(m_hContext, m_hspice, true, keymap_win322xtkbd[virtualKey]);
 			}
 		//	MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY PRESS EVENT -> WIN32KEY : %1========").arg(keymap_win322xtkbd[virtualKey]));
-			//qDebug() << "===========" << virtualKey;
+			//qDebug() << "P===========" << virtualKey;
+         /*
 			if(virtualKey == 65289)
 			ev->ignore();
+         */
 		}
 		else if (ev->type() == QEvent::KeyRelease)
 		{
 			QKeyEvent *keyEvent = static_cast<QKeyEvent*>(ev);
 			quint32 virtualKey = keyEvent->nativeVirtualKey();
-			qDebug() << ".............................." << virtualKey;
+			//qDebug() << "R.............................." << virtualKey;
 			if (virtualKey <= 65536)
             {
                MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY RELEASE EVENT -> VIRTUALKEY : %1========").arg(virtualKey));
@@ -983,9 +985,16 @@ void CSpiceMultVEx::Update()
 		char* ptr = *ita;
 		SPICE_Invalidate* ud = (SPICE_Invalidate*)ptr;
 	
-		if (ud->x >= 0 && ud->y >= 0 && (ud->x + ud->w) <= m_width && (ud->y + ud->h) <= m_height)
-			imageCombined((char*)ud->bitmap,ud->x,ud->y,ud->w,ud->h);
-		
+	   if(ud->w == m_width && ud->h == m_height)
+      {
+          int size = sizeof(uint32_t) * ud->w * ud->h;
+          memcpy(m_pImage, ud->bitmap, size);
+      }
+      else if (ud->x >= 0 && ud->y >= 0 && (ud->x + ud->w) <= m_width && (ud->y + ud->h) <= m_height)
+      {
+         imageCombined((char*)ud->bitmap,ud->x,ud->y,ud->w,ud->h);
+      }
+	
 		ud->free_bitmap(ud->bitmap);
 		free(*ita);
 	}
@@ -1190,7 +1199,10 @@ int SpiceMulViewer::OpenSpice(char* szIP, char* port, char* uname /*= NULL*/, ch
 
 bool SpiceMulViewer::CloseSpice()
 {
-	return m_SpiceViewer->CloseSpice();
+   if(m_SpiceViewer == NULL)
+      return false;
+   
+   return m_SpiceViewer->CloseSpice();
 }
 
 bool SpiceMulViewer::Spice_IsInit()

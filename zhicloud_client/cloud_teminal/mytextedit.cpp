@@ -39,3 +39,18 @@ CMyTextEdit::~CMyTextEdit()
 {
 
 }
+
+void CMyTextEdit::setReadOnly(bool isreadonly)
+{
+	if(isreadonly)
+	{
+		inputEdit->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:15px;border:0px;");
+		inputEdit->setReadOnly(true);
+	}
+	else
+	{
+		inputEdit->setStyleSheet("background-color:transparent;color:white;font-size:15px;border:0px;");
+		inputEdit->setReadOnly(false);
+	}
+}
+

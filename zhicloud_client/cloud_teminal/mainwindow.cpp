@@ -1078,8 +1078,11 @@ void CMainWindow::someItemOnWidget(QWidget* widget)
          }
 		 else
 		 {
-		 	adduserretbtn->hide();
-			isadduserretshow = false;
+			if(adduserretbtn)
+			{
+		 		adduserretbtn->hide();
+				isadduserretshow = false;
+			}
 		 }
 	
       }
@@ -1246,11 +1249,7 @@ void CMainWindow::dhcpclickfunc()
 {
    usersetbtn->setIcon(QIcon(QString(":/net_about/unselect")));
    dhcpbutton->setIcon(QIcon(QString(":/net_about/select")));
-   ipaddredit->GetEdit()->setReadOnly(true);
-   maskedit->GetEdit()->setReadOnly(true);
-   gatewayedit->GetEdit()->setReadOnly(true);
-   //LXL add for DNS
-   dnsedit->GetEdit()->setReadOnly(true);
+   netsetreadonly(true);
    QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
    QString isdhcp;
    if (settings)
@@ -1363,11 +1362,7 @@ void CMainWindow::usersetclickfunc()
 
    usersetbtn->setIcon(QIcon(QString(":/net_about/select")));
    dhcpbutton->setIcon(QIcon(QString(":/net_about/unselect")));
-   ipaddredit->GetEdit()->setReadOnly(false);
-   maskedit->GetEdit()->setReadOnly(false);
-   gatewayedit->GetEdit()->setReadOnly(false);
-   //LXL add for DNS
-   dnsedit->GetEdit()->setReadOnly(false);
+   netsetreadonly(false);
 }
 
 
@@ -1706,10 +1701,10 @@ void CMainWindow::createNetSettingWidget()
 
    QWidget* centertop = new QWidget;
    centertop->setFixedSize(250, 160);
-   QLabel* ipaddr = new QLabel;
-   ipaddr->setFixedSize(42, 14);
-   ipaddr->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-   ipaddr->setText(QStringLiteral("IP地址:"));
+   netset_ipaddr = new QLabel;
+   netset_ipaddr->setFixedSize(42, 14);
+   netset_ipaddr->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+   netset_ipaddr->setText(QStringLiteral("IP地址:"));
 
 
    QString ip,mac;
@@ -1725,16 +1720,16 @@ void CMainWindow::createNetSettingWidget()
 
    ipaddredit = new CMyTextEdit(":/setsvrurl/input", "", 150, 30, 1);
    ipaddredit->GetEdit()->setText(ip);
-   QLabel* mask = new QLabel;
-   mask->setFixedSize(52, 14);
-   mask->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-   mask->setText(QStringLiteral("子网掩码:"));
+   netset_mask = new QLabel;
+   netset_mask->setFixedSize(52, 14);
+   netset_mask->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+   netset_mask->setText(QStringLiteral("子网掩码:"));
    maskedit = new CMyTextEdit(":/setsvrurl/input", "", 150, 30, 1);
    maskedit->GetEdit()->setText(netmask);
-   QLabel* gateway = new QLabel;
-   gateway->setFixedSize(30, 14);
-   gateway->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-   gateway->setText(QStringLiteral("网关:"));
+   netset_gateway = new QLabel;
+   netset_gateway->setFixedSize(30, 14);
+   netset_gateway->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+   netset_gateway->setText(QStringLiteral("网关:"));
    gatewayedit = new CMyTextEdit(":/setsvrurl/input", "", 150, 30, 1);
    gatewayedit->GetEdit()->setText(getway);
 
@@ -1756,21 +1751,21 @@ void CMainWindow::createNetSettingWidget()
 
    readDns(dns);
 
-   QLabel* dnslable = new QLabel;
-   dnslable->setFixedSize(30, 14);
-   dnslable->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-   dnslable->setText(QStringLiteral("DNS:"));
+   netset_dnslable = new QLabel;
+   netset_dnslable->setFixedSize(30, 14);
+   netset_dnslable->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+   netset_dnslable->setText(QStringLiteral("DNS:"));
    dnsedit = new CMyTextEdit(":/setsvrurl/input", "", 150, 30, 1);
    dnsedit->GetEdit()->setText(dns);
    QGridLayout* c_layout = new QGridLayout;
 
-   c_layout->addWidget(ipaddr, 0, 0, Qt::AlignRight);
+   c_layout->addWidget(netset_ipaddr, 0, 0, Qt::AlignRight);
    c_layout->addWidget(ipaddredit, 0, 1);
-   c_layout->addWidget(mask, 1, 0, Qt::AlignRight);
+   c_layout->addWidget(netset_mask, 1, 0, Qt::AlignRight);
    c_layout->addWidget(maskedit, 1, 1);
-   c_layout->addWidget(gateway, 2, 0, Qt::AlignRight);
+   c_layout->addWidget(netset_gateway, 2, 0, Qt::AlignRight);
    c_layout->addWidget(gatewayedit, 2, 1);
-   c_layout->addWidget(dnslable, 3, 0, Qt::AlignRight);
+   c_layout->addWidget(netset_dnslable, 3, 0, Qt::AlignRight);
    c_layout->addWidget(dnsedit, 3, 1);
    centertop->setLayout(c_layout);
 
@@ -1909,6 +1904,34 @@ void CMainWindow::createNetSettingWidget()
    //	netmainl->addLayout(h_bottonlayout);
    netwidget->setLayout(netmainl);
 }
+
+void CMainWindow::netsetreadonly(bool isreadonly)
+{
+	if(isreadonly)
+	{
+		ipaddredit->setReadOnly(true);
+   		maskedit->setReadOnly(true);
+   		gatewayedit->setReadOnly(true);
+   		dnsedit->setReadOnly(true);
+		netset_ipaddr->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
+		netset_mask->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
+		netset_gateway->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
+		netset_dnslable->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
+	}
+	else
+	{
+		ipaddredit->setReadOnly(false);
+   		maskedit->setReadOnly(false);
+   		gatewayedit->setReadOnly(false);
+   		dnsedit->setReadOnly(false);
+		netset_ipaddr->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+		netset_mask->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+		netset_gateway->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+		netset_dnslable->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+	}
+}
+	
+
 void CMainWindow::readDns(QString &dns)
 {
    QFile file("/etc/resolv.conf");
@@ -1956,14 +1979,14 @@ void CMainWindow::readMac(QString &mac)
       	}
         
     }
-	qDebug() << mac << endl;
+	//qDebug() << mac << endl;
 	QStringList list1 = mac.split(" ");
 	for(int i = 0; i < list1.size(); i ++)
 	{
 		if(list1[i] == "HWaddr")
 		{
 			mac = list1[i+1];
-			qDebug() << mac << endl;
+			//qDebug() << mac << endl;
 			break;
 		}
 	}
@@ -2237,20 +2260,13 @@ void CMainWindow::changesetting()
    {
       usersetbtn->setIcon(QIcon(QString(":/net_about/select")));
       dhcpbutton->setIcon(QIcon(QString(":/net_about/unselect")));
-      ipaddredit->GetEdit()->setReadOnly(false);
-      maskedit->GetEdit()->setReadOnly(false);
-      gatewayedit->GetEdit()->setReadOnly(false);
-      //LXL add for DNS
-      dnsedit->GetEdit()->setReadOnly(false);	
+      netsetreadonly(false);
    }
    else/* if (QString("x") == isdhcp)*/
    {
       usersetbtn->setIcon(QIcon(QString(":/net_about/unselect")));
       dhcpbutton->setIcon(QIcon(QString(":/net_about/select")));
-      ipaddredit->GetEdit()->setReadOnly(true);
-      maskedit->GetEdit()->setReadOnly(true);
-      gatewayedit->GetEdit()->setReadOnly(true);
-      dnsedit->GetEdit()->setReadOnly(true);
+      netsetreadonly(true);
       QString mac;	
       getmaskAddress(ip, netmask,mac);
       char buff[256], ifName[12];
@@ -4648,7 +4664,8 @@ bool CMainWindow::parseHeartBRet(QByteArray data)
 
 void CMainWindow::adduserret()
 {
-    changeWidgetTo(adduserretwid);
+//    changeWidgetTo(adduserretwid);
+	changeuser();
 	adduserretbtn->hide();
 	isadduser = 0;
 }

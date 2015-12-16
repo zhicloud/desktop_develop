@@ -462,6 +462,7 @@ void spice_playback_channel_set_delay(SpicePlaybackChannel *channel, guint32 del
 
     g_return_if_fail(SPICE_IS_PLAYBACK_CHANNEL(channel));
 
+    CHANNEL_DEBUG(channel, "playback set_delay %u ms", delay_ms);
 
     c = channel->priv;
     c->latency = delay_ms;

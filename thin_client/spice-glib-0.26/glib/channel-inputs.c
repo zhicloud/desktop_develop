@@ -14,12 +14,13 @@
 
    You should have received a copy of the GNU Lesser General Public
    License along with this library; if not, see <http://www.gnu.org/licenses/>.
-*/
+   */
 #include "config.h"
 
 #include "spice-client.h"
 #include "spice-common.h"
 #include "spice-channel-priv.h"
+#include <X11/Xlib.h>
 
 /**
  * SECTION:channel-inputs
@@ -54,11 +55,11 @@ struct _SpiceInputsChannelPrivate {
 
 G_DEFINE_TYPE(SpiceInputsChannel, spice_inputs_channel, SPICE_TYPE_CHANNEL)
 
-/* Properties */
-enum {
-    PROP_0,
-    PROP_KEY_MODIFIERS,
-};
+    /* Properties */
+    enum {
+        PROP_0,
+        PROP_KEY_MODIFIERS,
+    };
 
 /* Signals */
 enum {
@@ -81,19 +82,19 @@ static void spice_inputs_channel_init(SpiceInputsChannel *channel)
 }
 
 static void spice_inputs_get_property(GObject    *object,
-                                      guint       prop_id,
-                                      GValue     *value,
-                                      GParamSpec *pspec)
+        guint       prop_id,
+        GValue     *value,
+        GParamSpec *pspec)
 {
     SpiceInputsChannelPrivate *c = SPICE_INPUTS_CHANNEL(object)->priv;
 
     switch (prop_id) {
-    case PROP_KEY_MODIFIERS:
-        g_value_set_int(value, c->modifiers);
-        break;
-    default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-        break;
+        case PROP_KEY_MODIFIERS:
+            g_value_set_int(value, c->modifiers);
+            break;
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+            break;
     }
 }
 
@@ -116,13 +117,13 @@ static void spice_inputs_channel_class_init(SpiceInputsChannelClass *klass)
     g_object_class_install_property
         (gobject_class, PROP_KEY_MODIFIERS,
          g_param_spec_int("key-modifiers",
-                          "Key modifiers",
-                          "Guest keyboard lock/led state",
-                          0, INT_MAX, 0,
-                          G_PARAM_READABLE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
+             "Key modifiers",
+             "Guest keyboard lock/led state",
+             0, INT_MAX, 0,
+             G_PARAM_READABLE |
+             G_PARAM_STATIC_NAME |
+             G_PARAM_STATIC_NICK |
+             G_PARAM_STATIC_BLURB));
 
     /**
      * SpiceInputsChannel::inputs-modifier:
@@ -135,13 +136,13 @@ static void spice_inputs_channel_class_init(SpiceInputsChannelClass *klass)
     /* TODO: use notify instead? */
     signals[SPICE_INPUTS_MODIFIERS] =
         g_signal_new("inputs-modifiers",
-                     G_OBJECT_CLASS_TYPE(gobject_class),
-                     G_SIGNAL_RUN_FIRST,
-                     G_STRUCT_OFFSET(SpiceInputsChannelClass, inputs_modifiers),
-                     NULL, NULL,
-                     g_cclosure_marshal_VOID__VOID,
-                     G_TYPE_NONE,
-                     0);
+                G_OBJECT_CLASS_TYPE(gobject_class),
+                G_SIGNAL_RUN_FIRST,
+                G_STRUCT_OFFSET(SpiceInputsChannelClass, inputs_modifiers),
+                NULL, NULL,
+                g_cclosure_marshal_VOID__VOID,
+                G_TYPE_NONE,
+                0);
 
     g_type_class_add_private(klass, sizeof(SpiceInputsChannelPrivate));
     channel_set_handlers(SPICE_CHANNEL_CLASS(klass));
@@ -162,7 +163,7 @@ static SpiceMsgOut* mouse_motion(SpiceInputsChannel *channel)
     motion.dx            = c->dx;
     motion.dy            = c->dy;
     msg = spice_msg_out_new(SPICE_CHANNEL(channel),
-                            SPICE_MSGC_INPUTS_MOUSE_MOTION);
+            SPICE_MSGC_INPUTS_MOUSE_MOTION);
     msg->marshallers->msgc_inputs_mouse_motion(msg->marshaller, &motion);
 
     c->motion_count++;
@@ -187,7 +188,7 @@ static SpiceMsgOut* mouse_position(SpiceInputsChannel *channel)
     position.y             = c->y;
     position.display_id    = c->dpy;
     msg = spice_msg_out_new(SPICE_CHANNEL(channel),
-                            SPICE_MSGC_INPUTS_MOUSE_POSITION);
+            SPICE_MSGC_INPUTS_MOUSE_POSITION);
     msg->marshallers->msgc_inputs_mouse_position(msg->marshaller, &position);
 
     c->motion_count++;
@@ -226,6 +227,31 @@ static void send_motion(SpiceInputsChannel *channel)
     spice_msg_out_send(msg);
 }
 
+static void sync_key_modifiers(SpiceChannel *channel, gpointer data)
+{
+    guint32 modifiers = 0;
+    Display *dpy = XOpenDisplay(":0");
+    XKeyboardState x;
+    XGetKeyboardControl(dpy, &x);
+    XCloseDisplay(dpy);
+    //printf("led_mask=%lx\n", x.led_mask);
+
+    if(x.led_mask & 1) {
+        modifiers |= SPICE_INPUTS_CAPS_LOCK;
+    }
+
+    if(x.led_mask & 2) {
+        modifiers |= SPICE_INPUTS_NUM_LOCK;
+    }
+
+    if(x.led_mask & 4)
+    {
+        modifiers |= SPICE_INPUTS_SCROLL_LOCK; 
+    }
+
+    spice_inputs_set_key_locks(SPICE_INPUTS_CHANNEL(channel), modifiers);
+}
+
 /* coroutine context */
 static void inputs_handle_init(SpiceChannel *channel, SpiceMsgIn *in)
 {
@@ -234,6 +260,7 @@ static void inputs_handle_init(SpiceChannel *channel, SpiceMsgIn *in)
 
     c->modifiers = init->keyboard_modifiers;
     g_coroutine_signal_emit(channel, signals[SPICE_INPUTS_MODIFIERS], 0);
+    sync_key_modifiers(channel, channel);
 }
 
 /* coroutine context */
@@ -286,7 +313,7 @@ static void channel_set_handlers(SpiceChannelClass *klass)
  * Change mouse position (used in SPICE_MOUSE_MODE_CLIENT).
  **/
 void spice_inputs_motion(SpiceInputsChannel *channel, gint dx, gint dy,
-                         gint button_state)
+        gint button_state)
 {
     SpiceInputsChannelPrivate *c;
 
@@ -319,7 +346,7 @@ void spice_inputs_motion(SpiceInputsChannel *channel, gint dx, gint dy,
  * Change mouse position (used in SPICE_MOUSE_MODE_CLIENT).
  **/
 void spice_inputs_position(SpiceInputsChannel *channel, gint x, gint y,
-                           gint display, gint button_state)
+        gint display, gint button_state)
 {
     SpiceInputsChannelPrivate *c;
 
@@ -350,7 +377,7 @@ void spice_inputs_position(SpiceInputsChannel *channel, gint x, gint y,
  * Press a mouse button.
  **/
 void spice_inputs_button_press(SpiceInputsChannel *channel, gint button,
-                               gint button_state)
+        gint button_state)
 {
     SpiceInputsChannelPrivate *c;
     SpiceMsgcMousePress press;
@@ -365,15 +392,15 @@ void spice_inputs_button_press(SpiceInputsChannel *channel, gint button,
 
     c = channel->priv;
     switch (button) {
-    case SPICE_MOUSE_BUTTON_LEFT:
-        button_state |= SPICE_MOUSE_BUTTON_MASK_LEFT;
-        break;
-    case SPICE_MOUSE_BUTTON_MIDDLE:
-        button_state |= SPICE_MOUSE_BUTTON_MASK_MIDDLE;
-        break;
-    case SPICE_MOUSE_BUTTON_RIGHT:
-        button_state |= SPICE_MOUSE_BUTTON_MASK_RIGHT;
-        break;
+        case SPICE_MOUSE_BUTTON_LEFT:
+            button_state |= SPICE_MOUSE_BUTTON_MASK_LEFT;
+            break;
+        case SPICE_MOUSE_BUTTON_MIDDLE:
+            button_state |= SPICE_MOUSE_BUTTON_MASK_MIDDLE;
+            break;
+        case SPICE_MOUSE_BUTTON_RIGHT:
+            button_state |= SPICE_MOUSE_BUTTON_MASK_RIGHT;
+            break;
     }
 
     c->bs  = button_state;
@@ -381,7 +408,7 @@ void spice_inputs_button_press(SpiceInputsChannel *channel, gint button,
     send_position(channel);
 
     msg = spice_msg_out_new(SPICE_CHANNEL(channel),
-                            SPICE_MSGC_INPUTS_MOUSE_PRESS);
+            SPICE_MSGC_INPUTS_MOUSE_PRESS);
     press.button = button;
     press.buttons_state = button_state;
     msg->marshallers->msgc_inputs_mouse_press(msg->marshaller, &press);
@@ -397,7 +424,7 @@ void spice_inputs_button_press(SpiceInputsChannel *channel, gint button,
  * Release a button.
  **/
 void spice_inputs_button_release(SpiceInputsChannel *channel, gint button,
-                                 gint button_state)
+        gint button_state)
 {
     SpiceInputsChannelPrivate *c;
     SpiceMsgcMouseRelease release;
@@ -412,15 +439,15 @@ void spice_inputs_button_release(SpiceInputsChannel *channel, gint button,
 
     c = channel->priv;
     switch (button) {
-    case SPICE_MOUSE_BUTTON_LEFT:
-        button_state &= ~SPICE_MOUSE_BUTTON_MASK_LEFT;
-        break;
-    case SPICE_MOUSE_BUTTON_MIDDLE:
-        button_state &= ~SPICE_MOUSE_BUTTON_MASK_MIDDLE;
-        break;
-    case SPICE_MOUSE_BUTTON_RIGHT:
-        button_state &= ~SPICE_MOUSE_BUTTON_MASK_RIGHT;
-        break;
+        case SPICE_MOUSE_BUTTON_LEFT:
+            button_state &= ~SPICE_MOUSE_BUTTON_MASK_LEFT;
+            break;
+        case SPICE_MOUSE_BUTTON_MIDDLE:
+            button_state &= ~SPICE_MOUSE_BUTTON_MASK_MIDDLE;
+            break;
+        case SPICE_MOUSE_BUTTON_RIGHT:
+            button_state &= ~SPICE_MOUSE_BUTTON_MASK_RIGHT;
+            break;
     }
 
     c->bs = button_state;
@@ -428,7 +455,7 @@ void spice_inputs_button_release(SpiceInputsChannel *channel, gint button,
     send_position(channel);
 
     msg = spice_msg_out_new(SPICE_CHANNEL(channel),
-                            SPICE_MSGC_INPUTS_MOUSE_RELEASE);
+            SPICE_MSGC_INPUTS_MOUSE_RELEASE);
     release.button = button;
     release.buttons_state = button_state;
     msg->marshallers->msgc_inputs_mouse_release(msg->marshaller, &release);
@@ -551,7 +578,7 @@ static SpiceMsgOut* set_key_locks(SpiceInputsChannel *channel, guint locks)
         return NULL;
 
     msg = spice_msg_out_new(SPICE_CHANNEL(channel),
-                            SPICE_MSGC_INPUTS_KEY_MODIFIERS);
+            SPICE_MSGC_INPUTS_KEY_MODIFIERS);
     modifiers.modifiers = locks;
     msg->marshallers->msgc_inputs_key_modifiers(msg->marshaller, &modifiers);
     return msg;

@@ -39,15 +39,17 @@ INC_PATH= -I../ \
 			 -I/usr/include/soprano/ \
 			 -I/usr/include/libxml2/ \
 			 -I/usr/include/libusb-1.0/ \
-			 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include/
+			 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include/ \
+			 -I/home/ffmpeg/ffmpeg_build/include/
 
 LIB_PATH=-L/lib \
-			-L../spice-common/common
+			-L../spice-common/common \
+			-L/home/ffmpeg/ffmpeg_build/lib
 
 DEFS = -DHAVE_CONFIG_H -DUSB_IDS=\""$(USB_IDS)"\"
 USB_IDS = /var/lib/usbutils/usb.ids
 
-LIBS:=-L/usr/local/lib /usr/local/lib/libcelt051.so -lm -lgio-2.0 -lgobject-2.0 -ljpeg -lz -lpixman-1 -lssl -lcrypto -lpulse-mainloop-glib -lpulse -lglib-2.0 -lsasl2 /usr/local/lib/libusbredirhost.so -lusb-1.0 /usr/local/lib/libusbredirparser.so
+LIBS:=-pthread -L/usr/local/lib /usr/local/lib/libcelt051.so -lm -lgio-2.0 -lgobject-2.0 -ljpeg -lz -lpixman-1 -lssl -lcrypto -lpulse-mainloop-glib -lpulse -lglib-2.0 -lsasl2 /usr/local/lib/libusbredirhost.so -lusb-1.0 /usr/local/lib/libusbredirparser.so -lavdevice -lavfilter -lpostproc -lavformat -lavcodec -lva-x11 -lva -lxcb-shm -lxcb-xfixes -lxcb-render -lxcb-shape -lxcb -lXau -lXdmcp -lSDL -lasound -lpulse-simple -lpulse -lX11 -lXext -lcaca -lx265 -lstdc++ -lrt -lx264 -ldl -lvpx -lpthread -lvorbisenc -lvorbis -ltheoraenc -ltheoradec -logg -lopus -lmp3lame -lfdk-aac -lass -lfontconfig -lenca -lfribidi -lexpat -lfreetype -lpng12 -lz -lswresample -lswscale -lavutil
 
 #LIBS=../spice-common/common/libspice-common-client.so -lglib-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lgobject-2.0 -lglib-2.0 -ljpeg -lz -lpixman-1 -lssl -lcrypto -lpulse-mainloop-glib -lpulse -lglib-2.0 -lsasl2 -L/usr/local/lib -lusb-1.0 -lusbredirhost -lusbredirparser
 

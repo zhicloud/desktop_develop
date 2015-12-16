@@ -8,43 +8,29 @@ STRIP=$(CC)-strip
 all : subdirs
 
 subdirs :
-ifeq ($(WINDOWS), y)
-	cp -a ./make/wmakefileCommon ./spice-common/common/makefile
-	cp -a ./make/wmakefileGlib ./glib/makefile
-	cp -a ./make/wmakefileWin32 ./win32/makefile
-	cp -a ./make/wmakefileExamples ./examples/makefile
-	cp -a ./make/wconfigwin32.h ./win32/config.h
-	cp -a ./make/wconfigglib.h ./glib/config.h
-	cp -a ./make/wconfigcommon.h ./spice-common/config.h
-	cp -a ./make/wconfig.h ./config.h
-	cp -a ./make/wconfigprotocol.h ./spice-common/spice-protocol/config.h
-	cp -a ./make/wbitopscommon.h ./spice-common/common/bitops.h
-else
-ifeq ($(PULSE),y)
-	cp -a ./make/makefileCommon ./spice-common/common/makefile
-	cp -a ./make/makefileGlib ./glib/makefile
-	cp -a ./make/makefileWin32 ./win32/makefile
-	cp -a ./make/makefileExamples ./examples/makefile
-	cp -a ./make/configwin32.h ./win32/config.h
-	cp -a ./make/configglib.h ./glib/config.h
-	cp -a ./make/configcommon.h ./spice-common/config.h
-	cp -a ./make/config.h ./config.h
-	cp -a ./make/configprotocol.h ./spice-common/spice-protocol/config.h
-	cp -a ./make/bitopscommon.h ./spice-common/common/bitops.h
-else
-	cp -a ./make/makefileCommon ./spice-common/common/makefile
-	cp -a ./make/makefileGlib_gst ./glib/makefile
-	cp -a ./make/makefileWin32_gst ./win32/makefile
-	cp -a ./make/makefileExamples_gst ./examples/makefile
-	cp -a ./make/configwin32_gst.h ./win32/config.h
-	cp -a ./make/configglib_gst.h  ./glib/config.h
-	cp -a ./make/configcommon.h ./spice-common/config.h
-	cp -a ./make/config_gst.h ./config.h
-	cp -a ./make/configprotocol.h ./spice-common/spice-protocol/config.h
-	cp -a ./make/bitopscommon.h ./spice-common/common/bitops.h
-endif
-
-endif
+#ifeq ($(WINDOWS), y)
+#	cp -a ./make/wmakefileCommon ./spice-common/common/makefile
+#	cp -a ./make/wmakefileGlib ./glib/makefile
+#	cp -a ./make/wmakefileWin32 ./win32/makefile
+#	cp -a ./make/wmakefileExamples ./examples/makefile
+#	cp -a ./make/wconfigwin32.h ./win32/config.h
+#	cp -a ./make/wconfigglib.h ./glib/config.h
+#	cp -a ./make/wconfigcommon.h ./spice-common/config.h
+#	cp -a ./make/wconfig.h ./config.h
+#	cp -a ./make/wconfigprotocol.h ./spice-common/spice-protocol/config.h
+#	cp -a ./make/wbitopscommon.h ./spice-common/common/bitops.h
+#else
+#	cp -a ./make/makefileCommon ./spice-common/common/makefile
+#	cp -a ./make/makefileGlib ./glib/makefile
+#	cp -a ./make/makefileWin32 ./win32/makefile
+#	cp -a ./make/makefileExamples ./examples/makefile
+#	cp -a ./make/configwin32.h ./win32/config.h
+#	cp -a ./make/configglib.h ./glib/config.h
+#	cp -a ./make/configcommon.h ./spice-common/config.h
+#	cp -a ./make/config.h ./config.h
+#	cp -a ./make/configprotocol.h ./spice-common/spice-protocol/config.h
+#	cp -a ./make/bitopscommon.h ./spice-common/common/bitops.h
+#endif
 	#for n in $(SUBDIRS); do echo $$n; done
 	for n in $(SUBDIRS); do  $(MAKE) -C $$n ; done
 

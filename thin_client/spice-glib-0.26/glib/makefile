@@ -1,6 +1,3 @@
-
-
-
 vpath %.h . ./glib  ./spice-common ./win32/ ./spice-common/common /usr/include/gstreamer-0.10/
 vpath %.c . ./glib ./spice-common/common ./win32/ ./spice-common/ 
 vpath %.o . ./glib ./spice-common/common ./win32/
@@ -13,7 +10,8 @@ CC=gcc
 #OBJS+=$(patsubst ./spice-common/common/%.c,./spice-common/common/%.o,$(wildcard ./spice-common/common/*.c))
 #OBJS+=$(patsubst ./glib/%.c,./win32/%.o,$(wildcard ./win32/*.c))
 
-OBJS:=bio-gio.o glib-compat.o spice-audio.o spice-util.o spice-option.o spice-client.o spice-session.o spice-channel.o gio-coroutine.o channel-base.o channel-webdav.o channel-cursor.o channel-display.o channel-display-mjpeg.o channel-inputs.o channel-main.o channel-playback.o channel-port.o channel-record.o channel-smartcard.o channel-usbredir.o smartcard-manager.o spice-uri.o usb-device-manager.o usbutil.o vmcstream.o decode-glz.o decode-jpeg.o decode-zlib.o client_sw_canvas.o wocky-http-proxy.o spice-pulse.o continuation.o coroutine_ucontext.o spice-glib-enums.o spice-marshal.o
+#coroutine_ucontext.o
+OBJS:=bio-gio.o glib-compat.o spice-audio.o spice-util.o spice-option.o spice-client.o spice-session.o spice-channel.o gio-coroutine.o channel-base.o channel-webdav.o channel-cursor.o channel-display.o channel-display-mjpeg.o channel-display-h264.o h264_decoder.o  channel-inputs.o channel-main.o channel-playback.o channel-port.o channel-record.o channel-smartcard.o channel-usbredir.o smartcard-manager.o spice-uri.o usb-device-manager.o usbutil.o vmcstream.o decode-glz.o decode-jpeg.o decode-zlib.o client_sw_canvas.o wocky-http-proxy.o spice-pulse.o continuation.o  spice-glib-enums.o spice-marshal.o coroutine_gthread.o
 
 CFLAGS = -std=gnu99
 
@@ -30,6 +28,7 @@ DEFINE_FLAG=
 INC_PATH= -I../ \
 			 -I../logger \
 			 -I../spice-common \
+			 -I/home/lichenxiang/opt/include/ \
 			 -I../spice-common/spice-protocol/ \
 			 -I/usr/include/gstreamer-0.10/gst \
 			 -I/usr/include/gstreamer-0.10/ \
@@ -42,12 +41,13 @@ INC_PATH= -I../ \
 			 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include/
 
 LIB_PATH=-L/lib \
-			-L../spice-common/common
+			-L../spice-common/common \
+			-L/home/lichenxiang/opt/lib
 
 DEFS = -DHAVE_CONFIG_H -DUSB_IDS=\""$(USB_IDS)"\"
 USB_IDS = /var/lib/usbutils/usb.ids
 
-LIBS:=-L/usr/local/lib /usr/local/lib/libcelt051.so -lm -lgio-2.0 -lgobject-2.0 -ljpeg -lz -lpixman-1 -lssl -lcrypto -lpulse-mainloop-glib -lpulse -lglib-2.0 -lsasl2 /usr/local/lib/libusbredirhost.so -lusb-1.0 /usr/local/lib/libusbredirparser.so
+LIBS:=-L/usr/local/lib /usr/local/lib/libcelt051.so -lm -lgio-2.0 -lgobject-2.0 -ljpeg -lz -lpixman-1 -lssl -lcrypto -lpulse-mainloop-glib -lpulse -lglib-2.0 -lsasl2 /usr/local/lib/libusbredirhost.so -lusb-1.0 /usr/local/lib/libusbredirparser.so -lavdevice -lavfilter -lpostproc -lavformat -lavcodec  -lswresample -lswscale -lavutil 
 
 #LIBS=../spice-common/common/libspice-common-client.so -lglib-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lgobject-2.0 -lglib-2.0 -ljpeg -lz -lpixman-1 -lssl -lcrypto -lpulse-mainloop-glib -lpulse -lglib-2.0 -lsasl2 -L/usr/local/lib -lusb-1.0 -lusbredirhost -lusbredirparser
 

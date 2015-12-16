@@ -167,13 +167,13 @@
 
 /* Have GStreamer? */
 /* #undef WITH_GSTAUDIO */
-//#define WITH_GSTAUDIO 1
+#define WITH_GSTAUDIO 1
 
 /* Whether to use gthread coroutine impl */
 #define WITH_GTHREAD 0
 
 /* Have pulseaudio? */
-#define WITH_PULSE 1
+//#define WITH_PULSE 1
 
 /* Whether to use ucontext coroutine impl */
 #define WITH_UCONTEXT 1

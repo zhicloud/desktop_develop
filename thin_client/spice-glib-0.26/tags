@@ -101,13 +101,13 @@ CC	glib/makefile	/^CC=gcc$/;"	m
 CC	spice-common/common/makefile	/^CC=gcc$/;"	m
 CC	win32/makefile	/^CC=gcc$/;"	m
 CFLAGS	examples/makefile	/^CFLAGS = -std=gnu99$/;"	m
-CFLAGS	glib/makefile	/^CFLAGS = -std=gnu99 $/;"	m
+CFLAGS	glib/makefile	/^CFLAGS = -std=gnu99$/;"	m
 CFLAGS	spice-common/common/makefile	/^CFLAGS = -std=c99  $/;"	m
 CFLAGS	win32/makefile	/^CFLAGS = -std=gnu99 -DSPICE_GTK_LOCALEDIR=\\""${SPICE_GTK_LOCALEDIR}"\\"$/;"	m
 CHANNELID_MAX	win32/win32-spicy.h	72;"	d
 CHANNEL_DEBUG	glib/spice-channel-priv.h	45;"	d
-CHANNEL_DISPLAY_PRIV_H_	glib/channel-display-priv.h	19;"	d
-CLAMP_CHECK	glib/channel-display.c	1702;"	d	file:
+CHANNEL_DISPLAY_PRIV_H_	glib/channel-display-priv.h	20;"	d
+CLAMP_CHECK	glib/channel-display.c	1785;"	d	file:
 CLIENT_MONITORS_CONFIG_CRC32_POLY	spice-common/spice-protocol/spice/qxl_dev.h	169;"	d
 CLIPSTEPEDGE	spice-common/common/lines.c	2152;"	d	file:
 COMMON	spice-common/common/makefile	/^COMMON=libspice-common.so$/;"	m
@@ -260,6 +260,7 @@ DECORELATE	spice-common/common/quic_rgb_tmpl.c	740;"	d	file:
 DECORELATE_0	spice-common/common/quic_rgb_tmpl.c	117;"	d	file:
 DECORELATE_0	spice-common/common/quic_rgb_tmpl.c	739;"	d	file:
 DEFAULTZEROLINEBIAS	spice-common/common/lines.c	151;"	d	file:
+DEFAULT_MAX_FRAME_SIZE	glib/channel-display-h264.c	9;"	d	file:
 DEFINE_FLAG	glib/makefile	/^DEFINE_FLAG=$/;"	m
 DEFINE_FLAG	spice-common/common/makefile	/^DEFINE_FLAG= $/;"	m
 DEFS	glib/makefile	/^DEFS = -DHAVE_CONFIG_H -DUSB_IDS=\\""$(USB_IDS)"\\"$/;"	m
@@ -276,7 +277,7 @@ DEV_ID_FMT	glib/usb-device-manager.c	55;"	d	file:
 DEV_ID_FMT	glib/usb-device-manager.c	57;"	d	file:
 DJB2_HASH	spice-common/common/lz_compress_tmpl.c	48;"	d	file:
 DJB2_START	spice-common/common/lz_compress_tmpl.c	47;"	d	file:
-DRAW	glib/channel-display.c	814;"	d	file:
+DRAW	glib/channel-display.c	818;"	d	file:
 DWORD	win32/create_bmp.h	/^typedef unsigned long DWORD;$/;"	t
 DemarshallingDestination	spice-common/python_modules/demarshal.py	/^class DemarshallingDestination:$/;"	c
 ENABLE_NLS	config.h	8;"	d
@@ -454,6 +455,8 @@ GETTEXT_PACKAGE	make/wconfigglib.h	17;"	d
 GETTEXT_PACKAGE	make/wconfigwin32.h	17;"	d
 GETTEXT_PACKAGE	win32/config.h	17;"	d
 GET_CODE	spice-common/common/lz_compress_tmpl.c	538;"	d	file:
+GET_FORMAT_BITS	glib/h264_type.h	36;"	d
+GET_FORMAT_BYTES	glib/h264_type.h	60;"	d
 GET_b	spice-common/common/lz_compress_tmpl.c	110;"	d	file:
 GET_b	spice-common/common/lz_compress_tmpl.c	141;"	d	file:
 GET_b	spice-common/common/lz_compress_tmpl.c	537;"	d	file:
@@ -591,6 +594,18 @@ GlibZlibDecoder	glib/decode-zlib.c	/^typedef struct GlibZlibDecoder$/;"	s	file:
 GlibZlibDecoder	glib/decode-zlib.c	/^} GlibZlibDecoder;$/;"	t	typeref:struct:GlibZlibDecoder	file:
 GlzData	spice-common/common/canvas_base.c	/^typedef struct GlzData {$/;"	s	file:
 GlzData	spice-common/common/canvas_base.c	/^} GlzData;$/;"	t	typeref:struct:GlzData	file:
+H264Decoder	glib/h264_decoder.h	/^}H264Decoder;$/;"	t	typeref:struct:_H264Decoder
+H264StreamInfo	glib/h264_type.h	/^}H264StreamInfo;$/;"	t	typeref:struct:_H264StreamInfo
+H264_DECODER_ERROR	glib/h264_type.h	17;"	d
+H264_DECODER_OK	glib/h264_type.h	20;"	d
+H264_ENCODER_ERROR	glib/h264_type.h	14;"	d
+H264_ENCODER_OK	glib/h264_type.h	19;"	d
+H264_ENV_INIT	glib/h264_type.h	29;"	d
+H264_ERROR	glib/h264_type.h	23;"	d
+H264_NOT_GET_PIC	glib/h264_type.h	15;"	d
+H264_NOT_GET_SLICE	glib/h264_type.h	16;"	d
+H264_OK	glib/h264_type.h	22;"	d
+H264_VERSION	glib/h264_type.h	25;"	d
 HASH_FUNC	spice-common/common/lz_compress_tmpl.c	113;"	d	file:
 HASH_FUNC	spice-common/common/lz_compress_tmpl.c	142;"	d	file:
 HASH_FUNC	spice-common/common/lz_compress_tmpl.c	532;"	d	file:
@@ -622,7 +637,7 @@ HAVE_BIND_TEXTDOMAIN_CODESET	make/wconfig.h	23;"	d
 HAVE_BIND_TEXTDOMAIN_CODESET	make/wconfigglib.h	23;"	d
 HAVE_BIND_TEXTDOMAIN_CODESET	make/wconfigwin32.h	23;"	d
 HAVE_BIND_TEXTDOMAIN_CODESET	win32/config.h	23;"	d
-HAVE_BOOLEAN	glib/channel-display-priv.h	24;"	d
+HAVE_BOOLEAN	glib/channel-display-priv.h	25;"	d
 HAVE_CELT051	make/configcommon.h	26;"	d
 HAVE_CELT051	make/wconfigcommon.h	26;"	d
 HAVE_CELT051	spice-common/config.h	26;"	d
@@ -960,8 +975,8 @@ LCX_SPICE_MOUSE_BUTTON_UP	packet/include/win32_spice_interface_types.h	/^    LCX
 LCX_SPICE_MOUSE_BUTTON_UP	win32/win32_spice_interface_types.h	/^    LCX_SPICE_MOUSE_BUTTON_UP,$/;"	e	enum:LCXSpiceMouseButton
 LDFLAGS	spice-common/common/makefile	/^LDFLAGS=-shared -fpic$/;"	m
 LIBADD	spice-common/common/makefile	/^LIBADD=-L\/usr\/local\/lib -lcelt051 -lm$/;"	m
-LIBS	examples/makefile	/^LIBS=..\/win32\/libspice_glib.a ..\/glib\/libspice_without_gtk.a ..\/spice-common\/common\/libspice-common-client.a -lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lgobject-2.0 \\$/;"	m
-LIBS	glib/makefile	/^LIBS:=-L\/usr\/local\/lib \/usr\/local\/lib\/libcelt051.so -lm -lgio-2.0 -lgobject-2.0 -ljpeg -lz -lpixman-1 -lssl -lcrypto -lglib-2.0 -lsasl2 \/usr\/local\/lib\/libusbredirhost.so -lusb-1.0 \/usr\/local\/lib\/libusbredirparser.so -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 $/;"	m
+LIBS	examples/makefile	/^LIBS=-pthread \\$/;"	m
+LIBS	glib/makefile	/^LIBS:=-pthread -L\/usr\/local\/lib \/usr\/local\/lib\/libcelt051.so -lm -lgio-2.0 -lgobject-2.0 -ljpeg -lz -lpixman-1 -lssl -lcrypto -lpulse-mainloop-glib -lpulse -lglib-2.0 -lsasl2 \/usr\/local\/lib\/libusbredirhost.so -lusb-1.0 \/usr\/local\/lib\/libusbredirparser.so -lavdevice -lavfilter -lpostproc -lavformat -lavcodec -lva-x11 -lva -lxcb-shm -lxcb-xfixes -lxcb-render -lxcb-shape -lxcb -lXau -lXdmcp -lpulse-simple -lpulse -lX11 -lXext -lcaca -lx265 -lstdc++ -lrt -lx264 -ldl  -lpthread -lfontconfig -lexpat -lfreetype -lpng12 -lz -lswresample -lswscale -lavutil -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10$/;"	m
 LIBS	spice-common/common/makefile	/^LIBS= -lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lgobject-2.0 -lglib-2.0 \\$/;"	m
 LIBS	win32/makefile	/^LIBS=-lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lgobject-2.0 -lglib-2.0 \\$/;"	m
 LIB_DEFINE_FLAG	win32/makefile	/^LIB_DEFINE_FLAG=$/;"	m
@@ -1147,7 +1162,7 @@ NewlineType	glib/spice-util.c	/^} NewlineType;$/;"	t	typeref:enum:__anon25	file:
 NextBand	spice-common/common/lines.c	3491;"	d	file:
 NoBlock	spice-common/python_modules/codegen.py	/^    class NoBlock:$/;"	c	class:CodeWriter
 OBJS	examples/makefile	/^OBJS=test_bmp.o $/;"	m
-OBJS	glib/makefile	/^OBJS:=bio-gio.o glib-compat.o spice-audio.o spice-util.o spice-option.o spice-client.o spice-session.o spice-channel.o gio-coroutine.o channel-base.o channel-webdav.o channel-cursor.o channel-display.o channel-display-mjpeg.o channel-inputs.o channel-main.o channel-playback.o channel-port.o channel-record.o channel-smartcard.o channel-usbredir.o smartcard-manager.o spice-uri.o usb-device-manager.o usbutil.o vmcstream.o decode-glz.o decode-jpeg.o decode-zlib.o client_sw_canvas.o wocky-http-proxy.o spice-pulse.o continuation.o coroutine_ucontext.o spice-glib-enums.o spice-marshal.o spice-gstaudio.o$/;"	m
+OBJS	glib/makefile	/^OBJS:=bio-gio.o glib-compat.o spice-audio.o spice-util.o spice-option.o spice-client.o spice-session.o spice-channel.o gio-coroutine.o channel-base.o channel-webdav.o channel-cursor.o channel-display.o channel-display-mjpeg.o channel-display-h264.o h264_decoder.o channel-inputs.o channel-main.o channel-playback.o channel-port.o channel-record.o channel-smartcard.o channel-usbredir.o smartcard-manager.o spice-uri.o usb-device-manager.o usbutil.o vmcstream.o decode-glz.o decode-jpeg.o decode-zlib.o client_sw_canvas.o wocky-http-proxy.o spice-pulse.o continuation.o coroutine_ucontext.o spice-glib-enums.o spice-marshal.o spice-gstaudio.o$/;"	m
 OBJS	spice-common/common/makefile	/^OBJS=generated_server_marshallers.o   mem.o backtrace.o generated_server_demarshallers.o \\$/;"	m
 OBJS	win32/makefile	/^OBJS= win32-spicy.o spice-cmdline.o spice-widget-enums.o win32_service.o virt-viewer-file.o virt-viewer-util.o \\$/;"	m
 OCTANT1	spice-common/common/lines.c	140;"	d	file:
@@ -2737,6 +2752,7 @@ SPICE_UTIL_PRIV_H	glib/spice-util-priv.h	19;"	d
 SPICE_VERSION_MAJOR	spice-common/spice-protocol/spice/protocol.h	39;"	d
 SPICE_VERSION_MINOR	spice-common/spice-protocol/spice/protocol.h	40;"	d
 SPICE_VIDEO_CODEC_TYPE_ENUM_END	spice-common/spice-protocol/spice/enums.h	/^    SPICE_VIDEO_CODEC_TYPE_ENUM_END$/;"	e	enum:SpiceVideoCodecType
+SPICE_VIDEO_CODEC_TYPE_H264	spice-common/spice-protocol/spice/enums.h	/^    SPICE_VIDEO_CODEC_TYPE_H264 = 2,$/;"	e	enum:SpiceVideoCodecType
 SPICE_VIDEO_CODEC_TYPE_MJPEG	spice-common/spice-protocol/spice/enums.h	/^    SPICE_VIDEO_CODEC_TYPE_MJPEG = 1,$/;"	e	enum:SpiceVideoCodecType
 SPICE_VMC_INPUT_STREAM	glib/vmcstream.h	28;"	d
 SPICE_VMC_INPUT_STREAM_CLASS	glib/vmcstream.h	29;"	d
@@ -2810,8 +2826,8 @@ STDC_HEADERS	make/wconfigglib.h	139;"	d
 STDC_HEADERS	make/wconfigwin32.h	139;"	d
 STDC_HEADERS	spice-common/config.h	143;"	d
 STDC_HEADERS	win32/config.h	139;"	d
-STREAM_PLAYBACK_SYNC_DROP_SEQ_LEN_LIMIT	glib/channel-display.c	1327;"	d	file:
-STREAM_REPORT_DROP_SEQ_LEN_LIMIT	glib/channel-display.c	1175;"	d	file:
+STREAM_PLAYBACK_SYNC_DROP_SEQ_LEN_LIMIT	glib/channel-display.c	1382;"	d	file:
+STREAM_REPORT_DROP_SEQ_LEN_LIMIT	glib/channel-display.c	1230;"	d	file:
 STRIP	makefile	/^STRIP=$(CC)-strip$/;"	m
 SUBDIRS	makefile	/^SUBDIRS :=  .\/spice-common .\/glib .\/win32 .\/examples $/;"	m
 SUBDIRS	spice-common/makefile	/^SUBDIRS :=  .\/common  $/;"	m
@@ -2922,6 +2938,7 @@ SpiceDisplayMonitorConfig	glib/channel-display.h	/^typedef struct _SpiceDisplayM
 SpiceDisplayPrimary	glib/channel-display.h	/^typedef struct _SpiceDisplayPrimary SpiceDisplayPrimary;$/;"	t	typeref:struct:_SpiceDisplayPrimary
 SpiceDisplayPrivate	win32/win32-spice-widget.h	/^typedef struct _SpiceDisplayPrivate SpiceDisplayPrivate;$/;"	t	typeref:struct:_SpiceDisplayPrivate
 SpiceEnableAutoUSBRedirect	win32/win32_spice_interface.c	/^void SpiceEnableAutoUSBRedirect(IN_OUT SPICE_HANDLE sh,IN int hspice,IN int enable) $/;"	f
+SpiceEnableAutoUSBRedirectBefore	win32/win32_spice_interface.c	/^void SpiceEnableAutoUSBRedirectBefore(IN_OUT SPICE_HANDLE sh,IN int hspice,IN int enable) $/;"	f
 SpiceFetchVmNames	win32/win32_spice_interface.c	/^int SpiceFetchVmNames(IN_OUT SPICE_HANDLE sh,IN int hspice,IN const char *URI, IN const char* user, IN const char* password,$/;"	f
 SpiceFileXferTask	glib/channel-main.c	/^typedef struct SpiceFileXferTask {$/;"	s	file:
 SpiceFileXferTask	glib/channel-main.c	/^} SpiceFileXferTask;$/;"	t	typeref:struct:SpiceFileXferTask	file:
@@ -3719,7 +3736,7 @@ WockyHttpsProxyClass	glib/wocky-http-proxy.h	/^typedef struct _WockyHttpsProxyCl
 X509_NAME	spice-common/common/ssl_verify.h	34;"	d
 XDECREASING	spice-common/common/lines.c	136;"	d	file:
 XMAJOROCTANTS	spice-common/common/lines.c	149;"	d	file:
-XMD_H	glib/channel-display-priv.h	25;"	d
+XMD_H	glib/channel-display-priv.h	26;"	d
 XMD_H	glib/decode-jpeg.c	25;"	d	file:
 X_AXIS	spice-common/common/lines.c	182;"	d	file:
 Y	spice-common/common/glc.c	158;"	d	file:
@@ -3769,6 +3786,8 @@ _GUdevDeviceInfo	glib/win-usb-dev.c	/^struct _GUdevDeviceInfo {$/;"	s	file:
 _GUdevDevicePrivate	glib/win-usb-dev.c	/^struct _GUdevDevicePrivate$/;"	s	file:
 _G_DEFINE_BOXED_TYPE_BEGIN	glib/glib-compat.h	31;"	d
 _G_DEFINE_BOXED_TYPE_BEGIN	glib/glib-compat.h	56;"	d
+_H264Decoder	glib/h264_decoder.h	/^typedef struct _H264Decoder$/;"	s
+_H264StreamInfo	glib/h264_type.h	/^typedef struct _H264StreamInfo$/;"	s
 _H_CANVAS_BASE	spice-common/common/canvas_base.h	20;"	d
 _H_CANVAS_UTILS	spice-common/common/canvas_utils.h	20;"	d
 _H_CONTROLLER_PROT	spice-common/spice-protocol/spice/controller_prot.h	19;"	d
@@ -4264,6 +4283,7 @@ bio_gio_write	glib/bio-gio.c	/^static int bio_gio_write(BIO *bio, const char *in
 bio_gsocket_method	glib/bio-gio.c	/^typedef struct bio_gsocket_method {$/;"	s	file:
 bio_gsocket_method	glib/bio-gio.c	/^} bio_gsocket_method;$/;"	t	typeref:struct:bio_gsocket_method	file:
 bio_new_giostream	glib/bio-gio.c	/^BIO* bio_new_giostream(GIOStream *stream)$/;"	f
+bit_rate	glib/h264_type.h	/^    int bit_rate;$/;"	m	struct:_H264StreamInfo
 bitat	spice-common/common/quic.c	/^static const unsigned int bitat[32] = {$/;"	v	file:
 bitmap	packet/include/win32_spice_interface_types.h	/^   unsigned char * bitmap;$/;"	m	struct:SPICE_Invalidate
 bitmap	spice-common/common/canvas_utils.h	/^    HBITMAP bitmap;$/;"	m	struct:PixmanData
@@ -4607,6 +4627,7 @@ code	spice-common/common/messages.h	/^    uint32_t code;$/;"	m	struct:SpiceMsgcK
 codec	glib/channel-display-priv.h	/^    int                         codec;$/;"	m	struct:display_stream
 codec	glib/channel-playback.c	/^    SndCodec                    codec;$/;"	m	struct:_SpicePlaybackChannelPrivate	file:
 codec	glib/channel-record.c	/^    SndCodec                    codec;$/;"	m	struct:_SpiceRecordChannelPrivate	file:
+codec_context	glib/h264_decoder.h	/^   AVCodecContext *codec_context;$/;"	m	struct:_H264Decoder
 codec_type	spice-common/common/messages.h	/^    uint32_t codec_type;$/;"	m	struct:SpiceMsgDisplayStreamCreate
 coldplug_list	glib/usb-device-manager.c	/^    libusb_device **coldplug_list; \/* Avoid needless reprobing during init *\/$/;"	m	struct:_SpiceUsbDeviceManagerPrivate	file:
 color	spice-common/common/canvas_base.c	/^    uint32_t color;$/;"	m	struct:__anon107	file:
@@ -4956,6 +4977,7 @@ default_rop3_test_handler	spice-common/common/rop3.c	/^static void default_rop3_
 default_rop3_with_pattern_handler	spice-common/common/rop3.c	/^static void default_rop3_with_pattern_handler(SPICE_GNUC_UNUSED pixman_image_t *d,$/;"	f	file:
 default_rop3_withe_color_handler	spice-common/common/rop3.c	/^static void default_rop3_withe_color_handler(SPICE_GNUC_UNUSED pixman_image_t *d,$/;"	f	file:
 default_usb_connect	win32/win32_spice_interface_priv.h	/^   char default_usb_connect[1024];$/;"	m	struct:priv_spice_connection
+default_usb_enable	win32/win32_spice_interface_priv.h	/^   int default_usb_enable;$/;"	m	struct:priv_spice_connection
 default_usb_on_connect	win32/win32_spice_interface_priv.h	/^   char default_usb_on_connect[1024];$/;"	m	struct:priv_spice_connection
 demux	glib/channel-webdav.c	/^    } demux;$/;"	m	struct:_SpiceWebdavChannelPrivate	typeref:struct:_SpiceWebdavChannelPrivate::_demux	file:
 demux_to_client	glib/channel-webdav.c	/^static void demux_to_client(SpiceWebdavChannel *self,$/;"	f	file:
@@ -5077,6 +5099,7 @@ display_session_mm_time_reset_cb	glib/channel-display.c	/^static void display_se
 display_stream	glib/channel-display-priv.h	/^typedef struct display_stream {$/;"	s
 display_stream	glib/channel-display-priv.h	/^} display_stream;$/;"	t	typeref:struct:display_stream
 display_stream_render	glib/channel-display.c	/^static gboolean display_stream_render(display_stream *st)$/;"	f	file:
+display_stream_render_ex	glib/channel-display.c	/^static gboolean display_stream_render_ex(display_stream *st)$/;"	f	file:
 display_stream_reset_rendering_timer	glib/channel-display.c	/^static void display_stream_reset_rendering_timer(display_stream *st)$/;"	f	file:
 display_stream_schedule	glib/channel-display.c	/^static gboolean display_stream_schedule(display_stream *st)$/;"	f	file:
 display_stream_test_frames_mm_time_reset	glib/channel-display.c	/^static void display_stream_test_frames_mm_time_reset(display_stream *st,$/;"	f	file:
@@ -5139,7 +5162,7 @@ emit_cursor_set	glib/channel-cursor.c	/^static void emit_cursor_set(SpiceChannel
 emit_invalidate	glib/channel-display.c	/^static void emit_invalidate(SpiceChannel *channel, SpiceRect *bbox)$/;"	f	file:
 emit_main_context	glib/gio-coroutine.c	/^static gboolean emit_main_context(gpointer opaque)$/;"	f	file:
 enable_accels_save	win32/win32-spicy.h	/^    bool             enable_accels_save;$/;"	m	struct:_SpiceWindow
-enable_adaptive_streaming	glib/channel-display.c	/^    gboolean                    enable_adaptive_streaming;$/;"	m	struct:_SpiceDisplayChannelPrivate	file:
+enable_adaptive_streaming	glib/channel-display.c	/^    gboolean                    enable_adaptive_streaming;	$/;"	m	struct:_SpiceDisplayChannelPrivate	file:
 enable_mnemonics_save	win32/win32-spicy.h	/^    bool             enable_mnemonics_save;$/;"	m	struct:_SpiceWindow
 enabled	glib/channel-main.c	/^        gboolean                enabled;$/;"	m	struct:_SpiceMainChannelPrivate::__anon17	file:
 enabled_set	glib/channel-main.c	/^        gboolean                enabled_set;$/;"	m	struct:_SpiceMainChannelPrivate::__anon17	file:
@@ -5530,9 +5553,14 @@ g_marshal_value_peek_ulong	glib/spice-marshal.c	13;"	d	file:
 g_marshal_value_peek_ulong	glib/spice-marshal.c	37;"	d	file:
 g_marshal_value_peek_variant	glib/spice-marshal.c	25;"	d	file:
 g_marshal_value_peek_variant	glib/spice-marshal.c	49;"	d	file:
+g_queue_cond	glib/channel-display-priv.h	/^    GCond			g_queue_cond;$/;"	m	struct:display_stream
+g_queue_msg	glib/channel-display-priv.h	/^    GQueue 		*g_queue_msg;$/;"	m	struct:display_stream
+g_queue_rec_mutex	glib/channel-display-priv.h	/^    GRecMutex 		g_queue_rec_mutex;$/;"	m	struct:display_stream
 g_simple_async_result_take_error	glib/glib-compat.c	/^g_simple_async_result_take_error (GSimpleAsyncResult *simple,$/;"	f
 g_slist_free_full	glib/glib-compat.c	/^g_slist_free_full (GSList         *list,$/;"	f
 g_source_set_name	glib/glib-compat.h	70;"	d
+g_thread_decoding	glib/channel-display-priv.h	/^    GThread		*g_thread_decoding;$/;"	m	struct:display_stream
+g_thread_exit	glib/channel-display-priv.h	/^    gboolean                g_thread_exit;$/;"	m	struct:display_stream
 g_udev_client_class_init	glib/win-usb-dev.c	/^static void g_udev_client_class_init(GUdevClientClass *klass)$/;"	f	file:
 g_udev_client_error_quark	glib/win-usb-dev.c	/^GQuark g_udev_client_error_quark(void)$/;"	f
 g_udev_client_finalize	glib/win-usb-dev.c	/^static void g_udev_client_finalize(GObject *gobject)$/;"	f	file:
@@ -5764,6 +5792,7 @@ golomb_decoding	spice-common/common/quic_rgb_tmpl.c	752;"	d	file:
 golomb_decoding	spice-common/common/quic_rgb_tmpl.c	90;"	d	file:
 golomb_decoding	spice-common/common/quic_tmpl.c	41;"	d	file:
 golomb_deoding	spice-common/common/quic_tmpl.c	630;"	d	file:
+gop_size	glib/h264_type.h	/^    int gop_size;$/;"	m	struct:_H264StreamInfo
 gross_pixels	glib/decode-glz.c	/^    uint32_t                gross_pixels;$/;"	m	struct:glz_image_hdr	file:
 group	spice-common/common/lines.c	/^    Spans *group;               \/* List of Spans                        *\/$/;"	m	struct:__anon134	file:
 group	spice-common/common/messages.h	/^    uint32_t group;$/;"	m	struct:SpiceMsgcTunnelAddGenericService
@@ -5773,9 +5802,22 @@ group_id	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint32_t group_id;$/;
 group_id	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint32_t group_id;$/;"	m	struct:QXLReleaseInfoExt
 group_start	spice-common/common/canvas_base.h	/^    void (*group_start)(SpiceCanvas *canvas, QRegion *region);$/;"	m	struct:__anon131
 gsocket	glib/bio-gio.c	/^    GSocket *gsocket;$/;"	m	struct:bio_gsocket_method	file:
+gthread_decoding_cb	glib/channel-display.c	/^static gpointer gthread_decoding_cb(gpointer arg)$/;"	f	file:
 gudev_devices_are_equal	glib/win-usb-dev.c	/^static gboolean gudev_devices_are_equal(GUdevDevice *a, GUdevDevice *b)$/;"	f	file:
 h	packet/include/win32_spice_interface_types.h	/^   int h;$/;"	m	struct:SPICE_Invalidate
 h	win32/win32_spice_interface_types.h	/^   int h;$/;"	m	struct:SPICE_Invalidate
+h264_decode	glib/h264_decoder.c	/^int h264_decode(H264Decoder * decoder,char * rgb,int *rgb_len, char *slice ,int slice_len,int *width,int *height,int *hpp)$/;"	f
+h264_decoder	glib/channel-display-priv.h	/^    H264Decoder                    *h264_decoder;$/;"	m	struct:display_stream
+h264_decoder_env_init	glib/h264_decoder.c	/^void  h264_decoder_env_init()$/;"	f
+h264_decoder_h	glib/h264_decoder.h	2;"	d
+h264_decoder_init	glib/h264_decoder.c	/^int h264_decoder_init(H264Decoder * decoder, H264StreamInfo * info)$/;"	f
+h264_decoder_new	glib/h264_decoder.c	/^H264Decoder* h264_decoder_new()$/;"	f
+h264_decoder_release	glib/h264_decoder.c	/^void h264_decoder_release(H264Decoder * decoder)$/;"	f
+h264_decoder_uninit	glib/h264_decoder.c	/^void h264_decoder_uninit(H264Decoder * decoder)$/;"	f
+h264_file_index	glib/channel-display-h264.c	/^static int h264_file_index = 0;$/;"	v	file:
+h264_info	glib/channel-display-priv.h	/^    H264StreamInfo                *h264_info;$/;"	m	struct:display_stream
+h264_log_file	glib/channel-display-priv.h	/^    FILE                                   *h264_log_file;$/;"	m	struct:display_stream
+h264_type_h	glib/h264_type.h	2;"	d
 handle	glib/win-usb-driver-install.c	/^    HANDLE                handle;$/;"	m	struct:_SpiceWinUsbDriverPrivate	file:
 handle_dev_change	glib/win-usb-dev.c	/^static void handle_dev_change(GUdevClient *self)$/;"	f	file:
 handle_msg	glib/spice-channel.h	/^    void (*handle_msg)(SpiceChannel *channel, SpiceMsgIn *msg);$/;"	m	struct:_SpiceChannelClass
@@ -5816,6 +5858,7 @@ height	glib/channel-display.h	/^    gint height;$/;"	m	struct:_SpiceDisplayPrima
 height	glib/channel-display.h	/^    guint height;$/;"	m	struct:_SpiceDisplayMonitorConfig
 height	glib/channel-main.c	/^        int                     height;$/;"	m	struct:_SpiceMainChannelPrivate::__anon17	file:
 height	glib/decode-glz.c	/^    uint32_t                height;$/;"	m	struct:glz_image_hdr	file:
+height	glib/h264_type.h	/^    int height;$/;"	m	struct:_H264StreamInfo
 height	packet/include/win32_spice_interface_types.h	/^   int height;$/;"	m	struct:SPICE_CursorSet
 height	packet/include/win32_spice_interface_types.h	/^   int height;$/;"	m	struct:SPICE_SettringChange
 height	spice-common/common/canvas_base.c	/^    int height;$/;"	m	struct:CanvasBase	file:
@@ -6256,6 +6299,7 @@ mask_transform	spice-common/spice-protocol/spice/qxl_dev.h	/^    QXLPHYSICAL		ma
 max	spice-common/spice-protocol/spice/vd_agent.h	/^    int32_t max;$/;"	m	struct:VDAgentMaxClipboard
 max_allowed	spice-common/common/messages.h	/^    uint16_t max_allowed;$/;"	m	struct:SpiceMsgDisplayMonitorsConfig
 max_allowed	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint16_t max_allowed; \/* If it is 0 no fixed limit is given by the driver *\/$/;"	m	struct:QXLMonitorsConfig
+max_b_frames	glib/h264_type.h	/^    int max_b_frames;$/;"	m	struct:_H264StreamInfo
 max_clipboard	glib/channel-main.c	/^    int                         max_clipboard;$/;"	m	struct:_SpiceMainChannelPrivate	file:
 max_num_of_sockets	spice-common/common/messages.h	/^    uint16_t max_num_of_sockets;$/;"	m	struct:SpiceMsgTunnelInit
 max_socket_data_size	spice-common/common/messages.h	/^    uint32_t max_socket_data_size;$/;"	m	struct:SpiceMsgTunnelInit
@@ -6935,6 +6979,7 @@ phodav_server_get	glib/channel-webdav.c	/^static PhodavServer* phodav_server_get
 pid	glib/usb-device-manager.c	/^    guint16 pid;$/;"	m	struct:_SpiceUsbDeviceInfo	file:
 pid	glib/win-usb-clerk.h	/^    UINT16 pid;$/;"	m	struct:USBClerkDriverOp
 pid	glib/win-usb-dev.c	/^    guint16 pid;$/;"	m	struct:_GUdevDeviceInfo	file:
+pix_fmt	glib/h264_type.h	/^    enum AVPixelFormat pix_fmt;$/;"	m	struct:_H264StreamInfo	typeref:enum:_H264StreamInfo::AVPixelFormat
 pixels	spice-common/common/glc.h	/^    uint8_t *pixels;$/;"	m	struct:GLCPImage
 pixman_format_compatible	spice-common/common/pixman_utils.c	/^static int pixman_format_compatible (pixman_format_code_t dest_format,$/;"	f	file:
 pixman_image_add_data	spice-common/common/canvas_utils.c	/^pixman_image_add_data(pixman_image_t *image)$/;"	f	file:
@@ -7057,6 +7102,7 @@ private_tex_width	spice-common/common/glc.c	/^    int private_tex_width;$/;"	m	s
 product_count	glib/usbutil.c	/^    int product_count;$/;"	m	struct:_usb_vendor_info	file:
 product_id	glib/usbutil.c	/^    guint16 product_id;$/;"	m	struct:_usb_product_info	file:
 product_info	glib/usbutil.c	/^    usb_product_info *product_info;$/;"	m	struct:_usb_vendor_info	file:
+profile	glib/h264_type.h	/^    int profile;$/;"	m	struct:_H264StreamInfo
 progress_callback	glib/channel-main.c	/^    GFileProgressCallback          progress_callback;$/;"	m	struct:SpiceFileXferTask	file:
 progress_callback_data	glib/channel-main.c	/^    gpointer                       progress_callback_data;$/;"	m	struct:SpiceFileXferTask	file:
 propagated_attributes	spice-common/python_modules/ptypes.py	/^propagated_attributes=["ptr_array", "nonnull", "chunk"]$/;"	v
@@ -7090,6 +7136,9 @@ put_image	spice-common/common/canvas_base.h	/^    void (*put_image)(SpiceCanvas 
 put_lossy	spice-common/common/canvas_base.h	/^    void (*put_lossy)(SpiceImageCache *cache,$/;"	m	struct:__anon126
 put_point	spice-common/common/glc.c	/^static inline void put_point(InternalPath *path, double x, double y)$/;"	f	file:
 pw	win32/win32_spice_interface.c	/^    gchar pw[100];$/;"	m	struct:SpiceConnectARGS	file:
+qcompress	glib/h264_type.h	/^    float qcompress;  $/;"	m	struct:_H264StreamInfo
+qmax	glib/h264_type.h	/^    int qmax;$/;"	m	struct:_H264StreamInfo
+qmin	glib/h264_type.h	/^    int qmin;$/;"	m	struct:_H264StreamInfo
 queue	glib/channel-webdav.c	/^    GQueue *queue;$/;"	m	struct:_OutputQueue	file:
 queue	glib/channel-webdav.c	/^    OutputQueue *queue;$/;"	m	struct:_OutputQueueElem	file:
 queue	glib/channel-webdav.c	/^    OutputQueue *queue;$/;"	m	struct:_SpiceWebdavChannelPrivate	file:
@@ -7121,6 +7170,9 @@ ram_header_offset	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint32_t ram
 ram_hint	spice-common/common/messages.h	/^    uint32_t ram_hint;$/;"	m	struct:SpiceMsgMainInit
 random_region	spice-common/common/region.c	/^static void random_region(QRegion *reg)$/;"	f	file:
 raster_ops	spice-common/common/gdi_canvas.c	/^uint32_t raster_ops[] = {$/;"	v
+rc_buffer_size	glib/h264_type.h	/^    int rc_buffer_size;$/;"	m	struct:_H264StreamInfo
+rc_max_rate	glib/h264_type.h	/^    int rc_max_rate;$/;"	m	struct:_H264StreamInfo
+rc_min_rate	glib/h264_type.h	/^    int rc_min_rate;$/;"	m	struct:_H264StreamInfo
 rchannel	glib/spice-gstaudio.c	/^    SpiceChannel            *rchannel;$/;"	m	struct:_SpiceGstaudioPrivate	file:
 rchannel	glib/spice-pulse.c	/^    SpiceChannel            *rchannel;$/;"	m	struct:_SpicePulsePrivate	file:
 read_array_len	spice-common/python_modules/demarshal.py	/^def read_array_len(writer, prefix, array, dest, scope, is_ptr):$/;"	f
@@ -7345,6 +7397,7 @@ rgb_32_to_16_555	spice-common/common/canvas_base.c	/^static inline uint16_t rgb_
 rgb_32_to_16_555	spice-common/common/pixman_utils.c	/^static inline uint16_t rgb_32_to_16_555(uint32_t color)$/;"	f	file:
 rgb_32_to_16_565	spice-common/common/canvas_base.c	/^static inline uint16_t rgb_32_to_16_565(uint32_t color)$/;"	f	file:
 rgb_state	spice-common/common/quic.c	/^    CommonState rgb_state;$/;"	m	struct:Encoder	file:
+rgbframe	glib/h264_decoder.h	/^   AVFrame *rgbframe;$/;"	m	struct:_H264Decoder
 right	spice-common/common/draw.h	/^    int32_t right;$/;"	m	struct:SpiceRect
 right	spice-common/spice-protocol/spice/qxl_dev.h	/^    int32_t right;$/;"	m	struct:QXLRect
 right	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint32_t right;$/;"	m	struct:QXLURect
@@ -7388,6 +7441,7 @@ rows_completed	spice-common/common/quic.c	/^    int rows_completed;$/;"	m	struct
 runnable	glib/coroutine.h	/^	gboolean runnable;$/;"	m	struct:coroutine
 s_bucket	spice-common/common/quic.c	/^typedef struct s_bucket {$/;"	s	file:
 s_bucket	spice-common/common/quic.c	/^} s_bucket;$/;"	t	typeref:struct:s_bucket	file:
+s_pix_fmt	glib/h264_type.h	/^    enum AVPixelFormat s_pix_fmt;$/;"	m	struct:_H264StreamInfo	typeref:enum:_H264StreamInfo::AVPixelFormat
 saddr	glib/win-usb-dev.c	/^    gchar saddr[4];$/;"	m	struct:_GUdevDeviceInfo	file:
 sasl_conn	glib/spice-channel-priv.h	/^    sasl_conn_t                 *sasl_conn;$/;"	m	struct:_SpiceChannelPrivate
 sasl_decoded	glib/spice-channel-priv.h	/^    const char                  *sasl_decoded;$/;"	m	struct:_SpiceChannelPrivate
@@ -7716,6 +7770,7 @@ spice_display_channel_reset	glib/channel-display.c	/^static void spice_display_c
 spice_display_channel_reset_capabilities	glib/channel-display.c	/^static void spice_display_channel_reset_capabilities(SpiceChannel *channel)$/;"	f	file:
 spice_display_channel_up	glib/channel-display.c	/^static void spice_display_channel_up(SpiceChannel *channel)$/;"	f	file:
 spice_display_class_init	win32/win32-spice-widget.c	/^static void spice_display_class_init(SpiceDisplayClass *klass)$/;"	f	file:
+spice_display_decoding	glib/channel-display.c	/^static void spice_display_decoding(display_stream* st, SpiceMsgIn* in)$/;"	f	file:
 spice_display_dispose	win32/win32-spice-widget.c	/^static void spice_display_dispose(GObject *obj)$/;"	f	file:
 spice_display_finalize	win32/win32-spice-widget.c	/^static void spice_display_finalize(GObject *obj)$/;"	f	file:
 spice_display_get_primary	glib/channel-display.c	/^gboolean spice_display_get_primary(SpiceChannel *channel, guint32 surface_id,$/;"	f
@@ -8396,6 +8451,9 @@ stream_get_current_frame	glib/channel-display.c	/^uint32_t stream_get_current_fr
 stream_get_dest	glib/channel-display.c	/^static SpiceRect *stream_get_dest(display_stream *st)$/;"	f	file:
 stream_get_dimensions	glib/channel-display.c	/^void stream_get_dimensions(display_stream *st, int *width, int *height)$/;"	f
 stream_get_flags	glib/channel-display.c	/^static uint32_t stream_get_flags(display_stream *st)$/;"	f	file:
+stream_h264_cleanup	glib/channel-display-h264.c	/^void stream_h264_cleanup(display_stream* st)$/;"	f
+stream_h264_data	glib/channel-display-h264.c	/^void stream_h264_data(display_stream* st, SpiceRect* rc)$/;"	f
+stream_h264_init	glib/channel-display-h264.c	/^void stream_h264_init(display_stream* st)$/;"	f
 stream_height	spice-common/common/messages.h	/^    uint32_t stream_height;$/;"	m	struct:SpiceMsgDisplayStreamCreate
 stream_id	spice-common/common/messages.h	/^    uint32_t stream_id;$/;"	m	struct:SpiceMsgDisplayStreamActivateReport
 stream_id	spice-common/common/messages.h	/^    uint32_t stream_id;$/;"	m	struct:SpiceMsgcDisplayStreamReport
@@ -8480,6 +8538,7 @@ sw_canvas_init	spice-common/common/sw_canvas.c	/^void sw_canvas_init(void) \/\/u
 sw_canvas_ops	spice-common/common/sw_canvas.c	/^static SpiceCanvasOps sw_canvas_ops;$/;"	v	file:
 switch_host_delayed	glib/channel-main.c	/^static gboolean switch_host_delayed(gpointer data)$/;"	f	file:
 switch_host_delayed_id	glib/channel-main.c	/^    guint                       switch_host_delayed_id;$/;"	m	struct:_SpiceMainChannelPrivate	file:
+sws_context	glib/h264_decoder.h	/^   struct SwsContext *sws_context;$/;"	m	struct:_H264Decoder	typeref:struct:_H264Decoder::SwsContext
 t	spice-common/spice_codegen.py	/^        t = ptypes.lookup_type(structname)$/;"	v
 t00	spice-common/common/draw.h	/^    uint32_t t00;$/;"	m	struct:SpiceTransform
 t00	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint32_t	t00;$/;"	m	struct:__anon60
@@ -8515,6 +8574,7 @@ textures_lost	spice-common/common/gl_canvas.c	/^    int textures_lost;$/;"	m	str
 thread	glib/coroutine.h	/^	GThread *thread;$/;"	m	struct:coroutine
 thread	win32/win32_spice_interface_priv.h	/^   GThread * thread;$/;"	m	struct:main_loop_context
 thread	win32/win32_spice_interface_priv.h	/^   GThread * thread;$/;"	m	struct:priv_spice_connection
+thread_count	glib/h264_type.h	/^    int thread_count;$/;"	m	struct:_H264StreamInfo
 three_bytes_pixel_t	spice-common/common/quic.c	/^typedef struct ATTR_PACKED three_bytes_pixel_t {$/;"	s	file:
 three_bytes_t	spice-common/common/quic.c	/^} three_bytes_t;$/;"	t	typeref:struct:three_bytes_pixel_t	file:
 tile	spice-common/common/canvas_base.c	/^        pixman_image_t *tile;$/;"	m	union:__anon107::__anon108	file:
@@ -8528,6 +8588,7 @@ time	spice-common/common/messages.h	/^    uint32_t time;$/;"	m	struct:SpiceMsgPl
 time	spice-common/common/messages.h	/^    uint32_t time;$/;"	m	struct:SpiceMsgPlaybackPacket
 time	spice-common/common/messages.h	/^    uint32_t time;$/;"	m	struct:SpiceMsgPlaybackStart
 time	spice-common/common/messages.h	/^    uint32_t time;$/;"	m	struct:SpiceMsgcRecordStartMark
+time_base	glib/h264_type.h	/^    AVRational time_base;$/;"	m	struct:_H264StreamInfo
 time_stamp	spice-common/common/messages.h	/^    uint64_t time_stamp;$/;"	m	struct:SpiceMsgDisconnect
 time_stamp	spice-common/common/messages.h	/^    uint64_t time_stamp;$/;"	m	struct:SpiceMsgNotify
 timeout	glib/channel-display-priv.h	/^    guint                       timeout;$/;"	m	struct:display_stream
@@ -8852,6 +8913,7 @@ width	glib/channel-display.h	/^    gint width;$/;"	m	struct:_SpiceDisplayPrimary
 width	glib/channel-display.h	/^    guint width;$/;"	m	struct:_SpiceDisplayMonitorConfig
 width	glib/channel-main.c	/^        int                     width;$/;"	m	struct:_SpiceMainChannelPrivate::__anon17	file:
 width	glib/decode-glz.c	/^    uint32_t                width;$/;"	m	struct:glz_image_hdr	file:
+width	glib/h264_type.h	/^    int width;$/;"	m	struct:_H264StreamInfo
 width	packet/include/win32_spice_interface_types.h	/^   int width;$/;"	m	struct:SPICE_CursorSet
 width	packet/include/win32_spice_interface_types.h	/^   int width;$/;"	m	struct:SPICE_SettringChange
 width	spice-common/common/canvas_base.c	/^    int width;$/;"	m	struct:CanvasBase	file:
@@ -9121,6 +9183,7 @@ ya	spice-common/common/lines.c	/^    double xa, ya;$/;"	m	struct:_LineFace	file:
 ymax	spice-common/common/lines.c	/^    int ymin, ymax;             \/* Min, max y values encountered        *\/$/;"	m	struct:__anon134	file:
 ymin	spice-common/common/lines.c	/^    int ymin, ymax;             \/* Min, max y values encountered        *\/$/;"	m	struct:__anon134	file:
 yres	spice-common/spice-protocol/spice/qxl_windows.h	/^    uint32_t yres;$/;"	m	struct:QXLEscapeSetCustomDisplay
+yuvframe	glib/h264_decoder.h	/^   AVFrame *yuvframe;$/;"	m	struct:_H264Decoder
 z	spice-common/common/glc.c	/^    double z;$/;"	m	struct:PathPoint	file:
 zeroLUT	spice-common/common/quic.c	/^static int zeroLUT[256]; \/* table to find out number of leading zeros *\/$/;"	v	file:
 zlib	spice-common/common/canvas_base.c	/^    SpiceZlibDecoder* zlib;$/;"	m	struct:CanvasBase	file:

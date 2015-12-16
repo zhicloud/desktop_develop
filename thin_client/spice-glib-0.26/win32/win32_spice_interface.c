@@ -112,9 +112,6 @@ int SpiceOpenMain(IN_OUT SPICE_HANDLE sh)
         
     }while(0);
     g_rec_mutex_unlock(&wsgi->rec_mutex_loop);
-#ifdef SPICE_DEBUG
-    spice_util_set_debug(TRUE);
-#endif
     return ret;
 }
 
@@ -161,7 +158,7 @@ static gpointer  main_loop_run_thread(gpointer data)
     SPICE_LOG("?????????????????????????????????\n");
     if(mainloop)
     {
-        SPICE_LOG("################################################\n");
+    SPICE_LOG("################################################\n");
     
         g_main_loop_run(mainloop);
     }
@@ -366,12 +363,12 @@ void SpiceSetUSBFilterBefore(IN_OUT SPICE_HANDLE sh,IN int hspice,IN const char 
     memset(wsgi->SpiceConnList[hspice]->default_usb_on_connect,0,sizeof(wsgi->SpiceConnList[hspice]->default_usb_on_connect));
     if(filter == NULL)
     {
-        g_debug("SpiceSetUSBFilterBefore============================== %s ==============2","default_usb_connect, is null");
+     //   g_debug("SpiceSetUSBFilterBefore============================== %s ==============2","default_usb_connect, is null");
         strcpy(wsgi->SpiceConnList[hspice]->default_usb_connect,"-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
     }
     else
     {
-        g_debug("SpiceSetUSBFilterBefore============================== %s ==============2",filter);
+      //  g_debug("SpiceSetUSBFilterBefore============================== %s ==============2",filter);
         strcpy(wsgi->SpiceConnList[hspice]->default_usb_connect,filter);
     }
     g_rec_mutex_unlock(&wsgi->rec_mutex_conn);
@@ -396,19 +393,20 @@ void SpiceEnableAutoUSBRedirectBefore(IN_OUT SPICE_HANDLE sh,IN int hspice,IN in
 int SpiceClose(IN_OUT SPICE_HANDLE sh,IN int hspice)
 {
     SPICE_LOG("hspice = %d\n",hspice);
-    //printf("2222222222222222==================22222222222222222222222\n");
+    
     struct Win32SpiceGloabInfo * wsgi = (struct Win32SpiceGloabInfo *)sh;  
     assert(wsgi);
     assert(hspice >= 0 && hspice < MAX_SPICE_CONNECT);
 
     int ret = ERROR_HANDLE;
     g_rec_mutex_lock(&wsgi->rec_mutex_conn);
-
+    
     if(wsgi->SpiceConnList[hspice])
     {
         g_free(wsgi->SpiceConnList[hspice]);
         wsgi->SpiceConnList[hspice] = NULL;
     }
+
     g_rec_mutex_unlock(&wsgi->rec_mutex_conn);
     return ret;
 }
@@ -725,7 +723,6 @@ void SpiceKeyEvent(IN_OUT SPICE_HANDLE sh,IN int hspice,IN bool down, IN int har
     int scancode;            
 
     SPICE_DEBUG("%s %s: keycode: %d", __FUNCTION__, "Key", hardware_keycode);
-    printf("%s %s: keycode: %d", __FUNCTION__, "Key", hardware_keycode);
 
     if (!d->inputs)          
         return;                

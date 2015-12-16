@@ -169,7 +169,7 @@
 //#define WITH_GSTAUDIO 1
 
 /* Whether to use gthread coroutine impl */
-#define WITH_GTHREAD 0
+#define WITH_GTHREAD 1
 
 /* Have pulseaudio? */
 /* #undef WITH_PULSE */

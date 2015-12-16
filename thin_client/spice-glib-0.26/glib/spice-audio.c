@@ -166,8 +166,8 @@ static void connect_channel(SpiceAudio *self, SpiceChannel *channel)
 
     if (SPICE_AUDIO_GET_CLASS(self)->connect_channel(self, channel))
     {
-        //printf("[file :%s][fun : %s][line : %d] ???????????????????????????????????new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
-        //printf("[file :%s][fun : %s][line : %d] new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
+        printf("[file :%s][fun : %s][line : %d] ???????????????????????????????????new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
+        printf("[file :%s][fun : %s][line : %d] new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
         spice_channel_connect(channel);
     }
 }
@@ -189,7 +189,7 @@ static void update_audio_channels(SpiceAudio *self, SpiceSession *session)
 
 static void channel_new(SpiceSession *session, SpiceChannel *channel, SpiceAudio *self)
 {
-    //printf("[file :%s][fun : %s][line : %d] come to channel new\n",__FILE__,__FUNCTION__,__LINE__);
+    printf("[file :%s][fun : %s][line : %d] come to channel new\n",__FILE__,__FUNCTION__,__LINE__);
     connect_channel(self, channel);
 }
 

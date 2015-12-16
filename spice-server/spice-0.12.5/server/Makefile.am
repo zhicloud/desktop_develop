@@ -68,6 +68,13 @@ libspice_server_la_SOURCES =			\
 	h264_type.h            \
 	h264_encoder.c        \
 	h264_encoder.h        \
+	red_decoding_dispatcher.c    \
+	red_decoding_dispatcher.h\
+	red_spice_common_defines.h \
+	red_threading.c       \
+	red_threading.h       \
+	red_decoding_data.c   \
+	red_decoding_data.h   \
 	red_bitmap_utils.h			\
 	red_channel.c				\
 	red_channel.h				\

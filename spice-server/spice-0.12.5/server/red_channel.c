@@ -361,8 +361,7 @@ static void red_peer_handle_outgoing(RedsStream *stream, OutgoingHandler *handle
         if (n == -1) {
             switch (errno) {
             case EAGAIN:
-                //handler->cb->on_block(handler->opaque);
-                //return;
+                continue;
             case EINTR:
                 continue;
             case EPIPE:
@@ -655,7 +654,6 @@ static void red_channel_peer_on_out_msg_done(void *opaque)
 
 static void red_channel_client_pipe_remove(RedChannelClient *rcc, PipeItem *item)
 {
-    rcc->pipe_size--;
     ring_remove(&item->link);
 }
 

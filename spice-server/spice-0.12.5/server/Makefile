@@ -169,7 +169,9 @@ am__libspice_server_la_SOURCES_DIST = agent-msg-filter.c \
 	zlib_encoder.h spice_bitmap_utils.h spice_bitmap_utils.c \
 	spice_server_utils.h spice_image_cache.h spice_image_cache.c \
 	reds_gl_canvas.c reds_gl_canvas.h smartcard.c smartcard.h \
-	h264_type.h h264_encoder.c h264_encoder.h 
+	h264_type.h h264_encoder.c h264_encoder.h red_decoding_data.c red_decoding_data.h \
+	red_threading.c red_threading.h red_spice_common_defines.h red_decoding_dispatcher.c \
+	red_decoding_dispatcher.h
 am__objects_1 =
 #am__objects_2 = reds_gl_canvas.lo $(am__objects_1)
 #am__objects_3 = smartcard.lo $(am__objects_1)
@@ -180,7 +182,8 @@ am_libspice_server_la_OBJECTS = agent-msg-filter.lo char_device.lo \
 	main_dispatcher.lo red_memslots.lo red_parse_qxl.lo \
 	red_worker.lo reds.lo reds_stream.lo reds_sw_canvas.lo \
 	snd_worker.lo spicevmc.lo spice_timer_queue.lo zlib_encoder.lo \
-	spice_bitmap_utils.lo spice_image_cache.lo h264_encoder.lo $(am__objects_1) \
+	spice_bitmap_utils.lo spice_image_cache.lo h264_encoder.lo red_decoding_data.lo red_threading.lo \
+	red_decoding_dispatcher.lo $(am__objects_1) \
 	$(am__objects_2) $(am__objects_3)
 libspice_server_la_OBJECTS = $(am_libspice_server_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
@@ -531,7 +534,8 @@ libspice_server_la_SOURCES = agent-msg-filter.c agent-msg-filter.h \
 	spice_timer_queue.c spice_timer_queue.h zlib_encoder.c \
 	zlib_encoder.h spice_bitmap_utils.h spice_bitmap_utils.c \
 	spice_server_utils.h spice_image_cache.h spice_image_cache.c \
-	h264_type.h h264_encoder.c h264_encoder.h \
+	h264_type.h h264_encoder.c h264_encoder.h red_decoding_data.c red_decoding_data.h \
+	red_threading.c red_threading.h red_spice_common_defines.h red_decoding_dispatcher.c red_decoding_dispatcher.h \
 	$(NULL) $(am__append_2) $(am__append_3)
 libspice_serverincludedir = $(includedir)/spice-server
 libspice_serverinclude_HEADERS = \
@@ -637,6 +641,9 @@ include ./$(DEPDIR)/main_channel.Plo
 include ./$(DEPDIR)/main_dispatcher.Plo
 include ./$(DEPDIR)/mjpeg_encoder.Plo
 include ./$(DEPDIR)/h264_encoder.Plo
+include ./$(DEPDIR)/red_decoding_dispatcher.Plo
+include ./$(DEPDIR)/red_threading.Plo
+include ./$(DEPDIR)/red_decoding_data.Plo
 include ./$(DEPDIR)/red_channel.Plo
 include ./$(DEPDIR)/red_dispatcher.Plo
 include ./$(DEPDIR)/red_memslots.Plo

@@ -116,6 +116,13 @@ H264Encoder * h264_encoder_new()
     memset(encoder,0,sizeof(H264Encoder));
     return encoder;
 }
+void h264_encoder_delete(H264Encoder * encoder)
+{
+    if(encoder)
+    {
+        free(encoder);
+    }
+}
 
 
 int h264_encode(H264Encoder * encoder,char * rgb,int rgb_len,char *slice,int *slice_len)

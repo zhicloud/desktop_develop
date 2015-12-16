@@ -141,8 +141,9 @@ red_worker.lo: red_worker.c ../config.h /usr/include/stdio.h \
  dispatcher.h spice.h main_channel.h spice_timer_queue.h \
  main_dispatcher.h spice_server_utils.h red_time.h spice_bitmap_utils.h \
  spice_image_cache.h ../spice-common/common/pixman_utils.h \
- ../spice-common/common/canvas_base.h red_client_shared_cache.h \
- red_client_cache.h red_bitmap_utils.h
+ ../spice-common/common/canvas_base.h red_decoding_data.h red_threading.h \
+ ../spice-common/common/log.h red_spice_common_defines.h \
+ red_client_shared_cache.h red_client_cache.h red_bitmap_utils.h
 
 ../config.h:
 
@@ -649,6 +650,14 @@ spice_image_cache.h:
 ../spice-common/common/pixman_utils.h:
 
 ../spice-common/common/canvas_base.h:
+
+red_decoding_data.h:
+
+red_threading.h:
+
+../spice-common/common/log.h:
+
+red_spice_common_defines.h:
 
 red_client_shared_cache.h:
 

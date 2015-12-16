@@ -94,6 +94,16 @@
 //add by lcx
 #include "h264_encoder.h"
 
+#ifdef READ_STREAM_FULL_H264_CODE
+
+#define READ_STREAM_FULL_H264_CODE 
+
+#include "red_decoding_data.h"
+
+#endif
+
+
+
 //#define COMPRESS_STAT
 //#define DUMP_BITMAP
 //#define PIPE_DEBUG
@@ -108,11 +118,21 @@
 
 
 //add by lcx
+/*
 #define BIT_RATE  1024 * 1024 * 2 
-#define RC_BUFFER_SIZE_FF ( (float) (BIT_RATE) / 6000000 * 56 * 1024 * 8) //6M时为56kbytes
+#define BIT_RATE_MAX 1024 * 1024 * 20
+
+//#define RC_BUFFER_SIZE_FF ( (float) (BIT_RATE) / 6000000 * 56 * 1024 * 8) //6M时为56kbytes
+#define RC_BUFFER_SIZE_FF ( (float) (BIT_RATE_MAX) / 6000000 * 56 * 1024 * 8) //6M时为56kbytes
 #define GOP_SIZE 200 
-#define MAX_B_FRAME 0 
+#define MAX_B_FRAME 10 
 #define THREAD_COUNT 9 
+*/
+//add by lcx 
+#define RED_MARSHALL_QXL_DRAW_GET_DATA_BEGIN NULL
+#define RED_MARSHALL_QXL_DRAW_GET_DATA_END NULL
+#define RED_MARSHALL_QXL_DRAW_DATA_BUF_SIZE 1920 * 1080 * 4
+
 
 #define CMD_RING_POLL_TIMEOUT 10 //milli
 #define CMD_RING_POLL_RETRIES 200
@@ -141,7 +161,30 @@
 
 #define FPS_TEST_INTERVAL 1
 #define MAX_FPS 30 
-//#define MAX_FPS 30 
+
+//add by lcx for h264 full stream
+
+#ifdef READ_STREAM_FULL_H264_CODE
+
+#define RED_GLOBAL_H264_STREAM_ID 1 
+
+
+H264Encoder *g_h264_encoder = NULL;
+PipeItem g_create_item;
+PipeItem g_destroy_item;
+
+RedThreading g_decoding_thread;
+
+//static void destroy_client_stream_global(RedWorker *worker);
+//static void create_client_stream_global(RedWorker *worker);
+
+
+#endif
+
+
+//end
+
+
 
 #define RED_COMPRESS_BUF_SIZE (1024 * 64)
 
@@ -1065,6 +1108,14 @@ typedef struct BitmapData {
 } BitmapData;
 
 static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable);
+
+#ifdef READ_STREAM_FULL_H264_CODE
+void red_draw_qxl_drawable_global(RedWorker *worker, Drawable *drawable);
+static uint8_t * red_get_primary_surface_bits(RedWorker *worker, uint8_t * bits);
+#endif
+
+
+
 static void red_current_flush(RedWorker *worker, int surface_id);
 #ifdef DRAW_ALL
 #define red_update_area(worker, rect, surface_id)
@@ -1704,6 +1755,9 @@ static SurfaceDestroyItem *get_surface_destroy_item(RedChannel *channel,
     return destroy;
 }
 
+
+
+
 static inline void red_destroy_surface_item(RedWorker *worker,
     DisplayChannelClient *dcc, uint32_t surface_id)
 {
@@ -1719,6 +1773,18 @@ static inline void red_destroy_surface_item(RedWorker *worker,
     destroy = get_surface_destroy_item(channel, surface_id);
     red_channel_client_pipe_add(&dcc->common.base, &destroy->pipe_item);
 }
+#ifdef READ_STREAM_FULL_H264_CODE
+static void destroy_client_stream_global(RedWorker *worker)
+{
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ",__FILE__,__FUNCTION__,__LINE__);
+    DisplayChannelClient *dcc;
+    RingItem *item, *next;
+    WORKER_FOREACH_DCC_SAFE(worker, item, next, dcc) {
+        red_channel_client_pipe_add(&dcc->common.base, &g_destroy_item);
+    }
+}
+#endif
+
 
 static inline void red_destroy_surface(RedWorker *worker, uint32_t surface_id)
 {
@@ -1726,10 +1792,21 @@ static inline void red_destroy_surface(RedWorker *worker, uint32_t surface_id)
     DisplayChannelClient *dcc;
     RingItem *link, *next;
 
+
     if (!--surface->refs) {
         // only primary surface streams are supported
         if (is_primary_surface(worker, surface_id)) {
             red_reset_stream_trace(worker);
+            
+#ifdef READ_STREAM_FULL_H264_CODE
+            destroy_client_stream_global(worker);
+            red_channel_push(&worker->display_channel->common.base);
+            if (g_h264_encoder != NULL)
+            {
+                h264_encoder_uninit(g_h264_encoder);
+            }
+            g_h264_encoder = NULL;
+#endif
         }
         spice_assert(surface->context.canvas);
 
@@ -1752,7 +1829,7 @@ static inline void red_destroy_surface(RedWorker *worker, uint32_t surface_id)
 }
 
 static inline void set_surface_release_info(RedWorker *worker, uint32_t surface_id, int is_create,
-                                            QXLReleaseInfo *release_info, uint32_t group_id)
+        QXLReleaseInfo *release_info, uint32_t group_id)
 {
     RedSurface *surface;
 
@@ -1775,7 +1852,7 @@ static RedDrawable *ref_red_drawable(RedDrawable *drawable)
 
 
 static inline void put_red_drawable(RedWorker *worker, RedDrawable *red_drawable,
-                                    uint32_t group_id)
+        uint32_t group_id)
 {
     QXLReleaseInfoExt release_info_ext;
 
@@ -3168,9 +3245,9 @@ static void red_create_h264_stream(DisplayChannelClient *dcc, Stream *stream)
     info.gop_size = GOP_SIZE; 
     info.max_b_frames = MAX_B_FRAME;
     info.thread_count = THREAD_COUNT;
-    //info.profile = FF_PROFILE_H264_CONSTRAINED;
-    info.profile = FF_PROFILE_H264_BASELINE;
-    //info.s_pix_fmt = AV_PIX_FMT_BGRA;
+    info.profile = FF_PROFILE_H264_CONSTRAINED;
+    //info.profile = FF_PROFILE_H264_BASELINE;
+    info.s_pix_fmt = AV_PIX_FMT_BGRA;
     info.pix_fmt = AV_PIX_FMT_YUV420P;
     //info.qmin = 1;
     //info.qmax = 33;
@@ -3299,6 +3376,7 @@ static void red_create_stream(RedWorker *worker, Drawable *drawable)
     spice_debug("stream %d %dx%d (%d, %d) (%d, %d)", (int)(stream - worker->streams_buf), stream->width,
                 stream->height, stream->dest_area.left, stream->dest_area.top,
                 stream->dest_area.right, stream->dest_area.bottom);
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"wooooooo");
     return;
 }
 
@@ -4408,8 +4486,14 @@ static inline void red_process_drawable(RedWorker *worker, RedDrawable *red_draw
             worker->transparent_count++;
         }
         red_pipes_add_drawable(worker, drawable);
+        //add by lcx for test 
+
+
+        //if ( !is_primary_surface(worker,drawable->surface_id))
+        //red_draw_qxl_drawable_global(worker, drawable);
 #ifdef DRAW_ALL
-        red_draw_qxl_drawable(worker, drawable);
+        spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"wocao!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //red_draw_qxl_drawable(worker, drawable);
 #endif
     }
 cleanup:
@@ -4544,14 +4628,16 @@ static void localize_mask(RedWorker *worker, SpiceQMask *mask, SpiceImage *image
         localize_bitmap(worker, &mask->bitmap, image_store, NULL);
     }
 }
+#ifdef READ_STREAM_FULL_H264_CODE
 
-static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
+ void red_draw_qxl_drawable_global(RedWorker *worker, Drawable *drawable)
 {
+
     RedSurface *surface;
     SpiceCanvas *canvas;
     SpiceClip clip = drawable->red_drawable->clip;
 
-    surface = &worker->surfaces[drawable->surface_id];
+    surface = &worker->surfaces[0];
     canvas = surface->context.canvas;
 
     image_cache_aging(&worker->image_cache);
@@ -4568,6 +4654,7 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
         localize_mask(worker, &fill.mask, &img2);
         canvas->ops->draw_fill(canvas, &drawable->red_drawable->bbox,
                                &clip, &fill);
+       // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_fill");
         break;
     }
     case QXL_DRAW_OPAQUE: {
@@ -4577,6 +4664,7 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
         localize_bitmap(worker, &opaque.src_bitmap, &img2, drawable);
         localize_mask(worker, &opaque.mask, &img3);
         canvas->ops->draw_opaque(canvas, &drawable->red_drawable->bbox, &clip, &opaque);
+       // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_opaque");
         break;
     }
     case QXL_DRAW_COPY: {
@@ -4585,37 +4673,276 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
         localize_bitmap(worker, &copy.src_bitmap, &img1, drawable);
         localize_mask(worker, &copy.mask, &img2);
         canvas->ops->draw_copy(canvas, &drawable->red_drawable->bbox,
-                               &clip, &copy);
+                &clip, &copy);
+        // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_copy");
         break;
-    }
+                        }
     case QXL_DRAW_TRANSPARENT: {
-        SpiceTransparent transparent = drawable->red_drawable->u.transparent;
-        SpiceImage img1;
-        localize_bitmap(worker, &transparent.src_bitmap, &img1, drawable);
-        canvas->ops->draw_transparent(canvas,
-                                      &drawable->red_drawable->bbox, &clip, &transparent);
-        break;
-    }
+                                   SpiceTransparent transparent = drawable->red_drawable->u.transparent;
+                                   SpiceImage img1;
+                                   localize_bitmap(worker, &transparent.src_bitmap, &img1, drawable);
+                                   canvas->ops->draw_transparent(canvas,
+                                           &drawable->red_drawable->bbox, &clip, &transparent);
+                                   // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_transparent");
+                                   break;
+                               }
     case QXL_DRAW_ALPHA_BLEND: {
-        SpiceAlphaBlend alpha_blend = drawable->red_drawable->u.alpha_blend;
-        SpiceImage img1;
-        localize_bitmap(worker, &alpha_blend.src_bitmap, &img1, drawable);
-        canvas->ops->draw_alpha_blend(canvas,
-                                      &drawable->red_drawable->bbox, &clip, &alpha_blend);
-        break;
-    }
+                                   SpiceAlphaBlend alpha_blend = drawable->red_drawable->u.alpha_blend;
+                                   SpiceImage img1;
+                                   localize_bitmap(worker, &alpha_blend.src_bitmap, &img1, drawable);
+                                   canvas->ops->draw_alpha_blend(canvas,
+                                           &drawable->red_drawable->bbox, &clip, &alpha_blend);
+                                   // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_alpha_blend");
+                                   break;
+                               }
     case QXL_COPY_BITS: {
-        canvas->ops->copy_bits(canvas, &drawable->red_drawable->bbox,
-                               &clip, &drawable->red_drawable->u.copy_bits.src_pos);
+                            canvas->ops->copy_bits(canvas, &drawable->red_drawable->bbox,
+                                    &clip, &drawable->red_drawable->u.copy_bits.src_pos);
+                            //  spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"copy_bits");
+                            break;
+                        }
+    case QXL_DRAW_BLEND: {
+                             SpiceBlend blend = drawable->red_drawable->u.blend;
+                             SpiceImage img1, img2;
+                             localize_bitmap(worker, &blend.src_bitmap, &img1, drawable);
+                             localize_mask(worker, &blend.mask, &img2);
+                             canvas->ops->draw_blend(canvas, &drawable->red_drawable->bbox,
+                                     &clip, &blend);
+                             //  spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_blend");
+                             break;
+                         }
+    case QXL_DRAW_BLACKNESS: {
+                                 SpiceBlackness blackness = drawable->red_drawable->u.blackness;
+                                 SpiceImage img1;
+                                 localize_mask(worker, &blackness.mask, &img1);
+                                 canvas->ops->draw_blackness(canvas,
+                                         &drawable->red_drawable->bbox, &clip, &blackness);
+                                 //  spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_blackness");
+                                 break;
+                             }
+    case QXL_DRAW_WHITENESS: {
+                                 SpiceWhiteness whiteness = drawable->red_drawable->u.whiteness;
+                                 SpiceImage img1;
+                                 localize_mask(worker, &whiteness.mask, &img1);
+                                 canvas->ops->draw_whiteness(canvas,
+                                         &drawable->red_drawable->bbox, &clip, &whiteness);
+                                 //  spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_whiteness");
+                                 break;
+                             }
+    case QXL_DRAW_INVERS: {
+                              SpiceInvers invers = drawable->red_drawable->u.invers;
+                              SpiceImage img1;
+                              localize_mask(worker, &invers.mask, &img1);
+                              canvas->ops->draw_invers(canvas,
+                                      &drawable->red_drawable->bbox, &clip, &invers);
+                              //    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_invers");
+                              break;
+                          }
+    case QXL_DRAW_ROP3: {
+                            SpiceRop3 rop3 = drawable->red_drawable->u.rop3;
+                            SpiceImage img1, img2, img3;
+                            localize_brush(worker, &rop3.brush, &img1);
+                            localize_bitmap(worker, &rop3.src_bitmap, &img2, drawable);
+                            localize_mask(worker, &rop3.mask, &img3);
+                            canvas->ops->draw_rop3(canvas, &drawable->red_drawable->bbox,
+                                    &clip, &rop3);
+                            //   spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_rop3");
+                            break;
+                        }
+    case QXL_DRAW_COMPOSITE: {
+                                 SpiceComposite composite = drawable->red_drawable->u.composite;
+                                 SpiceImage src, mask;
+                                 localize_bitmap(worker, &composite.src_bitmap, &src, drawable);
+                                 if (composite.mask_bitmap)
+                                     localize_bitmap(worker, &composite.mask_bitmap, &mask, drawable);
+                                 canvas->ops->draw_composite(canvas, &drawable->red_drawable->bbox,
+                                         &clip, &composite);
+                                 spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_composite");
+                                 break;
+                             }
+    case QXL_DRAW_STROKE: {
+                              SpiceStroke stroke = drawable->red_drawable->u.stroke;
+                              SpiceImage img1;
+                              localize_brush(worker, &stroke.brush, &img1);
+                              canvas->ops->draw_stroke(canvas,
+                                      &drawable->red_drawable->bbox, &clip, &stroke);
+                              //    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_stroke");
+                              break;
+                          }
+    case QXL_DRAW_TEXT: {
+                            SpiceText text = drawable->red_drawable->u.text;
+                            SpiceImage img1, img2;
+        localize_brush(worker, &text.fore_brush, &img1);
+        localize_brush(worker, &text.back_brush, &img2);
+        canvas->ops->draw_text(canvas, &drawable->red_drawable->bbox,
+                               &clip, &text);
+    //    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_text");
         break;
     }
-    case QXL_DRAW_BLEND: {
-        SpiceBlend blend = drawable->red_drawable->u.blend;
-        SpiceImage img1, img2;
+    default:
+        spice_warning("invalid type");
+    }
+    //add by lcx for test ====????? 
+    if (worker->surfaces[0].context.canvas_draws_on_surface = TRUE)
+    {
+
+        /*
+        int bpp = SPICE_SURFACE_FMT_DEPTH(worker->surfaces[0].context.format) / 8;
+        bmp_generator1(worker->surfaces[0].context.width,worker->surfaces[0].context.height,worker->surfaces[0].context.line_0);
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : width = %d  , height = %d, bpp = %d",
+                __FILE__,__FUNCTION__,__LINE__,
+                worker->surfaces[0].context.width,
+                worker->surfaces[0].context.height,
+                bpp);
+                */
+        /*
+           int bpp = SPICE_SURFACE_FMT_DEPTH(surface->context.format) / 8;
+           bmp_generator1(surface->context.width,surface->context.height,surface->context.line_0);
+           spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : width = %d  , height = %d, bpp = %d",
+           __FILE__,__FUNCTION__,__LINE__,
+           surface->context.width,
+           surface->context.height,
+           surface->context.line_0);
+           */
+    }
+
+
+}
+
+
+
+static uint8_t * red_get_primary_surface_bits(RedWorker *worker, uint8_t * bits)
+{
+    RedSurface *surface;
+    SpiceCanvas *canvas;
+
+    surface = &worker->surfaces[0];
+    canvas = surface->context.canvas;
+//    if (worker->surfaces[0].context.canvas_draws_on_surface = TRUE)
+    {
+
+        SpiceRect area;
+
+        area.top = area.left = 0;
+        area.right = worker->surfaces[0].context.width;
+        area.bottom = worker->surfaces[0].context.height;
+        int stride;
+        int width;
+        int height;
+        int bpp;
+        int all_set;
+        int image_format;
+        uint32_t image_flags;
+        int top_down;
+        
+        width = area.right - area.left;
+        height = area.bottom - area.top;
+        bpp = SPICE_SURFACE_FMT_DEPTH(surface->context.format) / 8;
+        stride = width * bpp;
+        size_t size1;
+        size1 = height * stride ;
+
+        image_format = spice_bitmap_from_surface_type(surface->context.format);
+        image_flags = 0;
+        top_down = surface->context.top_down;
+
+
+        canvas->ops->read_bits(canvas, bits, stride, &area);
+        
+        //bmp_generator1(worker->surfaces[0].context.width,worker->surfaces[0].context.height,bits);
+        /*
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : width = %d  , height = %d, bpp = %d",
+                __FILE__,__FUNCTION__,__LINE__,
+                worker->surfaces[0].context.width,
+                worker->surfaces[0].context.height,
+                worker->surfaces[0].context.line_0);
+*/
+    }
+    return NULL;
+
+}
+#endif
+
+
+static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
+{
+
+    RedSurface *surface;
+    SpiceCanvas *canvas;
+    SpiceClip clip = drawable->red_drawable->clip;
+
+    surface = &worker->surfaces[drawable->surface_id];
+    canvas = surface->context.canvas;
+
+    image_cache_aging(&worker->image_cache);
+
+    worker->preload_group_id = drawable->group_id;
+
+    region_add(&surface->draw_dirty_region, &drawable->red_drawable->bbox);
+
+    switch (drawable->red_drawable->type) {
+        case QXL_DRAW_FILL: {
+                                SpiceFill fill = drawable->red_drawable->u.fill;
+                                SpiceImage img1, img2;
+                                localize_brush(worker, &fill.brush, &img1);
+                                localize_mask(worker, &fill.mask, &img2);
+                                canvas->ops->draw_fill(canvas, &drawable->red_drawable->bbox,
+                                        &clip, &fill);
+                                // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_fill");
+                                break;
+                            }
+        case QXL_DRAW_OPAQUE: {
+                                  SpiceOpaque opaque = drawable->red_drawable->u.opaque;
+                                  SpiceImage img1, img2, img3;
+                                  localize_brush(worker, &opaque.brush, &img1);
+                                  localize_bitmap(worker, &opaque.src_bitmap, &img2, drawable);
+                                  localize_mask(worker, &opaque.mask, &img3);
+                                  canvas->ops->draw_opaque(canvas, &drawable->red_drawable->bbox, &clip, &opaque);
+                                  // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_opaque");
+                                  break;
+                              }
+        case QXL_DRAW_COPY: {
+                                SpiceCopy copy = drawable->red_drawable->u.copy;
+                                SpiceImage img1, img2;
+                                localize_bitmap(worker, &copy.src_bitmap, &img1, drawable);
+                                localize_mask(worker, &copy.mask, &img2);
+                                canvas->ops->draw_copy(canvas, &drawable->red_drawable->bbox,
+                                        &clip, &copy);
+                                // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_copy");
+                                break;
+                            }
+        case QXL_DRAW_TRANSPARENT: {
+                                       SpiceTransparent transparent = drawable->red_drawable->u.transparent;
+                                       SpiceImage img1;
+                                       localize_bitmap(worker, &transparent.src_bitmap, &img1, drawable);
+                                       canvas->ops->draw_transparent(canvas,
+                                               &drawable->red_drawable->bbox, &clip, &transparent);
+                                       // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_transparent");
+                                       break;
+                                   }
+        case QXL_DRAW_ALPHA_BLEND: {
+                                       SpiceAlphaBlend alpha_blend = drawable->red_drawable->u.alpha_blend;
+                                       SpiceImage img1;
+                                       localize_bitmap(worker, &alpha_blend.src_bitmap, &img1, drawable);
+                                       canvas->ops->draw_alpha_blend(canvas,
+                                               &drawable->red_drawable->bbox, &clip, &alpha_blend);
+                                       // spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_alpha_blend");
+                                       break;
+                                   }
+        case QXL_COPY_BITS: {
+                                canvas->ops->copy_bits(canvas, &drawable->red_drawable->bbox,
+                                        &clip, &drawable->red_drawable->u.copy_bits.src_pos);
+                                //  spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"copy_bits");
+                                break;
+                            }
+        case QXL_DRAW_BLEND: {
+                                 SpiceBlend blend = drawable->red_drawable->u.blend;
+                                 SpiceImage img1, img2;
         localize_bitmap(worker, &blend.src_bitmap, &img1, drawable);
         localize_mask(worker, &blend.mask, &img2);
         canvas->ops->draw_blend(canvas, &drawable->red_drawable->bbox,
                                 &clip, &blend);
+      //  spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_blend");
         break;
     }
     case QXL_DRAW_BLACKNESS: {
@@ -4624,6 +4951,7 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
         localize_mask(worker, &blackness.mask, &img1);
         canvas->ops->draw_blackness(canvas,
                                     &drawable->red_drawable->bbox, &clip, &blackness);
+      //  spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_blackness");
         break;
     }
     case QXL_DRAW_WHITENESS: {
@@ -4632,6 +4960,7 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
         localize_mask(worker, &whiteness.mask, &img1);
         canvas->ops->draw_whiteness(canvas,
                                     &drawable->red_drawable->bbox, &clip, &whiteness);
+      //  spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_whiteness");
         break;
     }
     case QXL_DRAW_INVERS: {
@@ -4640,6 +4969,7 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
         localize_mask(worker, &invers.mask, &img1);
         canvas->ops->draw_invers(canvas,
                                  &drawable->red_drawable->bbox, &clip, &invers);
+    //    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_invers");
         break;
     }
     case QXL_DRAW_ROP3: {
@@ -4650,6 +4980,7 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
         localize_mask(worker, &rop3.mask, &img3);
         canvas->ops->draw_rop3(canvas, &drawable->red_drawable->bbox,
                                &clip, &rop3);
+     //   spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_rop3");
         break;
     }
     case QXL_DRAW_COMPOSITE: {
@@ -4660,6 +4991,7 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
             localize_bitmap(worker, &composite.mask_bitmap, &mask, drawable);
         canvas->ops->draw_composite(canvas, &drawable->red_drawable->bbox,
                                     &clip, &composite);
+        spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_composite");
         break;
     }
     case QXL_DRAW_STROKE: {
@@ -4668,6 +5000,7 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
         localize_brush(worker, &stroke.brush, &img1);
         canvas->ops->draw_stroke(canvas,
                                  &drawable->red_drawable->bbox, &clip, &stroke);
+    //    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_stroke");
         break;
     }
     case QXL_DRAW_TEXT: {
@@ -4677,11 +5010,57 @@ static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)
         localize_brush(worker, &text.back_brush, &img2);
         canvas->ops->draw_text(canvas, &drawable->red_drawable->bbox,
                                &clip, &text);
+    //    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"draw_text");
         break;
     }
     default:
         spice_warning("invalid type");
     }
+    //add by lcx for test ====????? 
+/*
+    if (worker->surfaces[0].context.canvas_draws_on_surface = TRUE)
+    {
+    
+        int bpp = SPICE_SURFACE_FMT_DEPTH(worker->surfaces[0].context.format) / 8;
+        bmp_generator1(worker->surfaces[0].context.width,worker->surfaces[0].context.height,worker->surfaces[0].context.line_0);
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : width = %d  , height = %d, bpp = %d",
+                __FILE__,__FUNCTION__,__LINE__,
+                worker->surfaces[0].context.width,
+                worker->surfaces[0].context.height,
+                worker->surfaces[0].context.line_0);
+        int bpp = SPICE_SURFACE_FMT_DEPTH(surface->context.format) / 8;
+        bmp_generator1(surface->context.width,surface->context.height,surface->context.line_0);
+        spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : width = %d  , height = %d, bpp = %d",
+                __FILE__,__FUNCTION__,__LINE__,
+                surface->context.width,
+                surface->context.height,
+                surface->context.line_0);
+    }
+*/
+    //ImageItem *item;
+    /*
+    SpiceRect area;
+
+    area.top = area.left = 0;
+    area.right = worker->surfaces[0].context.width;
+    area.bottom = worker->surfaces[0].context.height;
+
+    int stride;
+    int width;
+    int height;
+    int bpp;
+    width = area.right - area.left;
+    height = area.bottom - area.top;
+    bpp = SPICE_SURFACE_FMT_DEPTH(surface->context.format) / 8;
+    stride = width * bpp;
+    //item = (ImageItem *)spice_malloc_n_m(height, stride, sizeof(ImageItem));
+    size_t size1;
+    size1 = height * stride ;
+    char * bits = spice_malloc(size1 + sizeof(ImageItem));
+
+    red_get_primary_surface_bits(worker, bits);
+    free(bits);
+    */
 }
 
 #ifndef DRAW_ALL
@@ -4690,14 +5069,14 @@ static void red_draw_drawable(RedWorker *worker, Drawable *drawable)
 {
 #ifdef UPDATE_AREA_BY_TREE
     SpiceCanvas *canvas;
-
     canvas = surface->context.canvas;
     //todo: add need top mask flag
     canvas->ops->group_start(canvas,
-                             &drawable->tree_item.base.rgn);
+            &drawable->tree_item.base.rgn);
 #endif
     red_flush_source_surfaces(worker, drawable);
     red_draw_qxl_drawable(worker, drawable);
+    //red_draw_qxl_drawable_global(worker, drawable);
 #ifdef UPDATE_AREA_BY_TREE
     canvas->ops->group_end(canvas);
 #endif
@@ -4728,7 +5107,7 @@ static void validate_area(RedWorker *worker, const SpiceRect *area, uint32_t sur
 #ifdef UPDATE_AREA_BY_TREE
 
 static inline void __red_collect_for_update(RedWorker *worker, Ring *ring, RingItem *ring_item,
-                                            QRegion *rgn, Ring *items)
+        QRegion *rgn, Ring *items)
 {
     Ring *top_ring = ring;
 
@@ -5181,6 +5560,11 @@ static int red_process_commands(RedWorker *worker, uint32_t max_pipe_size, int *
 
     worker->process_commands_generation++;
     *ring_is_empty = FALSE;
+
+
+    //add by lcx for test
+    //int my_counter = 0;
+
     while (!display_is_connected(worker) ||
            // TODO: change to average pipe size?
            red_channel_min_pipe_size(&worker->display_channel->common.base) <= max_pipe_size) {
@@ -5208,13 +5592,14 @@ static int red_process_commands(RedWorker *worker, uint32_t max_pipe_size, int *
             if (!red_get_drawable(&worker->mem_slots, ext_cmd.group_id,
                                  red_drawable, ext_cmd.cmd.data, ext_cmd.flags)) {
                 red_process_drawable(worker, red_drawable, ext_cmd.group_id);
+                //my_counter++;
             }
             // release the red_drawable
             put_red_drawable(worker, red_drawable, ext_cmd.group_id);
             break;
         }
         case QXL_CMD_UPDATE: {
-            spice_info("lcx add test \n");
+            spice_printerr("lcx add test \n");
             RedUpdateCmd update;
             QXLReleaseInfoExt release_info_ext;
 
@@ -5273,9 +5658,12 @@ static int red_process_commands(RedWorker *worker, uint32_t max_pipe_size, int *
              red_channel_all_blocked(&worker->display_channel->common.base))
             || red_now() - start > 10 * 1000 * 1000) {
             worker->event_timeout = 0;
+            //spice_printerr("%d ===== image come i11111111111\n",my_counter);
             return n;
         }
     }
+    //if (my_counter > 0)
+        //spice_printerr("%d ===== image come i11111111111\n",my_counter);
     return n;
 }
 
@@ -6818,7 +7206,6 @@ static FillBitsType fill_bits(DisplayChannelClient *dcc, SpiceMarshaller *m,
 
     switch (simage->descriptor.type) {
     case SPICE_IMAGE_TYPE_SURFACE: {
-    spice_info(" SPICE_IMAGE_TYPE_SURFACE===================111111111111111111");
         int surface_id;
         RedSurface *surface;
 
@@ -7273,7 +7660,6 @@ static void red_pipe_replace_rendered_drawables_with_images(RedWorker *worker,
         num_resent++;
 
         spice_assert(image);
-        spice_debug("1111111111111111111111111111111111111");
         red_channel_client_pipe_remove_and_release(&dcc->common.base, &dpi->dpi_pipe_item);
         pipe_item = &image->link;
     }
@@ -7354,7 +7740,6 @@ static void red_marshall_qxl_draw_fill(RedWorker *worker,
                                    SpiceMarshaller *base_marshaller,
                                    DrawablePipeItem *dpi)
 {
-    //spice_info(" red_marshall_qxl_draw_fill ===================111111111111111111");
     Drawable *item = dpi->drawable;
     RedDrawable *drawable = item->red_drawable;
     DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
@@ -7542,7 +7927,6 @@ static FillBitsType red_marshall_qxl_draw_copy(RedWorker *worker,
                                            SpiceMarshaller *base_marshaller,
                                            DrawablePipeItem *dpi, int src_allowed_lossy)
 {
-    //spice_info(" red_marshall_qxl_draw_copy ===================111111111111111111");
     Drawable *item = dpi->drawable;
     RedDrawable *drawable = item->red_drawable;
     DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
@@ -8757,8 +9141,12 @@ static inline int red_marshall_stream_h264_data(RedChannelClient *rcc,
                   SpiceMarshaller *base_marshaller, Drawable *drawable)
 {
 #if 1
+#ifndef OUTPUT_BUF_SIZE_H264
 #define OUTPUT_BUF_SIZE_H264  4096 * 4096 * 2
+#endif
+#ifndef MAX_RGB_SIZE
 #define MAX_RGB_SIZE 1920 * 1080 * 4 * 20
+#endif
     DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
     DisplayChannel *display_channel = SPICE_CONTAINEROF(rcc->channel, DisplayChannel, common.base);
     Stream *stream = drawable->stream;
@@ -9102,8 +9490,309 @@ static inline int red_marshall_stream_data(RedChannelClient *rcc,
     return TRUE;
 }
 
-static inline void marshall_qxl_drawable(RedChannelClient *rcc,
+
+//add by lcx 
+
+#if 0
+typedef void (*red_get_marshall_qxl_drawable_data_buffer)(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h);
+
+void red_marshall_qxl_draw_fill_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+
+}
+
+void red_marshall_qxl_draw_opaque_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+
+}
+
+void red_marshall_qxl_draw_copy_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+    //spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+
+}
+
+void red_marshall_qxl_copy_bits_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+
+void red_marshall_qxl_draw_blend_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+void red_marshall_qxl_draw_blackness_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+void red_marshall_qxl_draw_whiteness_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+void red_marshall_qxl_draw_inverse_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+void red_marshall_qxl_draw_rop3_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+void red_marshall_qxl_draw_stroke_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+void red_marshall_qxl_draw_text_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+void red_marshall_qxl_draw_transparent_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+void red_marshall_qxl_draw_alpha_blend_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+void red_marshall_qxl_draw_composite_get_data_buffer(RedWorker *worker, RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi,char *bmp,int *x,int *y,int *w,int *h)
+{
+
+    spice_info("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"begin");
+}
+
+
+static red_get_marshall_qxl_drawable_data_buffer red_get_marshall_qxl_drawable_data_buffer_entry[] = {
+    RED_MARSHALL_QXL_DRAW_GET_DATA_BEGIN,
+    red_marshall_qxl_draw_fill_get_data_buffer,
+    red_marshall_qxl_draw_opaque_get_data_buffer,
+    red_marshall_qxl_draw_copy_get_data_buffer,
+    red_marshall_qxl_copy_bits_get_data_buffer,
+    red_marshall_qxl_draw_blend_get_data_buffer,
+    red_marshall_qxl_draw_blackness_get_data_buffer,
+    red_marshall_qxl_draw_whiteness_get_data_buffer,
+    red_marshall_qxl_draw_inverse_get_data_buffer,
+    red_marshall_qxl_draw_rop3_get_data_buffer,
+    red_marshall_qxl_draw_stroke_get_data_buffer,
+    red_marshall_qxl_draw_text_get_data_buffer,
+    red_marshall_qxl_draw_transparent_get_data_buffer,
+    red_marshall_qxl_draw_alpha_blend_get_data_buffer,
+    red_marshall_qxl_draw_composite_get_data_buffer,
+    RED_MARSHALL_QXL_DRAW_GET_DATA_END
+};
+
+
+
+
+//add by lcx 
+static inline void marshall_qxl_drawable_stream_full(RedChannelClient *rcc,
     SpiceMarshaller *m, DrawablePipeItem *dpi)
+{
+    Drawable *item = dpi->drawable;
+    DisplayChannel *display_channel = SPICE_CONTAINEROF(rcc->channel, DisplayChannel, common.base);
+
+    spice_assert(display_channel && rcc);
+
+    DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
+    static char * bmp = NULL;
+    if (bmp == NULL)
+    {
+         bmp = malloc(sizeof(char) * RED_MARSHALL_QXL_DRAW_DATA_BUF_SIZE);
+    }
+
+    memset(bmp,0,RED_MARSHALL_QXL_DRAW_DATA_BUF_SIZE);
+    int x = 0,y = 0,w = 0,h = 0;
+    if (item->red_drawable->type <= QXL_DRAW_NOP || 
+            item->red_drawable->type > QXL_DRAW_COMPOSITE)
+    {
+        spice_printerr("item->red_drawable->type error = %s",draw_type_to_str(item->red_drawable->type));
+    }
+    else
+    {
+        if (red_get_marshall_qxl_drawable_data_buffer_entry[item->red_drawable->type] != NULL)
+        {
+            red_get_marshall_qxl_drawable_data_buffer_entry[item->red_drawable->type](
+                    display_channel->common.worker,rcc,m,dpi,bmp,&x,&y,&w,&h);
+        }
+    }
+
+}
+
+#endif
+
+#ifdef  READ_STREAM_FULL_H264_CODE
+static inline void marshall_qxl_drawable_global(RedChannelClient *rcc,
+        SpiceMarshaller *m)
+{
+    //add by lcx for h264
+
+    /* allow sized frames to be streamed, even if they where replaced by another frame, since
+     * newer frames might not cover sized frames completely if they are bigger */
+
+#ifndef OUTPUT_BUF_SIZE_H264
+#define OUTPUT_BUF_SIZE_H264  4096 * 4096 * 2
+#endif 
+#ifndef MAX_RGB_SIZE
+#define MAX_RGB_SIZE 1920 * 1080 * 4 * 20
+#endif
+    uint32_t frame_mm_time;
+    int n;
+    int width, height;
+    int ret;
+    uint64_t time_now = red_now();
+    size_t outbuf_size;
+    int stride;
+    int bpp;
+    size_t size1;
+    char *bits = NULL;
+
+    DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
+    DisplayChannel *display_channel = SPICE_CONTAINEROF(rcc->channel, DisplayChannel, common.base);
+    spice_assert(display_channel && rcc);
+    RedWorker *worker = dcc->common.worker;
+    RedSurface *surface = &worker->surfaces[0];
+
+    
+    worker = display_channel->common.worker;
+    if (!g_h264_encoder)
+    {
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"g_h264_encoder === NULL");
+        return;
+    
+    }
+
+    width = surface->context.width;
+    height = surface->context.height;
+    
+    if (g_h264_encoder->codec_context->width != width || 
+            g_h264_encoder->codec_context->height != height)
+    {
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : \
+                surface width = %d , surface height= %d,codec width = %d codec height = %d",
+                __FILE__,__FUNCTION__,__LINE__,width,height,
+                g_h264_encoder->codec_context->width, g_h264_encoder->codec_context->height);
+        return;
+    }
+
+    /*
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : \
+            surface width = %d , surface height= %d,codec width = %d codec height = %d",
+            __FILE__,__FUNCTION__,__LINE__,width,height,
+            g_h264_encoder->codec_context->width, g_h264_encoder->codec_context->height);
+*/
+
+    outbuf_size = dcc->send_data.stream_outbuf_size;
+    if(outbuf_size < OUTPUT_BUF_SIZE_H264)
+    {
+        if(dcc->send_data.stream_outbuf)
+        {
+            free(dcc->send_data.stream_outbuf);
+            dcc->send_data.stream_outbuf = NULL;
+        }
+    }
+
+    if (dcc->send_data.stream_outbuf == NULL || outbuf_size == 0) {
+        /* Allocate initial buffer */
+        dcc->send_data.stream_outbuf = malloc(OUTPUT_BUF_SIZE_H264);
+        if (dcc->send_data.stream_outbuf == NULL)
+        {
+            spice_debug("dcc->send_data.stream_outbuf malloc error");
+        }
+        outbuf_size = OUTPUT_BUF_SIZE_H264;
+    }
+
+    bpp = SPICE_SURFACE_FMT_DEPTH(surface->context.format) / 8;
+    stride = width * bpp;
+    size1 = height * stride ;
+    bits = spice_malloc(size1 + sizeof(ImageItem));
+
+    red_get_primary_surface_bits(worker, bits);
+
+
+    ret = h264_encode(g_h264_encoder,bits,width * height * 4,
+            dcc->send_data.stream_outbuf,&outbuf_size);
+
+    free(bits);
+
+
+    if (H264_NOT_GET_SLICE == ret)
+    {
+        return ;
+
+    }
+    else if(H264_ENCODER_OK == ret)
+    {
+#if 1
+        dcc->send_data.stream_outbuf_size = outbuf_size;
+        char filename[1000] = "";
+        sprintf(filename,"/home/lichenxiang/stream_before/h264_0x%xh264",g_h264_encoder);
+        FILE *fp = fopen(filename,"a");
+        fwrite(dcc->send_data.stream_outbuf,1,dcc->send_data.stream_outbuf_size,fp);
+        fclose(fp);
+#endif
+    }
+    else 
+    {
+        spice_printerr("h264_encode error");
+
+        return;
+    }
+    n = outbuf_size;
+
+    SpiceMsgDisplayStreamData stream_data;
+
+    red_channel_client_init_send_data(rcc, SPICE_MSG_DISPLAY_STREAM_DATA, NULL);
+
+    stream_data.base.id = RED_GLOBAL_H264_STREAM_ID;
+    stream_data.base.multi_media_time = frame_mm_time;
+    stream_data.data_size = n;
+
+    //spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %d",__FILE__,__FUNCTION__,__LINE__,n);
+    spice_marshall_msg_display_stream_data(m, &stream_data);
+
+    spice_marshaller_add_ref(m,dcc->send_data.stream_outbuf, n);
+
+    return ;
+}
+#endif
+
+static inline void marshall_qxl_drawable(RedChannelClient *rcc,
+        SpiceMarshaller *m, DrawablePipeItem *dpi)
 {
     //add by lcx for h264
     Drawable *item = dpi->drawable;
@@ -9115,12 +9804,12 @@ static inline void marshall_qxl_drawable(RedChannelClient *rcc,
     DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
 
     if(dcc->streaming_video_compression == STREAM_VIDEO_COMPRESSION_H264)
-    //if(dcc->use_h264_encoder)
+        //if(dcc->use_h264_encoder)
     {
 
         if ((item->stream || item->sized_stream) ) {
             int ret = red_marshall_stream_h264_data(rcc, m, item);
-            spice_printerr("\n\n====  aaaaaaaaaaaaaaaaaaaaaa ======\n\n");
+            //spice_printerr("\n\n====  aaaaaaaaaaaaaaaaaaaaaa ======\n\n");
             if (ret == TRUE)
                 return;
         }
@@ -9129,7 +9818,7 @@ static inline void marshall_qxl_drawable(RedChannelClient *rcc,
     else
     {
         if ((item->stream || item->sized_stream) && red_marshall_stream_data(rcc, m, item)) {
-            spice_printerr("\n\n====  bbbbbbbbbbbbbbbbbbbbbbb======\n\n");
+            //spice_printerr("\n\n====  bbbbbbbbbbbbbbbbbbbbbbb======\n\n");
             return;
         }
     }
@@ -9479,6 +10168,52 @@ static void red_display_marshall_stream_start(RedChannelClient *rcc,
     spice_marshall_msg_display_stream_create(base_marshaller, &stream_create);
 }
 
+#ifdef READ_STREAM_FULL_H264_CODE 
+static void red_display_marshall_stream_start_global(RedChannelClient *rcc,
+                     SpiceMarshaller *base_marshaller)
+{
+    DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
+    SpiceRect area;
+    
+    RedWorker *worker = dcc->common.worker;
+    RedSurface *surface = &worker->surfaces[0];
+
+    red_channel_client_init_send_data(rcc, SPICE_MSG_DISPLAY_STREAM_CREATE, NULL);
+    SpiceMsgDisplayStreamCreate stream_create;
+    SpiceClipRects clip_rects;
+
+    stream_create.surface_id = 0;
+    stream_create.id = RED_GLOBAL_H264_STREAM_ID; 
+    //stream_create.flags = SPICE_STREAM_FLAGS_TOP_DOWN;
+    stream_create.flags = surface->context.top_down  ? SPICE_STREAM_FLAGS_TOP_DOWN : 0;
+
+    area.top = area.left = 0;
+    area.right = worker->surfaces[0].context.width;
+    area.bottom = worker->surfaces[0].context.height;
+
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : width = %d height = %d",
+            __FILE__,__FUNCTION__,__LINE__,
+            worker->surfaces[0].context.width,worker->surfaces[0].context.height);
+    
+    stream_create.codec_type = SPICE_VIDEO_CODEC_TYPE_H264;
+    
+    stream_create.src_width = worker->surfaces[0].context.width;
+    stream_create.src_height = worker->surfaces[0].context.height;
+    stream_create.stream_width = stream_create.src_width;
+    stream_create.stream_height = stream_create.src_height;
+    stream_create.dest = area;
+
+    stream_create.clip.type = SPICE_CLIP_TYPE_RECTS;
+    clip_rects.num_rects = 0;
+    stream_create.clip.rects = &clip_rects;
+
+    stream_create.stamp = 0;
+
+    spice_marshall_msg_display_stream_create(base_marshaller, &stream_create);
+}
+#endif
+
+
 static void red_display_marshall_stream_clip(RedChannelClient *rcc,
                                          SpiceMarshaller *base_marshaller,
                                          StreamClipItem *item)
@@ -9498,8 +10233,22 @@ static void red_display_marshall_stream_clip(RedChannelClient *rcc,
     spice_marshall_msg_display_stream_clip(base_marshaller, &stream_clip);
 }
 
+#ifdef READ_STREAM_FULL_H264_CODE 
+static void red_display_marshall_stream_end_global(RedChannelClient *rcc,
+                   SpiceMarshaller *base_marshaller)
+{
+    DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
+    SpiceMsgDisplayStreamDestroy destroy;
+
+    red_channel_client_init_send_data(rcc, SPICE_MSG_DISPLAY_STREAM_DESTROY, NULL);
+    destroy.id = RED_GLOBAL_H264_STREAM_ID;
+    spice_marshall_msg_display_stream_destroy(base_marshaller, &destroy);
+}
+#endif
+
+
 static void red_display_marshall_stream_end(RedChannelClient *rcc,
-                   SpiceMarshaller *base_marshaller, StreamAgent* agent)
+        SpiceMarshaller *base_marshaller, StreamAgent* agent)
 {
     DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
     SpiceMsgDisplayStreamDestroy destroy;
@@ -9508,7 +10257,9 @@ static void red_display_marshall_stream_end(RedChannelClient *rcc,
     destroy.id = get_stream_id(dcc->common.worker, agent->stream);
     red_display_stream_agent_stop(dcc, agent);
     spice_marshall_msg_display_stream_destroy(base_marshaller, &destroy);
+
 }
+
 
 static void red_cursor_marshall_inval(RedChannelClient *rcc,
                 SpiceMarshaller *m, CacheItem *cach_item)
@@ -9676,16 +10427,43 @@ static void display_channel_send_item(RedChannelClient *rcc, PipeItem *pipe_item
     switch (pipe_item->type) {
     case PIPE_ITEM_TYPE_DRAW: {
         DrawablePipeItem *dpi = SPICE_CONTAINEROF(pipe_item, DrawablePipeItem, dpi_pipe_item);
-        marshall_qxl_drawable(rcc, m, dpi);
+        //if(dcc->streaming_video_compression == STREAM_VIDEO_COMPRESSION_H264 || 1)
+        //{
+            //marshall_qxl_drawable_stream_full(rcc, m, dpi);
+
+        //}
+        //else
+        //{
+#ifndef  READ_STREAM_FULL_H264_CODE
+            marshall_qxl_drawable(rcc, m, dpi);
+#else
+            Drawable *drawable = dpi->drawable;
+//            if (drawable->red_drawable->type == QXL_DRAW_COPY)
+            {
+                marshall_qxl_drawable_global(rcc, m);
+                /*
+                spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,
+                        "i come to h264 stream");
+                        */
+            }
+#endif
+        //}
         break;
     }
     case PIPE_ITEM_TYPE_INVAL_ONE:
         red_marshall_inval(rcc, m, (CacheItem *)pipe_item);
         break;
     case PIPE_ITEM_TYPE_STREAM_CREATE: {
+#ifndef READ_STREAM_FULL_H264_CODE 
         spice_info(" lcx come to PIPE_ITEM_TYPE_STREAM_CREATE  \n");
         StreamAgent *agent = SPICE_CONTAINEROF(pipe_item, StreamAgent, create_item);
         red_display_marshall_stream_start(rcc, m, agent);
+#else 
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",
+                __FILE__,__FUNCTION__,__LINE__,"PIPE_ITEM_TYPE_STREAM_CREATE for READ_STREAM_FULL_H264_CODE");
+        red_display_marshall_stream_start_global(rcc,m);
+
+#endif
         break;
     }
     case PIPE_ITEM_TYPE_STREAM_CLIP: {
@@ -9694,11 +10472,19 @@ static void display_channel_send_item(RedChannelClient *rcc, PipeItem *pipe_item
         break;
     }
     case PIPE_ITEM_TYPE_STREAM_DESTROY: {
+#ifndef READ_STREAM_FULL_H264_CODE 
         StreamAgent *agent = SPICE_CONTAINEROF(pipe_item, StreamAgent, destroy_item);
         red_display_marshall_stream_end(rcc, m, agent);
+#else
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",
+                __FILE__,__FUNCTION__,__LINE__,"PIPE_ITEM_TYPE_STREAM_DESTROY for READ_STREAM_FULL_H264_CODE");
+        red_display_marshall_stream_end_global(rcc, m);
+#endif
+
         break;
     }
     case PIPE_ITEM_TYPE_UPGRADE:
+        // do h264 code here
         red_display_marshall_upgrade(rcc, m, (UpgradeItem *)pipe_item);
         break;
     case PIPE_ITEM_TYPE_VERB:
@@ -9708,6 +10494,7 @@ static void display_channel_send_item(RedChannelClient *rcc, PipeItem *pipe_item
         display_channel_marshall_migrate_data(rcc, m);
         break;
     case PIPE_ITEM_TYPE_IMAGE:
+        // do h264 code here send by CREATE SURFACE
         red_marshall_image(rcc, m, (ImageItem *)pipe_item);
         break;
     case PIPE_ITEM_TYPE_PIXMAP_SYNC:
@@ -9770,9 +10557,13 @@ static void display_channel_send_item(RedChannelClient *rcc, PipeItem *pipe_item
     display_channel_client_release_item_before_push(dcc, pipe_item);
     // a message is pending
     if (red_channel_client_send_message_pending(rcc)) {
-/*
         if (pipe_item->type == PIPE_ITEM_TYPE_DRAW)
         {
+            /*
+            spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s == %d",
+                    __FILE__,__FUNCTION__,__LINE__,"beging to send PIPE_ITEM_TYPE_DRAW",pipe_item->type);
+*/
+/*
             int type = rcc->send_data.header.get_msg_type(&rcc->send_data.header);
             if(type == SPICE_MSG_DISPLAY_STREAM_DATA_SIZED || type == SPICE_MSG_DISPLAY_STREAM_DATA)
             {
@@ -9787,8 +10578,11 @@ static void display_channel_send_item(RedChannelClient *rcc, PipeItem *pipe_item
                 fwrite(dcc->send_data.stream_outbuf,1,dcc->send_data.stream_outbuf_size,fp);
                 fclose(fp);
             }
+            */
         }
-        */
+        if (pipe_item->type == PIPE_ITEM_TYPE_STREAM_CREATE || pipe_item->type == PIPE_ITEM_TYPE_STREAM_DESTROY )
+            spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s == %d",
+                    __FILE__,__FUNCTION__,__LINE__,"beging to send",pipe_item->type);
         //spice_debug("================ %d =====================",pthread_self());
         display_begin_send_message(rcc);
     }
@@ -10088,6 +10882,73 @@ static SurfaceCreateItem *get_surface_create_item(
             &create->pipe_item, PIPE_ITEM_TYPE_CREATE_SURFACE);
     return create;
 }
+#ifdef READ_STREAM_FULL_H264_CODE
+static void create_client_stream_global(RedWorker *worker)
+{
+
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ",__FILE__,__FUNCTION__,__LINE__);
+    DisplayChannelClient *dcc;
+    RingItem *item, *next;
+    WORKER_FOREACH_DCC_SAFE(worker, item, next, dcc) {
+        red_channel_client_pipe_add(&dcc->common.base, &g_create_item);
+    }
+}
+static void red_create_h264_stream_global(DisplayChannelClient *dcc, H264Encoder** h264_encoder)
+{
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,"1111");
+    RedWorker *worker = DCC_TO_WORKER(dcc);
+
+    uint32_t frame_mm_time;
+    int n;
+    int width, height;
+    int ret;
+
+    spice_assert(dcc);
+    spice_assert(worker);
+    
+
+    H264StreamInfo info;
+    AVRational rate = { 1, 30};
+    info.bit_rate = BIT_RATE; 
+    info.rc_max_rate = info.bit_rate;
+    info.rc_min_rate = info.bit_rate / 2;
+    info.rc_buffer_size = RC_BUFFER_SIZE_FF;//info.bit_rate / 2;
+
+    int n_pixel_bits; 
+    RedSurface *surface = &worker->surfaces[0];
+
+    info.s_pix_fmt = AV_PIX_FMT_BGRA;
+    GET_FORMAT_BITS(info.s_pix_fmt,n_pixel_bits); 
+
+    info.width= (surface->context.width + 1 ) / 2 * 2;
+    info.height = (surface->context.height + 1) / 2 * 2;
+
+
+    info.time_base = rate;
+    info.gop_size = GOP_SIZE; 
+    info.max_b_frames = MAX_B_FRAME;
+    info.thread_count = THREAD_COUNT;
+    info.profile = FF_PROFILE_H264_CONSTRAINED;
+    //info.profile = FF_PROFILE_H264_BASELINE;
+    //info.s_pix_fmt = AV_PIX_FMT_BGRA;
+    info.pix_fmt = AV_PIX_FMT_YUV420P;
+    //info.qmin = 1;
+    //info.qmax = 33;
+    //info.qcompress = 0.5;
+
+    if(*h264_encoder == NULL)
+    {
+        *h264_encoder =  h264_encoder_new(); 
+        h264_encoder_init(*h264_encoder,&info);
+    }
+    else
+    {
+        h264_encoder_reinit(*h264_encoder,&info);
+    }
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : n_pixel_bits = %d",__FILE__,__FUNCTION__,__LINE__,n_pixel_bits);
+}
+
+#endif
 
 static inline void red_create_surface_item(DisplayChannelClient *dcc, int surface_id)
 {
@@ -10095,6 +10956,8 @@ static inline void red_create_surface_item(DisplayChannelClient *dcc, int surfac
     SurfaceCreateItem *create;
     RedWorker *worker = dcc ? dcc->common.worker : NULL;
     uint32_t flags = is_primary_surface(worker, surface_id) ? SPICE_SURFACE_FLAGS_PRIMARY : 0;
+    
+    
 
     /* don't send redundant create surface commands to client */
     if (!dcc || worker->display_channel->common.during_target_migrate ||
@@ -10107,6 +10970,15 @@ static inline void red_create_surface_item(DisplayChannelClient *dcc, int surfac
                                      surface->context.format, flags);
     dcc->surface_client_created[surface_id] = TRUE;
     red_channel_client_pipe_add(&dcc->common.base, &create->pipe_item);
+#ifdef READ_STREAM_FULL_H264_CODE
+    if (flags & SPICE_SURFACE_FLAGS_PRIMARY)
+    {
+        create_client_stream_global(worker);
+//        red_channel_push(&worker->display_channel->common.base);
+        red_create_h264_stream_global(dcc,&g_h264_encoder);
+    }
+#endif
+
 }
 
 static void red_worker_create_surface_item(RedWorker *worker, int surface_id)
@@ -10129,6 +11001,20 @@ static void red_worker_push_surface_image(RedWorker *worker, int surface_id)
         red_push_surface_image(dcc, surface_id);
     }
 }
+/*
+#ifdef READ_STREAM_FULL_H264_CODE
+static void create_client_stream_global(RedWorker *worker)
+{
+
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ",__FILE__,__FUNCTION__,__LINE__);
+    DisplayChannelClient *dcc;
+    RingItem *item, *next;
+    WORKER_FOREACH_DCC_SAFE(worker, item, next, dcc) {
+        red_channel_client_pipe_add(&dcc->common.base, &g_create_item);
+    }
+}
+#endif
+*/
 
 static inline void red_create_surface(RedWorker *worker, uint32_t surface_id, uint32_t width,
                                       uint32_t height, int32_t stride, uint32_t format,
@@ -10154,6 +11040,15 @@ static inline void red_create_surface(RedWorker *worker, uint32_t surface_id, ui
     ring_init(&surface->current_list);
     ring_init(&surface->depend_on_me);
     region_init(&surface->draw_dirty_region);
+/*
+#ifdef READ_STREAM_FULL_H264_CODE
+    if (is_primary_surface(worker, surface_id))
+    {
+        create_client_stream_global(worker);
+        red_channel_push(&worker->display_channel->common.base);
+    }
+#endif
+*/
     surface->refs = 1;
     if (worker->renderer != RED_RENDERER_INVALID) {
         surface->context.canvas = create_canvas_for_surface(worker, surface, worker->renderer,
@@ -11105,16 +12000,27 @@ static void display_channel_client_release_item_before_push(DisplayChannelClient
         break;
     }
     case PIPE_ITEM_TYPE_STREAM_CREATE: {
+#ifndef READ_STREAM_FULL_H264_CODE 
         StreamAgent *agent = SPICE_CONTAINEROF(item, StreamAgent, create_item);
         red_display_release_stream(worker, agent);
+#else
+        //TODO
+
+#endif
         break;
     }
     case PIPE_ITEM_TYPE_STREAM_CLIP:
         red_display_release_stream_clip(worker, (StreamClipItem *)item);
         break;
     case PIPE_ITEM_TYPE_STREAM_DESTROY: {
+
+#ifndef READ_STREAM_FULL_H264_CODE 
         StreamAgent *agent = SPICE_CONTAINEROF(item, StreamAgent, destroy_item);
         red_display_release_stream(worker, agent);
+#else
+        //TODO
+
+#endif
         break;
     }
     case PIPE_ITEM_TYPE_UPGRADE:
@@ -11267,6 +12173,19 @@ static void guest_set_client_capabilities(RedWorker *worker)
     worker->set_client_capabilities_pending = 0;
 }
 
+
+#ifdef READ_STREAM_FULL_H264_CODE
+
+static void new_global_stream_msg_item(DisplayChannelClient *dcc)
+{
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ",__FILE__,__FUNCTION__,__LINE__);
+    RedChannel *channel = dcc->common.base.channel;
+    red_channel_pipe_item_init(channel, &g_create_item, PIPE_ITEM_TYPE_STREAM_CREATE);
+    red_channel_pipe_item_init(channel, &g_destroy_item, PIPE_ITEM_TYPE_STREAM_DESTROY);
+}
+
+#endif
+
 static void handle_new_display_channel(RedWorker *worker, RedClient *client, RedsStream *stream,
                                        int migrate,
                                        uint32_t *common_caps, int num_common_caps,
@@ -11327,7 +12246,12 @@ static void handle_new_display_channel(RedWorker *worker, RedClient *client, Red
     dcc->streaming_video_compression = worker->streaming_video_compression;
     spice_printerr("\n\n====  %d ======\n\n",dcc->streaming_video_compression);
     red_display_client_init_streams(dcc);
+
+#ifdef READ_STREAM_FULL_H264_CODE
+    new_global_stream_msg_item(dcc);
+#endif 
     on_new_display_channel_client(dcc);
+
 }
 
 static void cursor_channel_client_on_disconnect(RedChannelClient *rcc)
@@ -11842,6 +12766,11 @@ static void dev_create_primary_surface(RedWorker *worker, uint32_t surface_id,
         line_0 -= (int32_t)(surface.stride * (surface.height -1));
     }
 
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ================================================== %d",
+                __FILE__,__FUNCTION__,__LINE__,line_0);
+
+
+
     red_create_surface(worker, 0, surface.width, surface.height, surface.stride, surface.format,
                        line_0, surface.flags & QXL_SURF_FLAG_KEEP_DATA, TRUE);
     set_monitors_config_to_primary(worker);
@@ -11871,6 +12800,8 @@ void handle_dev_create_primary_surface(void *opaque, void *payload)
     dev_create_primary_surface(worker, msg->surface_id, msg->surface);
 }
 
+
+
 static void dev_destroy_primary_surface(RedWorker *worker, uint32_t surface_id)
 {
     spice_warn_if(surface_id != 0);
@@ -11884,11 +12815,15 @@ static void dev_destroy_primary_surface(RedWorker *worker, uint32_t surface_id)
     flush_all_qxl_commands(worker);
     dev_destroy_surface_wait(worker, 0);
     red_destroy_surface(worker, 0);
+
+
     spice_assert(ring_is_empty(&worker->streams));
 
     spice_assert(!worker->surfaces[surface_id].context.canvas);
 
     red_cursor_reset(worker);
+
+
 }
 
 void handle_dev_destroy_primary_surface(void *opaque, void *payload)
@@ -12114,7 +13049,7 @@ void handle_dev_display_connect(void *opaque, void *payload)
     RedClient *client = msg->client;
     int migration = msg->migration;
 
-    spice_info("connect");
+    spice_printerr("connect");
     handle_new_display_channel(worker, client, stream, migration,
                                msg->common_caps, msg->num_common_caps,
                                msg->caps, msg->num_caps);
@@ -12700,7 +13635,7 @@ SPICE_GNUC_NORETURN void *red_worker_main(void *arg)
     red_init_lz(worker);
     red_init_jpeg(worker);
     red_init_zlib(worker);
-    //add by lcx for h264
+    //add by lcx for h264 i forget can delete this
     red_init_more_video_compress(worker);
     worker->event_timeout = INF_EVENT_WAIT;
     for (;;) {

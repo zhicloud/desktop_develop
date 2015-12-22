@@ -152,23 +152,29 @@ static void spice_channel_dispose(GObject *gobject)
     SpiceChannelPrivate *c = channel->priv;
 
     CHANNEL_DEBUG(channel, "%s %p", __FUNCTION__, gobject);
+
+
+//    printf("[file :%s][fun : %s][line : %d] =====111\n",__FILE__,__FUNCTION__,__LINE__);
     if (c->session)
     {
+
+ //       printf("[file :%s][fun : %s][line : %d] ====\n",__FILE__,__FUNCTION__,__LINE__);
         spice_session_channel_destroy(c->session, channel);
     }
     spice_channel_disconnect(channel, SPICE_CHANNEL_CLOSED);
 
     if (c->session) {
+  //      printf("[file :%s][fun : %s][line : %d] why\n",__FILE__,__FUNCTION__,__LINE__);
          g_object_unref(c->session);
          c->session = NULL;
     }
 
     g_clear_error(&c->error);
 
- //       printf("[file :%s][fun : %s][line : %d] worini kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk\n",__FILE__,__FUNCTION__,__LINE__);
+   //     printf("[file :%s][fun : %s][line : %d] worini kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk\n",__FILE__,__FUNCTION__,__LINE__);
     
     if (SPICE_IS_PLAYBACK_CHANNEL(channel)) {
-//        printf("[file :%s][fun : %s][line : %d] worini mamammmamamamamamamamamamamamamammamamamamamammamamamamaamamamamammamamaammaamammamaammaamamamma\n",__FILE__,__FUNCTION__,__LINE__);
+    //    printf("[file :%s][fun : %s][line : %d] worini mamammmamamamamamamamamamamamamammamamamamamammamamamamaamamamamammamamaammaamammamaammaamamamma\n",__FILE__,__FUNCTION__,__LINE__);
     }
     /* Chain up to the parent class */
     if (G_OBJECT_CLASS(spice_channel_parent_class)->dispose)
@@ -785,7 +791,8 @@ static void spice_channel_flush_wire(SpiceChannel *channel,
                 if (g_error_matches(error, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK)) {
                     cond = G_IO_OUT;
                 } else {
-                    CHANNEL_DEBUG(channel, "Send error %s", error->message);
+                    CHANNEL_DEBUG(channel, "lcx Send error %s", error->message);
+                    //printf("lcx Send error %s",error->message);
                 }
                 g_clear_error(&error);
                 ret = -1;
@@ -794,16 +801,19 @@ static void spice_channel_flush_wire(SpiceChannel *channel,
         if (ret == -1) {
             if (cond != 0) {
                 // TODO: should use g_pollable_input/output_stream_create_source() in 2.28 ?
+
                 g_coroutine_socket_wait(&c->coroutine, c->sock, cond);
                 continue;
             } else {
-                CHANNEL_DEBUG(channel, "Closing the channel: spice_channel_flush %d", errno);
+                CHANNEL_DEBUG(channel, "lcx Closing the channel: spice_channel_flush %d", errno);
+                //printf("lcx Closing the channel: spice_channel_flush %d",errno);
                 c->has_error = TRUE;
                 return;
             }
         }
         if (ret == 0) {
             CHANNEL_DEBUG(channel, "Closing the connection: spice_channel_flush");
+            printf("Closing the connection: spice_channel_flush");
             c->has_error = TRUE;
             return;
         }
@@ -919,7 +929,8 @@ reread:
             if (g_error_matches(error, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK)) {
                 cond = G_IO_IN;
             } else {
-                CHANNEL_DEBUG(channel, "Read error %s", error->message);
+                CHANNEL_DEBUG(channel, "lcx Read error %s", error->message);
+                //printf("lcx Read error %s",error->message);
             }
             g_clear_error(&error);
             ret = -1;
@@ -933,11 +944,14 @@ reread:
             goto reread;
         } else {
             c->has_error = TRUE;
+            CHANNEL_DEBUG(channel, "lcx Read error %d", errno);
+            //printf("lcx Read error %d",errno);
             return -errno;
         }
     }
     if (ret == 0) {
-        CHANNEL_DEBUG(channel, "Closing the connection: spice_channel_read() - ret=0");
+        CHANNEL_DEBUG(channel, "lcx Closing the connection: spice_channel_read() - ret=0");
+        //printf("lcx Closing the connection: spice_channel_read() - ret=0");
         c->has_error = TRUE;
         return 0;
     }
@@ -1823,6 +1837,7 @@ void spice_channel_recv_msg(SpiceChannel *channel,
      */
     in->data = g_malloc0(msg_size);
     spice_channel_read(channel, in->data, msg_size);
+
     if (c->has_error)
         goto end;
     in->dpos = msg_size;
@@ -1982,6 +1997,7 @@ gchar *spice_channel_supported_string(void)
  **/
 SpiceChannel *spice_channel_new(SpiceSession *s, int type, int id)
 {
+        g_debug(" add for test ???????????????==============================");
     SpiceChannel *channel;
     GType gtype = 0;
 
@@ -2010,6 +2026,7 @@ SpiceChannel *spice_channel_new(SpiceSession *s, int type, int id)
             g_debug("audio channel is disabled, not creating it");
             return NULL;
         }
+        g_debug("SPICE_CHANNEL_PLAYBACK or SPICE_CHANNEL_RECORD::: ==============================");
         gtype = type == SPICE_CHANNEL_RECORD ?
             SPICE_TYPE_RECORD_CHANNEL : SPICE_TYPE_PLAYBACK_CHANNEL;
         break;
@@ -2069,7 +2086,6 @@ void spice_channel_destroy(SpiceChannel *channel)
 {
     g_return_if_fail(channel != NULL);
 
-    CHANNEL_DEBUG(channel, "channel destroy");
     spice_channel_disconnect(channel, SPICE_CHANNEL_NONE);
     g_object_unref(channel);
 }
@@ -2159,9 +2175,13 @@ static gboolean spice_channel_iterate(SpiceChannel *channel)
 
     /* flush any pending write and read */
     if (!c->has_error)
+    {
         SPICE_CHANNEL_GET_CLASS(channel)->iterate_write(channel);
+    }
     if (!c->has_error)
+    {
         SPICE_CHANNEL_GET_CLASS(channel)->iterate_read(channel);
+    }
 
     if (c->has_error) {
         GIOCondition ret;
@@ -2169,7 +2189,6 @@ static gboolean spice_channel_iterate(SpiceChannel *channel)
          * on the other end (VM shutdown) */
         ret = g_socket_condition_check(c->sock, G_IO_IN | G_IO_ERR | G_IO_HUP);
         if (ret & (G_IO_ERR|G_IO_HUP)) {
-            CHANNEL_DEBUG(channel, "channel got error");
             if (c->state > SPICE_CHANNEL_STATE_CONNECTING) {
                 printf("\n\n  ============  %s  ==============\n\n",c->state == SPICE_CHANNEL_STATE_READY ? "SPICE_CHANNEL_ERROR_IO":
                         "SPICE_CHANNEL_ERROR_LINK");
@@ -2321,6 +2340,26 @@ static void setKeepAlive(SpiceChannel *channel, int iSockfd , socklen_t iIdleTim
     }
 }
 
+//add by lcx
+static void setSocketTimeout(SpiceChannel *channel, int iSockfd , struct timeval rcvti,struct timeval sndti )
+{
+    CHANNEL_DEBUG(channel, "setSocketTimeout \n\n" );
+    int rc ;
+    rc = setsockopt(iSockfd,SOL_SOCKET,SO_RCVTIMEO,&rcvti,sizeof(rcvti)); 
+    if(rc < 0)
+    {
+        CHANNEL_DEBUG(channel, "SO_RCVTIMEO error" );
+    }
+    rc = setsockopt(iSockfd,SOL_SOCKET,SO_SNDTIMEO,&sndti,sizeof(sndti)); 
+    if(rc < 0)
+    {
+        CHANNEL_DEBUG(channel, "SO_RCVTIMEO error" );
+    }
+}
+
+
+
+
 
 /* coroutine context */
 static void *spice_channel_coroutine(void *data)
@@ -2336,8 +2375,9 @@ static void *spice_channel_coroutine(void *data)
      * variable. */
     long ssl_options = SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3;
     int keepIdle = 1;//开始首次KeepAlive探测前的TCP空闭时间
-    int keepInterval = 5;//两次KeepAlive探测间的时间间隔
-    int keepCount = 6;//判定断开前的KeepAlive探测次数
+    int keepInterval = 3;//两次KeepAlive探测间的时间间隔
+    int keepCount = 2;//判定断开前的KeepAlive探测次数
+
 
     CHANNEL_DEBUG(channel, "Started background coroutine %p", &c->coroutine);
 
@@ -2471,6 +2511,15 @@ connected:
                   strerror(errno));
     }
     setKeepAlive(channel,g_socket_get_fd(c->sock),keepIdle,keepInterval,keepCount);
+    struct timeval rcvti;
+    struct timeval sndti; 
+    rcvti.tv_sec = 6;
+    rcvti.tv_usec = 0;
+    sndti.tv_sec = 6;
+    sndti.tv_usec = 0;
+
+    setSocketTimeout(channel, g_socket_get_fd(c->sock) ,rcvti,sndti );
+
 
     spice_channel_send_link(channel);
     if (spice_channel_recv_link_hdr(channel, &switch_protocol) == FALSE)
@@ -2692,6 +2741,7 @@ static void channel_disconnect(SpiceChannel *channel)
 
     if (c->state == SPICE_CHANNEL_STATE_READY)
     {
+//        printf("[file :%s][fun : %s][line : %d] !!!!!!!!!!!!!!!!!!!!!!!!!!?????????????????  begin =========\n",__FILE__,__FUNCTION__,__LINE__);
         g_coroutine_signal_emit(channel, signals[SPICE_CHANNEL_EVENT], 0, SPICE_CHANNEL_CLOSED);
     }
     c->state = SPICE_CHANNEL_STATE_UNCONNECTED;
@@ -2713,7 +2763,6 @@ void spice_channel_disconnect(SpiceChannel *channel, SpiceChannelEvent reason)
 {
     SpiceChannelPrivate *c;
 
-    CHANNEL_DEBUG(channel, "channel disconnect %d", reason);
 
     g_return_if_fail(SPICE_IS_CHANNEL(channel));
     g_return_if_fail(channel->priv != NULL);

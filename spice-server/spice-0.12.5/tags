@@ -190,9 +190,9 @@ ASSERTBREAK	client/debug.h	37;"	d
 ATTR_PACKED	client/glz_decoder.cpp	123;"	d	file:
 ATTR_PACKED	client/glz_decoder.cpp	125;"	d	file:
 ATTR_PACKED	client/glz_decoder.cpp	157;"	d	file:
-ATTR_PACKED	server/red_worker.c	6070;"	d	file:
-ATTR_PACKED	server/red_worker.c	6072;"	d	file:
-ATTR_PACKED	server/red_worker.c	6097;"	d	file:
+ATTR_PACKED	server/red_worker.c	6479;"	d	file:
+ATTR_PACKED	server/red_worker.c	6481;"	d	file:
+ATTR_PACKED	server/red_worker.c	6506;"	d	file:
 ATTR_PACKED	spice-common/common/lz.c	386;"	d	file:
 ATTR_PACKED	spice-common/common/lz.c	388;"	d	file:
 ATTR_PACKED	spice-common/common/lz.c	420;"	d	file:
@@ -319,7 +319,7 @@ BITMAP_DATA_TYPE_CACHE	server/red_worker.c	/^    BITMAP_DATA_TYPE_CACHE,$/;"	e	e
 BITMAP_DATA_TYPE_INVALID	server/red_worker.c	/^    BITMAP_DATA_TYPE_INVALID,$/;"	e	enum:__anon191	file:
 BITMAP_DATA_TYPE_SURFACE	server/red_worker.c	/^    BITMAP_DATA_TYPE_SURFACE,$/;"	e	enum:__anon191	file:
 BITMAP_FMP_BYTES_PER_PIXEL	server/red_worker.c	/^static const int BITMAP_FMP_BYTES_PER_PIXEL[] = {0, 0, 0, 0, 0, 1, 2, 3, 4, 4, 1};$/;"	v	file:
-BITMAP_FMT_HAS_GRADUALITY	server/red_worker.c	532;"	d	file:
+BITMAP_FMT_HAS_GRADUALITY	server/red_worker.c	560;"	d	file:
 BITMAP_FMT_IS_PLT	server/red_worker.c	/^static const int BITMAP_FMT_IS_PLT[] = {0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0};$/;"	v	file:
 BITMAP_FMT_IS_RGB	server/red_parse_qxl.c	/^static const int BITMAP_FMT_IS_RGB[] = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1};$/;"	v	file:
 BITMAP_GRADUAL_HIGH	server/red_worker.c	/^    BITMAP_GRADUAL_HIGH,$/;"	e	enum:__anon188	file:
@@ -328,11 +328,12 @@ BITMAP_GRADUAL_LOW	server/red_worker.c	/^    BITMAP_GRADUAL_LOW,$/;"	e	enum:__an
 BITMAP_GRADUAL_MEDIUM	server/red_worker.c	/^    BITMAP_GRADUAL_MEDIUM,$/;"	e	enum:__anon188	file:
 BITMAP_GRADUAL_NOT_AVAIL	server/red_worker.c	/^    BITMAP_GRADUAL_NOT_AVAIL,$/;"	e	enum:__anon188	file:
 BITOPS_H	spice-common/common/bitops.h	22;"	d
-BITS_CACHE_HASH_KEY	server/red_worker.c	410;"	d	file:
-BITS_CACHE_HASH_MASK	server/red_worker.c	409;"	d	file:
-BITS_CACHE_HASH_SHIFT	server/red_worker.c	407;"	d	file:
-BITS_CACHE_HASH_SIZE	server/red_worker.c	408;"	d	file:
-BIT_RATE	server/red_worker.c	111;"	d	file:
+BITS_CACHE_HASH_KEY	server/red_worker.c	438;"	d	file:
+BITS_CACHE_HASH_MASK	server/red_worker.c	437;"	d	file:
+BITS_CACHE_HASH_SHIFT	server/red_worker.c	435;"	d	file:
+BITS_CACHE_HASH_SIZE	server/red_worker.c	436;"	d	file:
+BIT_RATE	server/h264_encoder.h	18;"	d
+BIT_RATE_MAX	server/h264_encoder.h	19;"	d
 BOOL	client/x11/platform.cpp	68;"	d	file:
 BOUND_OFFSET	server/glz_encoder.c	191;"	d	file:
 BOUND_OFFSET	spice-common/common/lz.c	425;"	d	file:
@@ -546,26 +547,26 @@ CHANNEL_FROM_RCC	server/red_client_cache.h	139;"	d
 CHANNEL_FROM_RCC	server/red_client_cache.h	45;"	d
 CHANNEL_FROM_RCC	server/red_client_shared_cache.h	235;"	d
 CHANNEL_FROM_RCC	server/red_client_shared_cache.h	37;"	d
-CHANNEL_RECEIVE_BUF_SIZE	server/red_worker.c	402;"	d	file:
+CHANNEL_RECEIVE_BUF_SIZE	server/red_worker.c	430;"	d	file:
 CHAR_DEVICE_WRITE_TO_TIMEOUT	server/char_device.c	28;"	d	file:
-CLEAR_CAP	server/red_worker.c	11237;"	d	file:
+CLEAR_CAP	server/red_worker.c	12291;"	d	file:
 CLIENT_ACK_WINDOW	server/red_channel.h	37;"	d
 CLIENT_CONNECTIVITY_TIMEOUT	server/main_channel.c	58;"	d	file:
-CLIENT_CURSOR_CACHE	server/red_worker.c	1643;"	d	file:
-CLIENT_CURSOR_CACHE	server/red_worker.c	1645;"	d	file:
-CLIENT_CURSOR_CACHE_SIZE	server/red_worker.c	412;"	d	file:
+CLIENT_CURSOR_CACHE	server/red_worker.c	1695;"	d	file:
+CLIENT_CURSOR_CACHE	server/red_worker.c	1697;"	d	file:
+CLIENT_CURSOR_CACHE_SIZE	server/red_worker.c	440;"	d	file:
 CLIENT_MARSHALLERS	spice-common/common/Makefile	/^CLIENT_MARSHALLERS = \\$/;"	m
 CLIENT_MONITORS_CONFIG_CRC32_POLY	spice-common/spice-protocol/spice/qxl_dev.h	169;"	d
-CLIENT_PALETTE_CACHE	server/red_worker.c	1647;"	d	file:
-CLIENT_PALETTE_CACHE	server/red_worker.c	1649;"	d	file:
-CLIENT_PALETTE_CACHE_SIZE	server/red_worker.c	419;"	d	file:
-CLIENT_PIXMAPS_CACHE	server/red_worker.c	1639;"	d	file:
-CLIENT_PIXMAPS_CACHE	server/red_worker.c	1641;"	d	file:
+CLIENT_PALETTE_CACHE	server/red_worker.c	1699;"	d	file:
+CLIENT_PALETTE_CACHE	server/red_worker.c	1701;"	d	file:
+CLIENT_PALETTE_CACHE_SIZE	server/red_worker.c	447;"	d	file:
+CLIENT_PIXMAPS_CACHE	server/red_worker.c	1691;"	d	file:
+CLIENT_PIXMAPS_CACHE	server/red_worker.c	1693;"	d	file:
 CLIPBOARD_FORMAT_MAX_TYPES	client/windows/platform.cpp	/^static const int CLIPBOARD_FORMAT_MAX_TYPES = 16;$/;"	v	file:
 CLIPBOARD_TIMEOUT_MS	client/windows/platform.cpp	/^static const int CLIPBOARD_TIMEOUT_MS = 10000;$/;"	v	file:
 CLIPSTEPEDGE	spice-common/common/lines.c	2157;"	d	file:
-CMD_RING_POLL_RETRIES	server/red_worker.c	118;"	d	file:
-CMD_RING_POLL_TIMEOUT	server/red_worker.c	117;"	d	file:
+CMD_RING_POLL_RETRIES	server/red_worker.c	128;"	d	file:
+CMD_RING_POLL_TIMEOUT	server/red_worker.c	127;"	d	file:
 COMMANDS_SIZE	server/tests/test_display_base.c	446;"	d	file:
 COMMON_BASE	server/tests/Makefile	/^COMMON_BASE = \\$/;"	m
 COMMON_CFLAGS	Makefile	/^COMMON_CFLAGS = -I ${top_srcdir}\/spice-common\/ -I ${top_builddir}\/spice-common\/ -I ${top_srcdir}\/spice-common\/spice-protocol\/$/;"	m
@@ -766,10 +767,10 @@ CTAGS	spice-common/Makefile	/^CTAGS = ctags$/;"	m
 CTAGS	spice-common/common/Makefile	/^CTAGS = ctags$/;"	m
 CTAGS	spice-common/spice-protocol/Makefile	/^CTAGS = ctags$/;"	m
 CTAGS	spice-common/spice-protocol/spice/Makefile	/^CTAGS = ctags$/;"	m
-CURSOR_CACHE_HASH_KEY	server/red_worker.c	417;"	d	file:
-CURSOR_CACHE_HASH_MASK	server/red_worker.c	416;"	d	file:
-CURSOR_CACHE_HASH_SHIFT	server/red_worker.c	414;"	d	file:
-CURSOR_CACHE_HASH_SIZE	server/red_worker.c	415;"	d	file:
+CURSOR_CACHE_HASH_KEY	server/red_worker.c	445;"	d	file:
+CURSOR_CACHE_HASH_MASK	server/red_worker.c	444;"	d	file:
+CURSOR_CACHE_HASH_SHIFT	server/red_worker.c	442;"	d	file:
+CURSOR_CACHE_HASH_SIZE	server/red_worker.c	443;"	d	file:
 CURSOR_HEIGHT	server/tests/test_display_base.c	645;"	d	file:
 CURSOR_WIDTH	server/tests/test_display_base.c	644;"	d	file:
 CXIMAGE_CFLAGS	Makefile	/^CXIMAGE_CFLAGS = $/;"	m
@@ -979,9 +980,9 @@ DATA	Makefile	/^DATA = $(pkgconfig_DATA)$/;"	m
 DATA	spice-common/spice-protocol/Makefile	/^DATA = $(pkgconfig_DATA)$/;"	m
 DBG	client/debug.h	86;"	d
 DBGLEVEL	client/debug.h	84;"	d
-DCC_FOREACH_SAFE	server/red_worker.c	1133;"	d	file:
-DCC_TO_DC	server/red_worker.c	1162;"	d	file:
-DCC_TO_WORKER	server/red_worker.c	1154;"	d	file:
+DCC_FOREACH_SAFE	server/red_worker.c	1185;"	d	file:
+DCC_TO_DC	server/red_worker.c	1214;"	d	file:
+DCC_TO_WORKER	server/red_worker.c	1206;"	d	file:
 DDXPointPtr	spice-common/common/lines.c	/^typedef DDXPointRec *DDXPointPtr;$/;"	t	file:
 DDXPointRec	spice-common/common/lines.c	/^typedef SpicePoint DDXPointRec;$/;"	t	file:
 DEBUG_PRINT_BYTE_ARRAY	client/smartcard_channel.cpp	51;"	d	file:
@@ -1036,11 +1037,11 @@ DISPATCHER_ACK	server/dispatcher.h	/^    DISPATCHER_ACK,$/;"	e	enum:__anon132
 DISPATCHER_ASYNC	server/dispatcher.h	/^    DISPATCHER_ASYNC$/;"	e	enum:__anon132
 DISPATCHER_H	server/dispatcher.h	2;"	d
 DISPATCHER_NONE	server/dispatcher.h	/^    DISPATCHER_NONE = 0,$/;"	e	enum:__anon132
-DISPLAY_CLIENT_MIGRATE_DATA_TIMEOUT	server/red_worker.c	122;"	d	file:
-DISPLAY_CLIENT_RETRY_INTERVAL	server/red_worker.c	123;"	d	file:
-DISPLAY_CLIENT_SHORT_TIMEOUT	server/red_worker.c	120;"	d	file:
-DISPLAY_CLIENT_TIMEOUT	server/red_worker.c	121;"	d	file:
-DISPLAY_FREE_LIST_DEFAULT_SIZE	server/red_worker.c	125;"	d	file:
+DISPLAY_CLIENT_MIGRATE_DATA_TIMEOUT	server/red_worker.c	132;"	d	file:
+DISPLAY_CLIENT_RETRY_INTERVAL	server/red_worker.c	133;"	d	file:
+DISPLAY_CLIENT_SHORT_TIMEOUT	server/red_worker.c	130;"	d	file:
+DISPLAY_CLIENT_TIMEOUT	server/red_worker.c	131;"	d	file:
+DISPLAY_FREE_LIST_DEFAULT_SIZE	server/red_worker.c	135;"	d	file:
 DISTCHECK_CONFIGURE_FLAGS	Makefile	/^DISTCHECK_CONFIGURE_FLAGS = \\$/;"	m
 DISTCLEANFILES	spice-common/Makefile	/^DISTCLEANFILES = *.pyc$/;"	m
 DISTCLEANFILES	spice-common/python_modules/Makefile	/^DISTCLEANFILES = *.pyc$/;"	m
@@ -1103,8 +1104,8 @@ DLLTOOL	spice-common/common/Makefile	/^DLLTOOL = false$/;"	m
 DLLTOOL	spice-common/python_modules/Makefile	/^DLLTOOL = false$/;"	m
 DPRINTF	server/tests/basic_event_loop.c	15;"	d	file:
 DRAW	client/display_channel.cpp	1644;"	d	file:
-DRAWABLE_FOREACH_DPI_SAFE	server/red_worker.c	1144;"	d	file:
-DRAWABLE_FOREACH_GLZ_SAFE	server/red_worker.c	1150;"	d	file:
+DRAWABLE_FOREACH_DPI_SAFE	server/red_worker.c	1196;"	d	file:
+DRAWABLE_FOREACH_GLZ_SAFE	server/red_worker.c	1202;"	d	file:
 DSYMUTIL	Makefile	/^DSYMUTIL = $/;"	m
 DSYMUTIL	client/Makefile	/^DSYMUTIL = $/;"	m
 DSYMUTIL	docs/Makefile	/^DSYMUTIL = $/;"	m
@@ -1125,6 +1126,8 @@ DUMPBIN	spice-common/common/Makefile	/^DUMPBIN = $/;"	m
 DUMPBIN	spice-common/python_modules/Makefile	/^DUMPBIN = $/;"	m
 DWORD	client/x11/platform.cpp	67;"	d	file:
 DecodedImageWinId	client/glz_decoder_window.h	/^typedef int DecodedImageWinId;$/;"	t
+DecodingDispatcher	server/red_decoding_dispatcher.h	/^struct DecodingDispatcher$/;"	s
+DecodingDispatcher	server/red_decoding_dispatcher.h	/^typedef struct DecodingDispatcher DecodingDispatcher;$/;"	t	typeref:struct:DecodingDispatcher
 DefaultClipboardListener	client/windows/platform.cpp	/^class DefaultClipboardListener: public Platform::ClipboardListener {$/;"	c	file:
 DefaultClipboardListener	client/x11/platform.cpp	/^class DefaultClipboardListener: public Platform::ClipboardListener {$/;"	c	file:
 DefaultDisplayModeListener	client/x11/platform.cpp	/^class DefaultDisplayModeListener: public Platform::DisplayModeListener {$/;"	c	file:
@@ -1446,8 +1449,8 @@ FAR	client/mjpeg_decoder.h	27;"	d
 FAR_PIX_IMAGE_DIST_LEVEL_1	server/glz_encode_match_tmpl.c	24;"	d	file:
 FAR_PIX_IMAGE_DIST_LEVEL_2	server/glz_encode_match_tmpl.c	25;"	d	file:
 FAR_PIX_IMAGE_DIST_LEVEL_3	server/glz_encode_match_tmpl.c	26;"	d	file:
-FFMPEG_CFLAGS	server/Makefile	/^FFMPEG_CFLAGS = -I\/home\/lichenxiang\/opt\/include$/;"	m
-FFMPEG_LIBS	server/Makefile	/^FFMPEG_LIBS = -L\/home\/lichenxiang\/opt\/lib -lavutil -lavformat -lavcodec -lswscale -lx264 -lswresample$/;"	m
+FFMPEG_CFLAGS	server/Makefile	/^FFMPEG_CFLAGS = -I\/home\/lichenxiang\/opt\/\/include  $/;"	m
+FFMPEG_LIBS	server/Makefile	/^FFMPEG_LIBS = -L\/home\/lichenxiang\/opt\/\/lib -lavcodec -lavformat -lavutil -lswresample -lswscale -lx264  $/;"	m
 FGREP	Makefile	/^FGREP = \/bin\/grep -F$/;"	m
 FGREP	client/Makefile	/^FGREP = \/bin\/grep -F$/;"	m
 FGREP	docs/Makefile	/^FGREP = \/bin\/grep -F$/;"	m
@@ -1542,7 +1545,8 @@ FOREIGN_MENU_SET_TITLE	spice-common/spice-protocol/spice/foreign_menu_prot.h	/^ 
 FOREIGN_MENU_VERSION	spice-common/spice-protocol/spice/foreign_menu_prot.h	25;"	d
 FOUR_BYTE	spice-common/common/quic.c	819;"	d	file:
 FOUR_BYTE	spice-common/common/quic_tmpl.c	35;"	d	file:
-FPS_TEST_INTERVAL	server/red_worker.c	142;"	d	file:
+FPS_TEST_INTERVAL	server/red_worker.c	152;"	d	file:
+FRAME_RATE	server/h264_encoder.h	20;"	d
 FUNC_NAME	server/red_client_cache.h	135;"	d
 FUNC_NAME	server/red_client_cache.h	24;"	d
 FUNC_NAME	server/red_client_cache.h	35;"	d
@@ -1747,10 +1751,10 @@ GL_LIBS	spice-common/common/Makefile	/^GL_LIBS = $/;"	m
 GL_LIBS	spice-common/python_modules/Makefile	/^GL_LIBS = $/;"	m
 GL_UTILS_H	spice-common/common/gl_utils.h	22;"	d
 GNULIB_defined_struct__gl_verify_type	spice-common/common/verify.h	174;"	d
-GOP_SIZE	server/red_worker.c	113;"	d	file:
-GRADUAL_HIGH_RGB16_TH	server/red_worker.c	6107;"	d	file:
-GRADUAL_HIGH_RGB24_TH	server/red_worker.c	6106;"	d	file:
-GRADUAL_MEDIUM_SCORE_TH	server/red_worker.c	6112;"	d	file:
+GOP_SIZE	server/h264_encoder.h	24;"	d
+GRADUAL_HIGH_RGB16_TH	server/red_worker.c	6516;"	d	file:
+GRADUAL_HIGH_RGB24_TH	server/red_worker.c	6515;"	d	file:
+GRADUAL_MEDIUM_SCORE_TH	server/red_worker.c	6521;"	d	file:
 GREP	Makefile	/^GREP = \/bin\/grep$/;"	m
 GREP	client/Makefile	/^GREP = \/bin\/grep$/;"	m
 GREP	docs/Makefile	/^GREP = \/bin\/grep$/;"	m
@@ -1814,6 +1818,8 @@ GlzSharedDictionary	server/red_worker.c	/^} GlzSharedDictionary;$/;"	t	typeref:s
 GlzUsrImageContext	server/glz_encoder_config.h	/^typedef void GlzUsrImageContext;$/;"	t
 Group	spice-common/python_modules/spice_parser.py	/^            alphanums, ParseException, ParseResults, Keyword, StringEnd, replaceWith$/;"	i
 GuiMode	client/application.h	/^    enum GuiMode {$/;"	g	class:Application
+H264DataItem	server/red_decoding_data.h	/^struct H264DataItem$/;"	s
+H264DataItem	server/red_decoding_data.h	/^typedef struct H264DataItem H264DataItem;$/;"	t	typeref:struct:H264DataItem
 H264Encoder	server/h264_encoder.h	/^}H264Encoder;$/;"	t	typeref:struct:_H264Encoder
 H264StreamInfo	server/h264_type.h	/^}H264StreamInfo;$/;"	t	typeref:struct:_H264StreamInfo
 H264_DECODER_ERROR	server/h264_type.h	17;"	d
@@ -1928,7 +1934,7 @@ IMAGE_SEG_IS_EARLIER	server/glz_encoder_dictionary_protected.h	153;"	d
 INFINITE	client/x11/event_sources_p.h	24;"	d
 INFINITY	client/red_client.cpp	33;"	d	file:
 INFO	client/gui/gui.h	/^        INFO,$/;"	e	enum:GUI::MessageType
-INF_EVENT_WAIT	server/red_worker.c	286;"	d	file:
+INF_EVENT_WAIT	server/red_worker.c	311;"	d	file:
 INIT_IMAGES_CAPACITY	client/glz_decoder_window.cpp	26;"	d	file:
 INIT_IMAGE_SEGS_NUM	server/glz_encoder_dictionary_protected.h	57;"	d
 INIT_KEY	client/x11/red_window.cpp	505;"	d	file:
@@ -2045,11 +2051,11 @@ INVALID_STAT_REF	server/stat.h	24;"	d
 INVAL_ALL_VERB	server/red_client_shared_cache.h	30;"	d
 IOV_MAX	server/red_channel.h	40;"	d
 IOV_MAX	server/snd_worker.c	42;"	d	file:
-IS_DRAW_ITEM	server/red_worker.c	800;"	d	file:
+IS_DRAW_ITEM	server/red_worker.c	830;"	d	file:
 IS_IMAGE_LOSSY	spice-common/common/canvas_base.c	45;"	d	file:
 IS_IMAGE_TYPE_PLT	spice-common/common/lz_common.h	/^static const int IS_IMAGE_TYPE_PLT[] = {0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};$/;"	v
 IS_IMAGE_TYPE_RGB	spice-common/common/lz_common.h	/^static const int IS_IMAGE_TYPE_RGB[] = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1};$/;"	v
-ITEMS_TRACE_MASK	server/red_worker.c	938;"	d	file:
+ITEMS_TRACE_MASK	server/red_worker.c	968;"	d	file:
 Icon	client/icon.h	/^    Icon() : _refs (1) {}$/;"	f	class:Icon
 Icon	client/icon.h	/^class Icon {$/;"	c
 IconHeader	client/red_types.h	/^struct IconHeader {$/;"	s
@@ -2270,6 +2276,8 @@ KeyboardModifier	client/windows/platform.cpp	/^typedef struct KeyboardModifier {
 KeyboardModifier	client/windows/platform.cpp	/^} KeyboardModifier;$/;"	t	typeref:struct:KeyboardModifier	file:
 KeysList	client/windows/red_window.cpp	/^typedef std::list<RedKey> KeysList;$/;"	t	file:
 Keyword	spice-common/python_modules/spice_parser.py	/^            alphanums, ParseException, ParseResults, Keyword, StringEnd, replaceWith$/;"	i
+LCXCALLBACK	server/red_spice_common_defines.h	/^typedef struct LCXCALLBACK$/;"	s
+LCXCALLBACK	server/red_spice_common_defines.h	/^}LCXCALLBACK;$/;"	t	typeref:struct:LCXCALLBACK
 LD	Makefile	/^LD = \/usr\/bin\/ld -m elf_x86_64$/;"	m
 LD	client/Makefile	/^LD = \/usr\/bin\/ld -m elf_x86_64$/;"	m
 LD	docs/Makefile	/^LD = \/usr\/bin\/ld -m elf_x86_64$/;"	m
@@ -2339,10 +2347,10 @@ LINK	client/Makefile	/^LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) 
 LINK	server/Makefile	/^LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \\$/;"	m
 LINK	server/tests/Makefile	/^LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \\$/;"	m
 LINK	spice-common/common/Makefile	/^LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \\$/;"	m
-LINK_TO_DCC	server/red_worker.c	1131;"	d	file:
-LINK_TO_DPI	server/red_worker.c	1143;"	d	file:
-LINK_TO_GLZ	server/red_worker.c	1148;"	d	file:
-LINK_TO_RCC	server/red_worker.c	1126;"	d	file:
+LINK_TO_DCC	server/red_worker.c	1183;"	d	file:
+LINK_TO_DPI	server/red_worker.c	1195;"	d	file:
+LINK_TO_GLZ	server/red_worker.c	1200;"	d	file:
+LINK_TO_RCC	server/red_worker.c	1178;"	d	file:
 LIPO	Makefile	/^LIPO = $/;"	m
 LIPO	client/Makefile	/^LIPO = $/;"	m
 LIPO	docs/Makefile	/^LIPO = $/;"	m
@@ -2582,28 +2590,28 @@ MAX	spice-common/spice-protocol/spice/macros.h	112;"	d
 MAX	spice-common/spice-protocol/spice/macros.h	113;"	d
 MAXNUMCODES	spice-common/common/quic.c	46;"	d	file:
 MAX_ATR_LEN	client/smartcard_channel.cpp	37;"	d	file:
-MAX_B_FRAME	server/red_worker.c	114;"	d	file:
-MAX_CACHE_CLIENTS	server/red_worker.c	325;"	d	file:
+MAX_B_FRAME	server/h264_encoder.h	25;"	d
+MAX_CACHE_CLIENTS	server/red_worker.c	353;"	d	file:
 MAX_CHANNELS	spice-common/common/quic.c	126;"	d	file:
 MAX_COORDINATE	spice-common/common/lines.c	79;"	d	file:
 MAX_COPY	spice-common/common/lz.c	423;"	d	file:
 MAX_COPY	spice-common/common/lz_common.h	35;"	d
 MAX_DISPLAY_PIXMAP_CACHE	client/red_client.cpp	870;"	d	file:
 MAX_DISTANCE	spice-common/common/lz.c	434;"	d	file:
-MAX_DRAWABLE_PIXMAP_CACHE_ITEMS	server/red_worker.c	692;"	d	file:
-MAX_EVENT_SOURCES	server/red_worker.c	285;"	d	file:
+MAX_DRAWABLE_PIXMAP_CACHE_ITEMS	server/red_worker.c	720;"	d	file:
+MAX_EVENT_SOURCES	server/red_worker.c	310;"	d	file:
 MAX_FARDISTANCE	spice-common/common/lz.c	435;"	d	file:
-MAX_FPS	server/red_worker.c	143;"	d	file:
-MAX_GLZ_DRAWABLE_INSTANCES	server/red_worker.c	627;"	d	file:
+MAX_FPS	server/red_worker.c	153;"	d	file:
+MAX_GLZ_DRAWABLE_INSTANCES	server/red_worker.c	655;"	d	file:
 MAX_GLZ_WINDOW_SIZE	client/red_client.cpp	875;"	d	file:
 MAX_HEADER_SIZE	server/red_channel.h	43;"	d
 MAX_HEIGHT	server/tests/test_display_base.h	77;"	d
 MAX_IMAGE_DIST	server/glz_encoder.c	198;"	d	file:
 MAX_IMAGE_SEGS_NUM	server/glz_encoder_dictionary_protected.h	55;"	d
 MAX_LEN	spice-common/common/lz.c	424;"	d	file:
-MAX_LZ_ENCODERS	server/red_worker.c	326;"	d	file:
+MAX_LZ_ENCODERS	server/red_worker.c	354;"	d	file:
 MAX_OVER	client/display_channel.cpp	173;"	d	file:
-MAX_PIPE_SIZE	server/red_worker.c	401;"	d	file:
+MAX_PIPE_SIZE	server/red_worker.c	429;"	d	file:
 MAX_PIXEL_LONG_DISTANCE	server/glz_encoder.c	197;"	d	file:
 MAX_PIXEL_MEDIUM_DISTANCE	server/glz_encoder.c	196;"	d	file:
 MAX_PIXEL_SHORT_DISTANCE	server/glz_encoder.c	195;"	d	file:
@@ -2613,7 +2621,7 @@ MAX_REF_ENCODE_SIZE	server/glz_encode_tmpl.c	574;"	d	file:
 MAX_REF_ENCODE_SIZE	server/glz_encode_tmpl.c	57;"	d	file:
 MAX_REF_ENCODE_SIZE	server/glz_encode_tmpl.c	76;"	d	file:
 MAX_REF_ENCODE_SIZE	server/glz_encode_tmpl.c	94;"	d	file:
-MAX_RGB_SIZE	server/red_worker.c	8757;"	d	file:
+MAX_RGB_SIZE	server/h264_encoder.h	32;"	d
 MAX_SEND_BUFS	server/red_channel.h	36;"	d
 MAX_SURFACE_NUM	server/tests/test_display_base.c	424;"	d	file:
 MAX_TRANS_DEPTH	client/x11/platform.cpp	1203;"	d	file:
@@ -2641,11 +2649,11 @@ MIN	server/tests/test_vdagent.c	20;"	d	file:
 MIN	spice-common/spice-protocol/spice/macros.h	115;"	d
 MIN	spice-common/spice-protocol/spice/macros.h	116;"	d
 MIN_COORDINATE	spice-common/common/lines.c	80;"	d	file:
-MIN_DIMENSION_TO_QUIC	server/red_worker.c	6614;"	d	file:
+MIN_DIMENSION_TO_QUIC	server/red_worker.c	7023;"	d	file:
 MIN_DISPLAY_PIXMAP_CACHE	client/red_client.cpp	869;"	d	file:
 MIN_FILE_SIZE	server/glz_encoder.c	193;"	d	file:
 MIN_FILE_SIZE	spice-common/common/lz.c	427;"	d	file:
-MIN_GLZ_SIZE_FOR_ZLIB	server/red_worker.c	149;"	d	file:
+MIN_GLZ_SIZE_FOR_ZLIB	server/red_worker.c	174;"	d	file:
 MIN_GLZ_WINDOW_SIZE	client/red_client.cpp	874;"	d	file:
 MIN_MEM_FOR_OTHERS	client/red_client.cpp	871;"	d	file:
 MIN_REF_ENCODE_SIZE	server/glz_encode_tmpl.c	101;"	d	file:
@@ -2654,7 +2662,7 @@ MIN_REF_ENCODE_SIZE	server/glz_encode_tmpl.c	56;"	d	file:
 MIN_REF_ENCODE_SIZE	server/glz_encode_tmpl.c	573;"	d	file:
 MIN_REF_ENCODE_SIZE	server/glz_encode_tmpl.c	75;"	d	file:
 MIN_REF_ENCODE_SIZE	server/glz_encode_tmpl.c	93;"	d	file:
-MIN_SIZE_TO_COMPRESS	server/red_worker.c	6613;"	d	file:
+MIN_SIZE_TO_COMPRESS	server/red_worker.c	7022;"	d	file:
 MINevol	spice-common/common/quic.c	50;"	d	file:
 MINwminext	spice-common/common/quic.c	65;"	d	file:
 MINwmistart	spice-common/common/quic.c	55;"	d	file:
@@ -2681,9 +2689,9 @@ MJPEG_AVERAGE_SIZE_WINDOW	server/mjpeg_encoder.c	39;"	d	file:
 MJPEG_BIT_RATE_EVAL_MIN_NUM_FRAMES	server/mjpeg_encoder.c	41;"	d	file:
 MJPEG_CLIENT_POSITIVE_REPORT_STRICT_TIMEOUT	server/mjpeg_encoder.c	53;"	d	file:
 MJPEG_CLIENT_POSITIVE_REPORT_TIMEOUT	server/mjpeg_encoder.c	52;"	d	file:
-MJPEG_ENCODER_FRAME_DROP	server/mjpeg_encoder.h	/^    MJPEG_ENCODER_FRAME_DROP,$/;"	e	enum:__anon198
-MJPEG_ENCODER_FRAME_ENCODE_START	server/mjpeg_encoder.h	/^    MJPEG_ENCODER_FRAME_ENCODE_START,$/;"	e	enum:__anon198
-MJPEG_ENCODER_FRAME_UNSUPPORTED	server/mjpeg_encoder.h	/^    MJPEG_ENCODER_FRAME_UNSUPPORTED = -1,$/;"	e	enum:__anon198
+MJPEG_ENCODER_FRAME_DROP	server/mjpeg_encoder.h	/^    MJPEG_ENCODER_FRAME_DROP,$/;"	e	enum:__anon199
+MJPEG_ENCODER_FRAME_ENCODE_START	server/mjpeg_encoder.h	/^    MJPEG_ENCODER_FRAME_ENCODE_START,$/;"	e	enum:__anon199
+MJPEG_ENCODER_FRAME_UNSUPPORTED	server/mjpeg_encoder.h	/^    MJPEG_ENCODER_FRAME_UNSUPPORTED = -1,$/;"	e	enum:__anon199
 MJPEG_IMPROVE_QUALITY_FPS_PERMISSIVE_TH	server/mjpeg_encoder.c	37;"	d	file:
 MJPEG_IMPROVE_QUALITY_FPS_STRICT_TH	server/mjpeg_encoder.c	36;"	d	file:
 MJPEG_LEGACY_STATIC_QUALITY_ID	server/mjpeg_encoder.c	34;"	d	file:
@@ -2837,7 +2845,7 @@ Mutex	client/threads.cpp	/^Mutex::Mutex(Type type)$/;"	f	class:Mutex
 Mutex	client/threads.h	/^class Mutex {$/;"	c
 MyListItem	client/gui/gui.cpp	/^        MyListItem (const CEGUI::String& text)$/;"	f	class:SampleTabFactory::MyListItem
 MyListItem	client/gui/gui.cpp	/^    class MyListItem : public CEGUI::ListboxTextItem {$/;"	c	class:SampleTabFactory	file:
-NARROW_CLIENT_ACK_WINDOW	server/red_worker.c	405;"	d	file:
+NARROW_CLIENT_ACK_WINDOW	server/red_worker.c	433;"	d	file:
 NATIVE_CAPTION_STYLE	client/windows/red_window.cpp	33;"	d	file:
 NET_TEST_BYTES	server/main_channel.c	54;"	d	file:
 NET_TEST_STAGE_COMPLETE	server/main_channel.c	/^    NET_TEST_STAGE_COMPLETE,$/;"	e	enum:NetTestStage	file:
@@ -2912,15 +2920,15 @@ NULL	spice-common/spice-protocol/Makefile	/^NULL = $/;"	m
 NULL	spice-common/spice-protocol/spice/Makefile	/^NULL = $/;"	m
 NULL_IMAGE_SEG_ID	server/glz_encoder_dictionary_protected.h	56;"	d
 NUM_COMMANDS	server/tests/test_display_streaming.c	44;"	d	file:
-NUM_CURSORS	server/red_worker.c	941;"	d	file:
-NUM_DRAWABLES	server/red_worker.c	940;"	d	file:
+NUM_CURSORS	server/red_worker.c	971;"	d	file:
+NUM_DRAWABLES	server/red_worker.c	970;"	d	file:
 NUM_LOCK_MODIFIER	client/platform.h	/^        NUM_LOCK_MODIFIER = (1 << NUM_LOCK_MODIFIER_SHIFT),$/;"	e	enum:Platform::__anon105
 NUM_LOCK_MODIFIER_SHIFT	client/platform.h	/^        NUM_LOCK_MODIFIER_SHIFT,$/;"	e	enum:Platform::__anon105
 NUM_LOCK_SCAN_CODE	server/inputs_channel.c	117;"	d	file:
 NUM_SAMPLES_MESSAGES	client/record_channel.cpp	26;"	d	file:
-NUM_STREAMS	server/red_worker.c	565;"	d	file:
-NUM_SURFACES	server/red_worker.c	670;"	d	file:
-NUM_TRACE_ITEMS	server/red_worker.c	937;"	d	file:
+NUM_STREAMS	server/red_worker.c	593;"	d	file:
+NUM_SURFACES	server/red_worker.c	698;"	d	file:
+NUM_TRACE_ITEMS	server/red_worker.c	967;"	d	file:
 N_STATIC_ITEMS	spice-common/common/marshaller.c	64;"	d	file:
 NaitivCursor	client/cursor_channel.cpp	/^class NaitivCursor: public CursorOpaque {$/;"	c	file:
 NamePipeItem	server/main_channel.c	/^typedef struct NamePipeItem {$/;"	s	file:
@@ -3005,7 +3013,7 @@ OUTGOING_BLOCKED	server/inputs_channel.c	205;"	d	file:
 OUTGOING_FAILED	server/inputs_channel.c	204;"	d	file:
 OUTGOING_OK	server/inputs_channel.c	203;"	d	file:
 OUTPUT_BUF_SIZE	server/mjpeg_encoder.c	332;"	d	file:
-OUTPUT_BUF_SIZE_H264	server/red_worker.c	8756;"	d	file:
+OUTPUT_BUF_SIZE_H264	server/h264_encoder.h	29;"	d
 OUT_ABOVE	spice-common/common/lines.c	187;"	d	file:
 OUT_BELOW	spice-common/common/lines.c	188;"	d	file:
 OUT_LEFT	spice-common/common/lines.c	185;"	d	file:
@@ -3147,10 +3155,10 @@ PACKAGE_VERSION	spice-common/python_modules/Makefile	/^PACKAGE_VERSION = noversi
 PACKAGE_VERSION	spice-common/spice-protocol/Makefile	/^PACKAGE_VERSION = 0.12.6$/;"	m
 PACKAGE_VERSION	spice-common/spice-protocol/config.h	23;"	d
 PACKAGE_VERSION	spice-common/spice-protocol/spice/Makefile	/^PACKAGE_VERSION = 0.12.6$/;"	m
-PALETTE_CACHE_HASH_KEY	server/red_worker.c	424;"	d	file:
-PALETTE_CACHE_HASH_MASK	server/red_worker.c	423;"	d	file:
-PALETTE_CACHE_HASH_SHIFT	server/red_worker.c	421;"	d	file:
-PALETTE_CACHE_HASH_SIZE	server/red_worker.c	422;"	d	file:
+PALETTE_CACHE_HASH_KEY	server/red_worker.c	452;"	d	file:
+PALETTE_CACHE_HASH_MASK	server/red_worker.c	451;"	d	file:
+PALETTE_CACHE_HASH_SHIFT	server/red_worker.c	449;"	d	file:
+PALETTE_CACHE_HASH_SIZE	server/red_worker.c	450;"	d	file:
 PANIC	client/debug.h	74;"	d
 PANIC_ON	client/debug.h	79;"	d
 PASSIVE_STATE	client/red_channel.h	/^    PASSIVE_STATE,$/;"	e	enum:__anon110
@@ -3174,10 +3182,10 @@ PING_STATE_WARMUP	server/red_channel.c	/^    PING_STATE_WARMUP,$/;"	e	enum:QosPi
 PING_TEST_IDLE_NET_TIMEOUT_MS	server/red_channel.c	53;"	d	file:
 PING_TEST_TIMEOUT_MS	server/red_channel.c	52;"	d	file:
 PIPE_BUF_SIZE	client/windows/named_pipe.h	26;"	d
-PIPE_ITEM_INPUTS_INIT	server/inputs_channel.c	/^    PIPE_ITEM_INPUTS_INIT = PIPE_ITEM_TYPE_CHANNEL_BASE,$/;"	e	enum:__anon197	file:
-PIPE_ITEM_KEY_MODIFIERS	server/inputs_channel.c	/^    PIPE_ITEM_KEY_MODIFIERS,$/;"	e	enum:__anon197	file:
-PIPE_ITEM_MIGRATE_DATA	server/inputs_channel.c	/^    PIPE_ITEM_MIGRATE_DATA,$/;"	e	enum:__anon197	file:
-PIPE_ITEM_MOUSE_MOTION_ACK	server/inputs_channel.c	/^    PIPE_ITEM_MOUSE_MOTION_ACK,$/;"	e	enum:__anon197	file:
+PIPE_ITEM_INPUTS_INIT	server/inputs_channel.c	/^    PIPE_ITEM_INPUTS_INIT = PIPE_ITEM_TYPE_CHANNEL_BASE,$/;"	e	enum:__anon198	file:
+PIPE_ITEM_KEY_MODIFIERS	server/inputs_channel.c	/^    PIPE_ITEM_KEY_MODIFIERS,$/;"	e	enum:__anon198	file:
+PIPE_ITEM_MIGRATE_DATA	server/inputs_channel.c	/^    PIPE_ITEM_MIGRATE_DATA,$/;"	e	enum:__anon198	file:
+PIPE_ITEM_MOUSE_MOTION_ACK	server/inputs_channel.c	/^    PIPE_ITEM_MOUSE_MOTION_ACK,$/;"	e	enum:__anon198	file:
 PIPE_ITEM_TYPE	server/red_client_shared_cache.h	25;"	d
 PIPE_ITEM_TYPE_CHANNEL_BASE	server/red_channel.h	/^    PIPE_ITEM_TYPE_CHANNEL_BASE=101,$/;"	e	enum:__anon144
 PIPE_ITEM_TYPE_CREATE_SURFACE	server/red_worker.c	/^    PIPE_ITEM_TYPE_CREATE_SURFACE,$/;"	e	enum:__anon172	file:
@@ -3191,22 +3199,22 @@ PIPE_ITEM_TYPE_IMAGE	server/red_worker.c	/^    PIPE_ITEM_TYPE_IMAGE,$/;"	e	enum:
 PIPE_ITEM_TYPE_INVAL_CURSOR_CACHE	server/red_worker.c	/^    PIPE_ITEM_TYPE_INVAL_CURSOR_CACHE,$/;"	e	enum:__anon172	file:
 PIPE_ITEM_TYPE_INVAL_ONE	server/red_worker.c	/^    PIPE_ITEM_TYPE_INVAL_ONE,$/;"	e	enum:__anon172	file:
 PIPE_ITEM_TYPE_INVAL_PALLET_CACHE	server/red_worker.c	/^    PIPE_ITEM_TYPE_INVAL_PALLET_CACHE,$/;"	e	enum:__anon172	file:
-PIPE_ITEM_TYPE_MAIN_AGENT_CONNECTED_TOKENS	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_AGENT_CONNECTED_TOKENS,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_AGENT_DATA	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_AGENT_DATA,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_AGENT_DISCONNECTED	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_AGENT_DISCONNECTED,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_AGENT_TOKEN	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_AGENT_TOKEN,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_CHANNELS_LIST	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_CHANNELS_LIST = PIPE_ITEM_TYPE_CHANNEL_BASE,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_INIT	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_INIT,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_MIGRATE_BEGIN	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MIGRATE_BEGIN,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_MIGRATE_BEGIN_SEAMLESS	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MIGRATE_BEGIN_SEAMLESS,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_MIGRATE_DATA	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MIGRATE_DATA,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_MIGRATE_SWITCH_HOST	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MIGRATE_SWITCH_HOST,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_MOUSE_MODE	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MOUSE_MODE,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_MULTI_MEDIA_TIME	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MULTI_MEDIA_TIME,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_NAME	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_NAME,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_NOTIFY	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_NOTIFY,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_PING	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_PING,$/;"	e	enum:__anon199	file:
-PIPE_ITEM_TYPE_MAIN_UUID	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_UUID,$/;"	e	enum:__anon199	file:
+PIPE_ITEM_TYPE_MAIN_AGENT_CONNECTED_TOKENS	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_AGENT_CONNECTED_TOKENS,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_AGENT_DATA	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_AGENT_DATA,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_AGENT_DISCONNECTED	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_AGENT_DISCONNECTED,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_AGENT_TOKEN	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_AGENT_TOKEN,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_CHANNELS_LIST	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_CHANNELS_LIST = PIPE_ITEM_TYPE_CHANNEL_BASE,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_INIT	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_INIT,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_MIGRATE_BEGIN	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MIGRATE_BEGIN,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_MIGRATE_BEGIN_SEAMLESS	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MIGRATE_BEGIN_SEAMLESS,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_MIGRATE_DATA	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MIGRATE_DATA,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_MIGRATE_SWITCH_HOST	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MIGRATE_SWITCH_HOST,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_MOUSE_MODE	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MOUSE_MODE,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_MULTI_MEDIA_TIME	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_MULTI_MEDIA_TIME,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_NAME	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_NAME,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_NOTIFY	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_NOTIFY,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_PING	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_PING,$/;"	e	enum:__anon200	file:
+PIPE_ITEM_TYPE_MAIN_UUID	server/main_channel.c	/^    PIPE_ITEM_TYPE_MAIN_UUID,$/;"	e	enum:__anon200	file:
 PIPE_ITEM_TYPE_MIGRATE	server/red_channel.h	/^    PIPE_ITEM_TYPE_MIGRATE,$/;"	e	enum:__anon144
 PIPE_ITEM_TYPE_MIGRATE_DATA	server/red_worker.c	/^    PIPE_ITEM_TYPE_MIGRATE_DATA,$/;"	e	enum:__anon172	file:
 PIPE_ITEM_TYPE_MONITORS_CONFIG	server/red_worker.c	/^    PIPE_ITEM_TYPE_MONITORS_CONFIG,$/;"	e	enum:__anon172	file:
@@ -3224,6 +3232,7 @@ PIPE_ITEM_TYPE_STREAM_ACTIVATE_REPORT	server/red_worker.c	/^    PIPE_ITEM_TYPE_S
 PIPE_ITEM_TYPE_STREAM_CLIP	server/red_worker.c	/^    PIPE_ITEM_TYPE_STREAM_CLIP,$/;"	e	enum:__anon172	file:
 PIPE_ITEM_TYPE_STREAM_CREATE	server/red_worker.c	/^    PIPE_ITEM_TYPE_STREAM_CREATE,$/;"	e	enum:__anon172	file:
 PIPE_ITEM_TYPE_STREAM_DESTROY	server/red_worker.c	/^    PIPE_ITEM_TYPE_STREAM_DESTROY,$/;"	e	enum:__anon172	file:
+PIPE_ITEM_TYPE_STREAM_TIMOUT	server/red_worker.c	/^    PIPE_ITEM_TYPE_STREAM_TIMOUT,$/;"	e	enum:__anon172	file:
 PIPE_ITEM_TYPE_UPGRADE	server/red_worker.c	/^    PIPE_ITEM_TYPE_UPGRADE,$/;"	e	enum:__anon172	file:
 PIPE_ITEM_TYPE_VERB	server/red_worker.c	/^    PIPE_ITEM_TYPE_VERB,$/;"	e	enum:__anon172	file:
 PIPE_MAX_NAME_LEN	client/windows/named_pipe.cpp	27;"	d	file:
@@ -3312,15 +3321,15 @@ PKG_CONFIG_LIBDIR	server/tests/Makefile	/^PKG_CONFIG_LIBDIR = $/;"	m
 PKG_CONFIG_LIBDIR	spice-common/Makefile	/^PKG_CONFIG_LIBDIR = $/;"	m
 PKG_CONFIG_LIBDIR	spice-common/common/Makefile	/^PKG_CONFIG_LIBDIR = $/;"	m
 PKG_CONFIG_LIBDIR	spice-common/python_modules/Makefile	/^PKG_CONFIG_LIBDIR = $/;"	m
-PKG_CONFIG_PATH	Makefile	/^PKG_CONFIG_PATH = $/;"	m
-PKG_CONFIG_PATH	client/Makefile	/^PKG_CONFIG_PATH = $/;"	m
-PKG_CONFIG_PATH	docs/Makefile	/^PKG_CONFIG_PATH = $/;"	m
-PKG_CONFIG_PATH	docs/manual/Makefile	/^PKG_CONFIG_PATH = $/;"	m
-PKG_CONFIG_PATH	server/Makefile	/^PKG_CONFIG_PATH = $/;"	m
-PKG_CONFIG_PATH	server/tests/Makefile	/^PKG_CONFIG_PATH = $/;"	m
-PKG_CONFIG_PATH	spice-common/Makefile	/^PKG_CONFIG_PATH = $/;"	m
-PKG_CONFIG_PATH	spice-common/common/Makefile	/^PKG_CONFIG_PATH = $/;"	m
-PKG_CONFIG_PATH	spice-common/python_modules/Makefile	/^PKG_CONFIG_PATH = $/;"	m
+PKG_CONFIG_PATH	Makefile	/^PKG_CONFIG_PATH = \/home\/lichenxiang\/opt\/lib\/pkgconfig$/;"	m
+PKG_CONFIG_PATH	client/Makefile	/^PKG_CONFIG_PATH = \/home\/lichenxiang\/opt\/lib\/pkgconfig$/;"	m
+PKG_CONFIG_PATH	docs/Makefile	/^PKG_CONFIG_PATH = \/home\/lichenxiang\/opt\/lib\/pkgconfig$/;"	m
+PKG_CONFIG_PATH	docs/manual/Makefile	/^PKG_CONFIG_PATH = \/home\/lichenxiang\/opt\/lib\/pkgconfig$/;"	m
+PKG_CONFIG_PATH	server/Makefile	/^PKG_CONFIG_PATH = \/home\/lichenxiang\/opt\/lib\/pkgconfig$/;"	m
+PKG_CONFIG_PATH	server/tests/Makefile	/^PKG_CONFIG_PATH = \/home\/lichenxiang\/opt\/lib\/pkgconfig$/;"	m
+PKG_CONFIG_PATH	spice-common/Makefile	/^PKG_CONFIG_PATH = \/home\/lichenxiang\/opt\/lib\/pkgconfig$/;"	m
+PKG_CONFIG_PATH	spice-common/common/Makefile	/^PKG_CONFIG_PATH = \/home\/lichenxiang\/opt\/lib\/pkgconfig$/;"	m
+PKG_CONFIG_PATH	spice-common/python_modules/Makefile	/^PKG_CONFIG_PATH = \/home\/lichenxiang\/opt\/lib\/pkgconfig$/;"	m
 PLATFORM_INCLUDES	client/Makefile	/^PLATFORM_INCLUDES = -I$(top_srcdir)\/client\/x11$/;"	m
 PLT1_BE	client/glz_decode_tmpl.c	324;"	d	file:
 PLT1_BE	client/glz_decoder.cpp	178;"	d	file:
@@ -3840,10 +3849,11 @@ RANLIB	spice-common/Makefile	/^RANLIB = ranlib$/;"	m
 RANLIB	spice-common/common/Makefile	/^RANLIB = ranlib$/;"	m
 RANLIB	spice-common/python_modules/Makefile	/^RANLIB = ranlib$/;"	m
 RASTER_OP	spice-common/common/pixman_utils.c	75;"	d	file:
-RCC_FOREACH_SAFE	server/red_worker.c	1127;"	d	file:
-RCC_TO_CCC	server/red_worker.c	1166;"	d	file:
-RCC_TO_DCC	server/red_worker.c	1165;"	d	file:
-RC_BUFFER_SIZE_FF	server/red_worker.c	112;"	d	file:
+RCC_FOREACH_SAFE	server/red_worker.c	1179;"	d	file:
+RCC_TO_CCC	server/red_worker.c	1218;"	d	file:
+RCC_TO_DCC	server/red_worker.c	1217;"	d	file:
+RC_BUFFER_SIZE_FF	server/h264_encoder.h	23;"	d
+READ_STREAM_FULL_H264_CODE	server/red_worker.c	99;"	d	file:
 RECEIVE_BUF_SIZE	server/inputs_channel.c	54;"	d	file:
 RECORD_SAMPLES_SIZE	server/snd_worker.c	46;"	d	file:
 RECURSIVE	client/threads.h	/^        RECURSIVE,$/;"	e	enum:Mutex::Type
@@ -3998,7 +4008,7 @@ REDS_SASL_ERROR_GENERIC	server/reds_stream.h	/^    REDS_SASL_ERROR_GENERIC,$/;"	
 REDS_SASL_ERROR_INVALID_DATA	server/reds_stream.h	/^    REDS_SASL_ERROR_INVALID_DATA,$/;"	e	enum:__anon154
 REDS_SASL_ERROR_OK	server/reds_stream.h	/^    REDS_SASL_ERROR_OK,$/;"	e	enum:__anon154
 REDS_SASL_ERROR_RETRY	server/reds_stream.h	/^    REDS_SASL_ERROR_RETRY,$/;"	e	enum:__anon154
-REDS_SAVE_VERSION	server/reds.c	2657;"	d	file:
+REDS_SAVE_VERSION	server/reds.c	2658;"	d	file:
 REDS_STAT_SHM_SIZE	server/reds-private.h	85;"	d
 REDS_STREAM_SSL_STATUS_ERROR	server/reds_stream.h	/^    REDS_STREAM_SSL_STATUS_ERROR,$/;"	e	enum:__anon153
 REDS_STREAM_SSL_STATUS_OK	server/reds_stream.h	/^    REDS_STREAM_SSL_STATUS_OK,$/;"	e	enum:__anon153
@@ -4008,20 +4018,24 @@ REDS_TOKENS_TO_SEND	server/reds.c	93;"	d	file:
 REDS_VDI_PORT_NUM_RECEIVE_BUFFS	server/reds.c	94;"	d	file:
 RED_ABI_TRANSLATE_H	server/red_parse_qxl.h	20;"	d
 RED_BITMAP_UTILS_RGB16	server/red_bitmap_utils.h	155;"	d
-RED_BITMAP_UTILS_RGB16	server/red_worker.c	6099;"	d	file:
+RED_BITMAP_UTILS_RGB16	server/red_worker.c	6508;"	d	file:
 RED_BITMAP_UTILS_RGB24	server/red_bitmap_utils.h	156;"	d
-RED_BITMAP_UTILS_RGB24	server/red_worker.c	6101;"	d	file:
+RED_BITMAP_UTILS_RGB24	server/red_worker.c	6510;"	d	file:
 RED_BITMAP_UTILS_RGB32	server/red_bitmap_utils.h	157;"	d
-RED_BITMAP_UTILS_RGB32	server/red_worker.c	6103;"	d	file:
-RED_COMPRESS_BUF_SIZE	server/red_worker.c	146;"	d	file:
+RED_BITMAP_UTILS_RGB32	server/red_worker.c	6512;"	d	file:
+RED_COMPRESS_BUF_SIZE	server/red_worker.c	171;"	d	file:
+RED_DECODING_DATA_H	server/red_decoding_data.h	2;"	d
+RED_DECODING_DISPATCHER_H	server/red_decoding_dispatcher.h	2;"	d
+RED_GLOBAL_H264_STREAM_ID	server/red_worker.c	159;"	d	file:
+RED_GLOBAL_STREAM_TIMOUT	server/red_worker.c	160;"	d	file:
 RED_ICON_RES_ID	client/windows/resource.h	5;"	d
 RED_ICON_RES_ID	client/x11/resource.h	21;"	d
-RED_MAX_RENDERERS	server/red_worker.h	79;"	d
+RED_MAX_RENDERERS	server/red_worker.h	80;"	d
 RED_MOUSE_BUTTON_STATE_TO_AGENT	server/inputs_channel.c	212;"	d	file:
-RED_MOUSE_BUTTON_STATE_TO_AGENT	server/reds.c	1628;"	d	file:
+RED_MOUSE_BUTTON_STATE_TO_AGENT	server/reds.c	1629;"	d	file:
 RED_MOUSE_STATE_TO_LOCAL	server/inputs_channel.c	207;"	d	file:
-RED_MOUSE_STATE_TO_LOCAL	server/reds.c	1623;"	d	file:
-RED_RELEASE_BUNCH_SIZE	server/red_worker.c	5279;"	d	file:
+RED_MOUSE_STATE_TO_LOCAL	server/reds.c	1624;"	d	file:
+RED_RELEASE_BUNCH_SIZE	server/red_worker.c	5688;"	d	file:
 RED_RENDERER_INVALID	server/red_worker.h	/^    RED_RENDERER_INVALID,$/;"	e	enum:__anon135
 RED_RENDERER_OGL_PBUF	server/red_worker.h	/^    RED_RENDERER_OGL_PBUF,$/;"	e	enum:__anon135
 RED_RENDERER_OGL_PIXMAP	server/red_worker.h	/^    RED_RENDERER_OGL_PIXMAP,$/;"	e	enum:__anon135
@@ -4030,25 +4044,32 @@ RED_SCREEN_ROTATION_0	client/x11/platform.cpp	/^    RED_SCREEN_ROTATION_0,$/;"	e
 RED_SCREEN_ROTATION_180	client/x11/platform.cpp	/^    RED_SCREEN_ROTATION_180,$/;"	e	enum:RedScreenRotation	file:
 RED_SCREEN_ROTATION_270	client/x11/platform.cpp	/^    RED_SCREEN_ROTATION_270,$/;"	e	enum:RedScreenRotation	file:
 RED_SCREEN_ROTATION_90	client/x11/platform.cpp	/^    RED_SCREEN_ROTATION_90,$/;"	e	enum:RedScreenRotation	file:
-RED_STREAM_CHANNEL_CAPACITY	server/red_worker.c	135;"	d	file:
-RED_STREAM_CLIENT_REPORT_TIMEOUT	server/red_worker.c	138;"	d	file:
-RED_STREAM_CLIENT_REPORT_WINDOW	server/red_worker.c	137;"	d	file:
-RED_STREAM_CONTINUS_MAX_DELTA	server/red_worker.c	128;"	d	file:
-RED_STREAM_DEFAULT_HIGH_START_BIT_RATE	server/red_worker.c	139;"	d	file:
-RED_STREAM_DEFAULT_LOW_START_BIT_RATE	server/red_worker.c	140;"	d	file:
-RED_STREAM_DETACTION_MAX_DELTA	server/red_worker.c	127;"	d	file:
-RED_STREAM_FRAMES_RESET_CONDITION	server/red_worker.c	132;"	d	file:
-RED_STREAM_FRAMES_START_CONDITION	server/red_worker.c	130;"	d	file:
-RED_STREAM_GRADUAL_FRAMES_START_CONDITION	server/red_worker.c	131;"	d	file:
-RED_STREAM_INPUT_FPS_TIMEOUT	server/red_worker.c	134;"	d	file:
-RED_STREAM_MIN_SIZE	server/red_worker.c	133;"	d	file:
-RED_STREAM_TIMOUT	server/red_worker.c	129;"	d	file:
+RED_SPICE_BASE_THREADING_INIT	server/red_threading.h	10;"	d
+RED_SPICE_COMMON_DEFINES_H	server/red_spice_common_defines.h	2;"	d
+RED_SPICE_DECODING_THREADING_INIT	server/red_decoding_data.h	16;"	d
+RED_STREAM_CHANNEL_CAPACITY	server/red_worker.c	145;"	d	file:
+RED_STREAM_CLIENT_REPORT_TIMEOUT	server/red_worker.c	148;"	d	file:
+RED_STREAM_CLIENT_REPORT_WINDOW	server/red_worker.c	147;"	d	file:
+RED_STREAM_CONTINUS_MAX_DELTA	server/red_worker.c	138;"	d	file:
+RED_STREAM_DEFAULT_HIGH_START_BIT_RATE	server/red_worker.c	149;"	d	file:
+RED_STREAM_DEFAULT_LOW_START_BIT_RATE	server/red_worker.c	150;"	d	file:
+RED_STREAM_DETACTION_MAX_DELTA	server/red_worker.c	137;"	d	file:
+RED_STREAM_FRAMES_RESET_CONDITION	server/red_worker.c	142;"	d	file:
+RED_STREAM_FRAMES_START_CONDITION	server/red_worker.c	140;"	d	file:
+RED_STREAM_GRADUAL_FRAMES_START_CONDITION	server/red_worker.c	141;"	d	file:
+RED_STREAM_INPUT_FPS_TIMEOUT	server/red_worker.c	144;"	d	file:
+RED_STREAM_MIN_SIZE	server/red_worker.c	143;"	d	file:
+RED_STREAM_TIMOUT	server/red_worker.c	139;"	d	file:
 RED_SUBPIXEL_ORDER_H_BGR	client/x11/platform.cpp	/^    RED_SUBPIXEL_ORDER_H_BGR,$/;"	e	enum:RedSubpixelOrder	file:
 RED_SUBPIXEL_ORDER_H_RGB	client/x11/platform.cpp	/^    RED_SUBPIXEL_ORDER_H_RGB,$/;"	e	enum:RedSubpixelOrder	file:
 RED_SUBPIXEL_ORDER_NONE	client/x11/platform.cpp	/^    RED_SUBPIXEL_ORDER_NONE,$/;"	e	enum:RedSubpixelOrder	file:
 RED_SUBPIXEL_ORDER_UNKNOWN	client/x11/platform.cpp	/^    RED_SUBPIXEL_ORDER_UNKNOWN,$/;"	e	enum:RedSubpixelOrder	file:
 RED_SUBPIXEL_ORDER_V_BGR	client/x11/platform.cpp	/^    RED_SUBPIXEL_ORDER_V_BGR,$/;"	e	enum:RedSubpixelOrder	file:
 RED_SUBPIXEL_ORDER_V_RGB	client/x11/platform.cpp	/^    RED_SUBPIXEL_ORDER_V_RGB,$/;"	e	enum:RedSubpixelOrder	file:
+RED_THREADING_PAUSING	server/red_threading.h	/^   RED_THREADING_PAUSING  = 2$/;"	e	enum:__anon197
+RED_THREADING_RUNNING	server/red_threading.h	/^   RED_THREADING_RUNNING  = 1,$/;"	e	enum:__anon197
+RED_THREADING_STOPPING	server/red_threading.h	/^   RED_THREADING_STOPPING = 0,$/;"	e	enum:__anon197
+RED_THREAD_H	server/red_threading.h	2;"	d
 RED_WORKER_MESSAGE_ADD_MEMSLOT	server/red_worker.h	/^    RED_WORKER_MESSAGE_ADD_MEMSLOT,$/;"	e	enum:__anon134
 RED_WORKER_MESSAGE_ADD_MEMSLOT_ASYNC	server/red_worker.h	/^    RED_WORKER_MESSAGE_ADD_MEMSLOT_ASYNC,$/;"	e	enum:__anon134
 RED_WORKER_MESSAGE_COUNT	server/red_worker.h	/^    RED_WORKER_MESSAGE_COUNT \/\/ LAST$/;"	e	enum:__anon134
@@ -4083,6 +4104,7 @@ RED_WORKER_MESSAGE_SET_COMPRESSION	server/red_worker.h	/^    RED_WORKER_MESSAGE_
 RED_WORKER_MESSAGE_SET_MOUSE_MODE	server/red_worker.h	/^    RED_WORKER_MESSAGE_SET_MOUSE_MODE,$/;"	e	enum:__anon134
 RED_WORKER_MESSAGE_SET_STREAMING_VIDEO	server/red_worker.h	/^    RED_WORKER_MESSAGE_SET_STREAMING_VIDEO,$/;"	e	enum:__anon134
 RED_WORKER_MESSAGE_SET_STREAMING_VIDEO_COMPRESSION	server/red_worker.h	/^    RED_WORKER_MESSAGE_SET_STREAMING_VIDEO_COMPRESSION,$/;"	e	enum:__anon134
+RED_WORKER_MESSAGE_SET_STREAMING_VIDEO_INFO	server/red_worker.h	/^    RED_WORKER_MESSAGE_SET_STREAMING_VIDEO_INFO,$/;"	e	enum:__anon134
 RED_WORKER_MESSAGE_START	server/red_worker.h	/^    RED_WORKER_MESSAGE_START,$/;"	e	enum:__anon134
 RED_WORKER_MESSAGE_STOP	server/red_worker.h	/^    RED_WORKER_MESSAGE_STOP,$/;"	e	enum:__anon134
 RED_WORKER_MESSAGE_UPDATE	server/red_worker.h	/^    RED_WORKER_MESSAGE_UPDATE,$/;"	e	enum:__anon134
@@ -4183,6 +4205,9 @@ RectI	client/gui/softrenderer.h	/^        struct RectI {$/;"	s	class:CEGUI::Soft
 RecurciveLock	client/threads.h	/^typedef Lock RecurciveLock;$/;"	t
 RecurciveMutex	client/threads.h	/^    RecurciveMutex() : Mutex(Mutex::RECURSIVE) {}$/;"	f	class:RecurciveMutex
 RecurciveMutex	client/threads.h	/^class RecurciveMutex: public Mutex {$/;"	c
+RedBaseThreading	server/red_threading.h	/^typedef struct RedBaseThreading RedBaseThreading;$/;"	t	typeref:struct:RedBaseThreading
+RedBaseThreading	server/red_threading.h	/^typedef struct RedBaseThreading$/;"	s
+RedBaseThreadingStatus	server/red_threading.h	/^}RedBaseThreadingStatus;$/;"	t	typeref:enum:__anon197
 RedChannel	client/red_channel.cpp	/^RedChannel::RedChannel(RedClient& client, uint8_t type, uint8_t id,$/;"	f	class:RedChannel
 RedChannel	client/red_channel.h	/^class RedChannel: public RedChannelBase {$/;"	c
 RedChannel	server/red_channel.h	/^struct RedChannel {$/;"	s
@@ -4207,6 +4232,8 @@ RedCursorCmd	server/red_parse_qxl.h	/^typedef struct RedCursorCmd {$/;"	s
 RedCursorCmd	server/red_parse_qxl.h	/^} RedCursorCmd;$/;"	t	typeref:struct:RedCursorCmd
 RedDataChunk	server/red_parse_qxl.h	/^struct RedDataChunk {$/;"	s
 RedDataChunk	server/red_parse_qxl.h	/^typedef struct RedDataChunk RedDataChunk;$/;"	t	typeref:struct:RedDataChunk
+RedDecodingThreading	server/red_decoding_data.h	/^struct RedDecodingThreading$/;"	s
+RedDecodingThreading	server/red_decoding_data.h	/^typedef struct RedDecodingThreading RedDecodingThreading;$/;"	t	typeref:struct:RedDecodingThreading
 RedDispatcher	server/red_dispatcher.c	/^struct RedDispatcher {$/;"	s	file:
 RedDispatcher	server/red_worker.h	/^typedef struct RedDispatcher RedDispatcher;$/;"	t	typeref:struct:RedDispatcher
 RedDrawable	client/red_drawable.h	/^    RedDrawable() {}$/;"	f	class:RedDrawable
@@ -4329,6 +4356,8 @@ RedWorkerMessageSetStreamingVideo	server/red_dispatcher.h	/^typedef struct RedWo
 RedWorkerMessageSetStreamingVideo	server/red_dispatcher.h	/^} RedWorkerMessageSetStreamingVideo;$/;"	t	typeref:struct:RedWorkerMessageSetStreamingVideo
 RedWorkerMessageSetStreamingVideoCompression	server/red_dispatcher.h	/^typedef struct RedWorkerMessageSetStreamingVideoCompression {$/;"	s
 RedWorkerMessageSetStreamingVideoCompression	server/red_dispatcher.h	/^} RedWorkerMessageSetStreamingVideoCompression;$/;"	t	typeref:struct:RedWorkerMessageSetStreamingVideoCompression
+RedWorkerMessageSetStreamingVideoInfo	server/red_dispatcher.h	/^typedef struct RedWorkerMessageSetStreamingVideoInfo{$/;"	s
+RedWorkerMessageSetStreamingVideoInfo	server/red_dispatcher.h	/^} RedWorkerMessageSetStreamingVideoInfo;$/;"	t	typeref:struct:RedWorkerMessageSetStreamingVideoInfo
 RedWorkerMessageStart	server/red_dispatcher.h	/^typedef struct RedWorkerMessageStart {$/;"	s
 RedWorkerMessageStart	server/red_dispatcher.h	/^} RedWorkerMessageStart;$/;"	t	typeref:struct:RedWorkerMessageStart
 RedWorkerMessageStop	server/red_dispatcher.h	/^typedef struct RedWorkerMessageStop {$/;"	s
@@ -4392,7 +4421,7 @@ Ring	spice-common/common/ring.h	/^} Ring;$/;"	t	typeref:struct:Ring
 RingItem	spice-common/common/ring.h	/^typedef struct Ring RingItem;$/;"	t	typeref:struct:Ring
 RootDemarshallingDestination	spice-common/python_modules/demarshal.py	/^class RootDemarshallingDestination(DemarshallingDestination):$/;"	c
 RootMarshallingSource	spice-common/python_modules/marshal.py	/^class RootMarshallingSource(MarshallingSource):$/;"	c
-SAFE_FOREACH	server/red_worker.c	1117;"	d	file:
+SAFE_FOREACH	server/red_worker.c	1169;"	d	file:
 SAME_PIXEL	server/glz_encode_tmpl.c	126;"	d	file:
 SAME_PIXEL	server/glz_encode_tmpl.c	38;"	d	file:
 SAME_PIXEL	server/glz_encode_tmpl.c	55;"	d	file:
@@ -4416,7 +4445,7 @@ SASL_CFLAGS	docs/Makefile	/^SASL_CFLAGS = $/;"	m
 SASL_CFLAGS	docs/manual/Makefile	/^SASL_CFLAGS = $/;"	m
 SASL_CFLAGS	server/Makefile	/^SASL_CFLAGS = $/;"	m
 SASL_CFLAGS	server/tests/Makefile	/^SASL_CFLAGS = $/;"	m
-SASL_DATA_MAX_LEN	server/reds.c	1908;"	d	file:
+SASL_DATA_MAX_LEN	server/reds.c	1909;"	d	file:
 SASL_DATA_MAX_LEN	server/reds_stream.c	660;"	d	file:
 SASL_LIBS	Makefile	/^SASL_LIBS =  -lsasl2$/;"	m
 SASL_LIBS	client/Makefile	/^SASL_LIBS =  -lsasl2$/;"	m
@@ -4446,7 +4475,7 @@ SED	spice-common/Makefile	/^SED = \/bin\/sed$/;"	m
 SED	spice-common/common/Makefile	/^SED = \/bin\/sed$/;"	m
 SED	spice-common/python_modules/Makefile	/^SED = \/bin\/sed$/;"	m
 SERVER_MARSHALLERS	spice-common/common/Makefile	/^SERVER_MARSHALLERS = \\$/;"	m
-SET_CAP	server/red_worker.c	11234;"	d	file:
+SET_CAP	server/red_worker.c	12288;"	d	file:
 SET_GLC_BOX	spice-common/common/gl_canvas.c	164;"	d	file:
 SET_GLC_RECT	spice-common/common/gl_canvas.c	157;"	d	file:
 SET_MAKE	Makefile	/^SET_MAKE = $/;"	m
@@ -4515,18 +4544,18 @@ SMARTCARD_CFLAGS	docs/Makefile	/^SMARTCARD_CFLAGS = $/;"	m
 SMARTCARD_CFLAGS	docs/manual/Makefile	/^SMARTCARD_CFLAGS = $/;"	m
 SMARTCARD_CFLAGS	server/Makefile	/^SMARTCARD_CFLAGS = $/;"	m
 SMARTCARD_CFLAGS	server/tests/Makefile	/^SMARTCARD_CFLAGS = $/;"	m
-SMARTCARD_CFLAGS	spice-common/Makefile	/^SMARTCARD_CFLAGS = -I\/usr\/include\/cacard -I\/usr\/include\/nss3 -I\/usr\/include\/nspr4  $/;"	m
-SMARTCARD_CFLAGS	spice-common/common/Makefile	/^SMARTCARD_CFLAGS = -I\/usr\/include\/cacard -I\/usr\/include\/nss3 -I\/usr\/include\/nspr4  $/;"	m
-SMARTCARD_CFLAGS	spice-common/python_modules/Makefile	/^SMARTCARD_CFLAGS = -I\/usr\/include\/cacard -I\/usr\/include\/nss3 -I\/usr\/include\/nspr4  $/;"	m
+SMARTCARD_CFLAGS	spice-common/Makefile	/^SMARTCARD_CFLAGS = -I\/usr\/local\/include\/cacard -I\/usr\/include\/nss3 -I\/usr\/include\/nspr4  $/;"	m
+SMARTCARD_CFLAGS	spice-common/common/Makefile	/^SMARTCARD_CFLAGS = -I\/usr\/local\/include\/cacard -I\/usr\/include\/nss3 -I\/usr\/include\/nspr4  $/;"	m
+SMARTCARD_CFLAGS	spice-common/python_modules/Makefile	/^SMARTCARD_CFLAGS = -I\/usr\/local\/include\/cacard -I\/usr\/include\/nss3 -I\/usr\/include\/nspr4  $/;"	m
 SMARTCARD_LIBS	Makefile	/^SMARTCARD_LIBS = $/;"	m
 SMARTCARD_LIBS	client/Makefile	/^SMARTCARD_LIBS = $/;"	m
 SMARTCARD_LIBS	docs/Makefile	/^SMARTCARD_LIBS = $/;"	m
 SMARTCARD_LIBS	docs/manual/Makefile	/^SMARTCARD_LIBS = $/;"	m
 SMARTCARD_LIBS	server/Makefile	/^SMARTCARD_LIBS = $/;"	m
 SMARTCARD_LIBS	server/tests/Makefile	/^SMARTCARD_LIBS = $/;"	m
-SMARTCARD_LIBS	spice-common/Makefile	/^SMARTCARD_LIBS = -lcacard -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 -lpthread -ldl  $/;"	m
-SMARTCARD_LIBS	spice-common/common/Makefile	/^SMARTCARD_LIBS = -lcacard -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 -lpthread -ldl  $/;"	m
-SMARTCARD_LIBS	spice-common/python_modules/Makefile	/^SMARTCARD_LIBS = -lcacard -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 -lpthread -ldl  $/;"	m
+SMARTCARD_LIBS	spice-common/Makefile	/^SMARTCARD_LIBS = -L\/usr\/local\/lib -lcacard -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 -lpthread -ldl  $/;"	m
+SMARTCARD_LIBS	spice-common/common/Makefile	/^SMARTCARD_LIBS = -L\/usr\/local\/lib -lcacard -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 -lpthread -ldl  $/;"	m
+SMARTCARD_LIBS	spice-common/python_modules/Makefile	/^SMARTCARD_LIBS = -L\/usr\/local\/lib -lcacard -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 -lpthread -ldl  $/;"	m
 SMARTCARD_MAX_READERS	server/smartcard.c	41;"	d	file:
 SND_CODEC_ANY_FREQUENCY	spice-common/common/snd_codec.h	53;"	d
 SND_CODEC_CELT_BIT_RATE	spice-common/common/snd_codec.h	38;"	d
@@ -4884,9 +4913,9 @@ SPICE_INTERFACE_CORE_MINOR	server/spice.h	53;"	d
 SPICE_INTERFACE_KEYBOARD	server/spice.h	270;"	d
 SPICE_INTERFACE_KEYBOARD_MAJOR	server/spice.h	271;"	d
 SPICE_INTERFACE_KEYBOARD_MINOR	server/spice.h	272;"	d
-SPICE_INTERFACE_MIGRATION	server/spice.h	533;"	d
-SPICE_INTERFACE_MIGRATION_MAJOR	server/spice.h	534;"	d
-SPICE_INTERFACE_MIGRATION_MINOR	server/spice.h	535;"	d
+SPICE_INTERFACE_MIGRATION	server/spice.h	535;"	d
+SPICE_INTERFACE_MIGRATION_MAJOR	server/spice.h	536;"	d
+SPICE_INTERFACE_MIGRATION_MINOR	server/spice.h	537;"	d
 SPICE_INTERFACE_MOUSE	server/spice.h	291;"	d
 SPICE_INTERFACE_MOUSE_MAJOR	server/spice.h	292;"	d
 SPICE_INTERFACE_MOUSE_MINOR	server/spice.h	293;"	d
@@ -5266,10 +5295,12 @@ SPICE_STMT_START	spice-common/spice-protocol/spice/macros.h	157;"	d
 SPICE_STREAM_FLAGS_MASK	spice-common/spice-protocol/spice/enums.h	/^    SPICE_STREAM_FLAGS_MASK = 0x1$/;"	e	enum:SpiceStreamFlags
 SPICE_STREAM_FLAGS_TOP_DOWN	spice-common/spice-protocol/spice/enums.h	/^    SPICE_STREAM_FLAGS_TOP_DOWN = (1 << 0),$/;"	e	enum:SpiceStreamFlags
 SPICE_STREAM_VIDEO_ALL	server/spice.h	/^    SPICE_STREAM_VIDEO_ALL,$/;"	e	enum:__anon159
-SPICE_STREAM_VIDEO_COMPRESSION_H264	server/spice.h	/^   SPICE_STREAM_VIDEO_COMPRESSION_H264$/;"	e	enum:__anon160
+SPICE_STREAM_VIDEO_COMPRESSION_H264	server/spice.h	/^   SPICE_STREAM_VIDEO_COMPRESSION_H264,$/;"	e	enum:__anon160
+SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL	server/spice.h	/^   SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL$/;"	e	enum:__anon160
 SPICE_STREAM_VIDEO_COMPRESSION_INVALID	server/spice.h	/^   SPICE_STREAM_VIDEO_COMPRESSION_INVALID,$/;"	e	enum:__anon160
 SPICE_STREAM_VIDEO_COMPRESSION_MJPEG	server/spice.h	/^   SPICE_STREAM_VIDEO_COMPRESSION_MJPEG,$/;"	e	enum:__anon160
-SPICE_STREAM_VIDEO_FILTER	server/spice.h	/^    SPICE_STREAM_VIDEO_FILTER$/;"	e	enum:__anon159
+SPICE_STREAM_VIDEO_FILTER	server/spice.h	/^    SPICE_STREAM_VIDEO_FILTER,$/;"	e	enum:__anon159
+SPICE_STREAM_VIDEO_H264_ALL	server/spice.h	/^    SPICE_STREAM_VIDEO_H264_ALL$/;"	e	enum:__anon159
 SPICE_STREAM_VIDEO_INVALID	server/spice.h	/^    SPICE_STREAM_VIDEO_INVALID,$/;"	e	enum:__anon159
 SPICE_STREAM_VIDEO_OFF	server/spice.h	/^    SPICE_STREAM_VIDEO_OFF,$/;"	e	enum:__anon159
 SPICE_STRINGIFY	spice-common/common/log.h	31;"	d
@@ -5354,14 +5385,16 @@ STICKY_KEY_TIMEOUT	client/application.cpp	59;"	d	file:
 STREAM_FRAME_CONTAINER	server/red_worker.c	/^    STREAM_FRAME_CONTAINER,$/;"	e	enum:__anon175	file:
 STREAM_FRAME_NATIVE	server/red_worker.c	/^    STREAM_FRAME_NATIVE,$/;"	e	enum:__anon175	file:
 STREAM_FRAME_NONE	server/red_worker.c	/^    STREAM_FRAME_NONE,$/;"	e	enum:__anon175	file:
-STREAM_STATS	server/red_worker.c	470;"	d	file:
-STREAM_VIDEO_ALL	server/red_common.h	/^    STREAM_VIDEO_ALL,$/;"	e	enum:__anon200
-STREAM_VIDEO_COMPRESSION_H264	server/red_common.h	/^   STREAM_VIDEO_COMPRESSION_H264$/;"	e	enum:__anon201
-STREAM_VIDEO_COMPRESSION_INVALID	server/red_common.h	/^   STREAM_VIDEO_COMPRESSION_INVALID,$/;"	e	enum:__anon201
-STREAM_VIDEO_COMPRESSION_MJPEG	server/red_common.h	/^   STREAM_VIDEO_COMPRESSION_MJPEG,$/;"	e	enum:__anon201
-STREAM_VIDEO_FILTER	server/red_common.h	/^    STREAM_VIDEO_FILTER$/;"	e	enum:__anon200
-STREAM_VIDEO_INVALID	server/red_common.h	/^    STREAM_VIDEO_INVALID,$/;"	e	enum:__anon200
-STREAM_VIDEO_OFF	server/red_common.h	/^    STREAM_VIDEO_OFF,$/;"	e	enum:__anon200
+STREAM_STATS	server/red_worker.c	498;"	d	file:
+STREAM_VIDEO_ALL	server/red_common.h	/^    STREAM_VIDEO_ALL,$/;"	e	enum:__anon201
+STREAM_VIDEO_COMPRESSION_H264	server/red_common.h	/^   STREAM_VIDEO_COMPRESSION_H264,$/;"	e	enum:__anon202
+STREAM_VIDEO_COMPRESSION_H264_FULL	server/red_common.h	/^   STREAM_VIDEO_COMPRESSION_H264_FULL$/;"	e	enum:__anon202
+STREAM_VIDEO_COMPRESSION_INVALID	server/red_common.h	/^   STREAM_VIDEO_COMPRESSION_INVALID,$/;"	e	enum:__anon202
+STREAM_VIDEO_COMPRESSION_MJPEG	server/red_common.h	/^   STREAM_VIDEO_COMPRESSION_MJPEG,$/;"	e	enum:__anon202
+STREAM_VIDEO_FILTER	server/red_common.h	/^    STREAM_VIDEO_FILTER,$/;"	e	enum:__anon201
+STREAM_VIDEO_H264_ALL	server/red_common.h	/^    STREAM_VIDEO_H264_ALL$/;"	e	enum:__anon201
+STREAM_VIDEO_INVALID	server/red_common.h	/^    STREAM_VIDEO_INVALID,$/;"	e	enum:__anon201
+STREAM_VIDEO_OFF	server/red_common.h	/^    STREAM_VIDEO_OFF,$/;"	e	enum:__anon201
 STRINGIZE	client/gui/softrenderer.cpp	35;"	d	file:
 STRIP	Makefile	/^STRIP = strip$/;"	m
 STRIP	client/Makefile	/^STRIP = strip$/;"	m
@@ -5399,10 +5432,10 @@ SUBDIRS	server/Makefile	/^SUBDIRS = . tests$/;"	m
 SUBDIRS	spice-common/Makefile	/^SUBDIRS = python_modules common$/;"	m
 SUBDIRS	spice-common/spice-protocol/Makefile	/^SUBDIRS = spice$/;"	m
 SUBSUMES	spice-common/common/region.c	39;"	d	file:
-SUBTYPE_PORT	server/reds.c	2910;"	d	file:
-SUBTYPE_SMARTCARD	server/reds.c	2908;"	d	file:
-SUBTYPE_USBREDIR	server/reds.c	2909;"	d	file:
-SUBTYPE_VDAGENT	server/reds.c	2907;"	d	file:
+SUBTYPE_PORT	server/reds.c	2911;"	d	file:
+SUBTYPE_SMARTCARD	server/reds.c	2909;"	d	file:
+SUBTYPE_USBREDIR	server/reds.c	2910;"	d	file:
+SUBTYPE_VDAGENT	server/reds.c	2908;"	d	file:
 SUFFIXES	docs/manual/Makefile	/^SUFFIXES = .html$/;"	m
 SURF_HEIGHT	server/tests/test_display_base.h	81;"	d
 SURF_WIDTH	server/tests/test_display_base.h	80;"	d
@@ -5590,6 +5623,8 @@ SpiceDataHeader	spice-common/spice-protocol/spice/protocol.h	/^typedef struct SP
 SpiceDataHeader	spice-common/spice-protocol/spice/protocol.h	/^} SpiceDataHeader;$/;"	t	typeref:struct:SpiceDataHeader
 SpiceDataHeaderOpaque	server/red_channel.h	/^struct SpiceDataHeaderOpaque {$/;"	s
 SpiceDataHeaderOpaque	server/red_channel.h	/^typedef struct SpiceDataHeaderOpaque SpiceDataHeaderOpaque;$/;"	t	typeref:struct:SpiceDataHeaderOpaque
+SpiceDecodingData	server/red_decoding_data.h	/^struct SpiceDecodingData$/;"	s
+SpiceDecodingData	server/red_decoding_data.h	/^typedef struct SpiceDecodingData SpiceDecodingData;$/;"	t	typeref:struct:SpiceDecodingData
 SpiceFill	spice-common/common/draw.h	/^typedef struct SpiceFill {$/;"	s
 SpiceFill	spice-common/common/draw.h	/^} SpiceFill;$/;"	t	typeref:struct:SpiceFill
 SpiceGlzDecoder	spice-common/common/canvas_base.h	/^typedef struct _SpiceGlzDecoder SpiceGlzDecoder;$/;"	t	typeref:struct:_SpiceGlzDecoder
@@ -6081,7 +6116,7 @@ TERMINATED_STATE	client/red_channel.h	/^    TERMINATED_STATE,$/;"	e	enum:__anon1
 TESS_CALL_BACK_TYPE	spice-common/common/glc.c	1377;"	d	file:
 TESS_CALL_BACK_TYPE	spice-common/common/glc.c	1379;"	d	file:
 TESS_VERTEX_ALLOC_BUNCH	spice-common/common/glc.c	44;"	d	file:
-THREAD_COUNT	server/red_worker.c	115;"	d	file:
+THREAD_COUNT	server/h264_encoder.h	26;"	d
 THREE_BYTE	spice-common/common/quic.c	838;"	d	file:
 THREE_BYTE	spice-common/common/quic_tmpl.c	29;"	d	file:
 THROW	client/utils.h	39;"	d
@@ -6103,7 +6138,7 @@ TO_RGB32	spice-common/common/lz.c	465;"	d	file:
 TO_RGB32	spice-common/common/lz.c	473;"	d	file:
 TO_RGB32	spice-common/common/lz.c	481;"	d	file:
 TO_RGB32	spice-common/common/lz_decompress_tmpl.c	336;"	d	file:
-TRACE_ITEMS_SHIFT	server/red_worker.c	936;"	d	file:
+TRACE_ITEMS_SHIFT	server/red_worker.c	966;"	d	file:
 TREE_ITEM_TYPE_CONTAINER	server/red_worker.c	/^    TREE_ITEM_TYPE_CONTAINER,$/;"	e	enum:__anon187	file:
 TREE_ITEM_TYPE_DRAWABLE	server/red_worker.c	/^    TREE_ITEM_TYPE_DRAWABLE,$/;"	e	enum:__anon187	file:
 TREE_ITEM_TYPE_SHADOW	server/red_worker.c	/^    TREE_ITEM_TYPE_SHADOW,$/;"	e	enum:__anon187	file:
@@ -6237,9 +6272,9 @@ UpgradeItem	server/red_worker.c	/^typedef struct UpgradeItem {$/;"	s	file:
 UpgradeItem	server/red_worker.c	/^} UpgradeItem;$/;"	t	typeref:struct:UpgradeItem	file:
 UuidPipeItem	server/main_channel.c	/^typedef struct UuidPipeItem {$/;"	s	file:
 UuidPipeItem	server/main_channel.c	/^} UuidPipeItem;$/;"	t	typeref:struct:UuidPipeItem	file:
-VALIDATE_SURFACE_BREAK	server/red_worker.c	165;"	d	file:
-VALIDATE_SURFACE_RET	server/red_worker.c	153;"	d	file:
-VALIDATE_SURFACE_RETVAL	server/red_worker.c	159;"	d	file:
+VALIDATE_SURFACE_BREAK	server/red_worker.c	190;"	d	file:
+VALIDATE_SURFACE_RET	server/red_worker.c	178;"	d	file:
+VALIDATE_SURFACE_RETVAL	server/red_worker.c	184;"	d	file:
 VAR_NAME	server/red_client_cache.h	136;"	d
 VAR_NAME	server/red_client_cache.h	25;"	d
 VAR_NAME	server/red_client_cache.h	36;"	d
@@ -6427,7 +6462,7 @@ WARN_LDFLAGS	server/tests/Makefile	/^WARN_LDFLAGS =  -Wall -W -Wformat-y2k -Wfor
 WAVE_BUF_SIZE	client/playback_channel.cpp	31;"	d	file:
 WCHAR_MAX	client/windows/stdint.h	305;"	d
 WCHAR_MIN	client/windows/stdint.h	303;"	d
-WIDE_CLIENT_ACK_WINDOW	server/red_worker.c	404;"	d	file:
+WIDE_CLIENT_ACK_WINDOW	server/red_worker.c	432;"	d	file:
 WINDRES	Makefile	/^WINDRES = $/;"	m
 WINDRES	client/Makefile	/^WINDRES = $/;"	m
 WINDRES	docs/Makefile	/^WINDRES = $/;"	m
@@ -6439,8 +6474,8 @@ WINT_MIN	client/windows/stdint.h	317;"	d
 WINVER	client/common.h	48;"	d
 WIN_REALLOC_FACTOR	client/glz_decoder_window.cpp	27;"	d	file:
 WORDS_BIGENDIAN	config.h	137;"	d
-WORKER_FOREACH_DCC_SAFE	server/red_worker.c	1137;"	d	file:
-WORKER_TO_DCC	server/red_worker.c	1158;"	d	file:
+WORKER_FOREACH_DCC_SAFE	server/red_worker.c	1189;"	d	file:
+WORKER_TO_DCC	server/red_worker.c	1210;"	d	file:
 WOULDBLOCK_ERR	client/windows/platform_utils.h	95;"	d
 WOULDBLOCK_ERR	client/x11/platform_utils.h	34;"	d
 WRITE_BUFFER_ORIGIN_CLIENT	server/char_device.c	/^    WRITE_BUFFER_ORIGIN_CLIENT,$/;"	e	enum:__anon136	file:
@@ -6587,7 +6622,7 @@ YMAX	spice-common/common/lines.c	447;"	d	file:
 YMIN	spice-common/common/lines.c	446;"	d	file:
 Y_AXIS	spice-common/common/lines.c	183;"	d	file:
 ZERO_BUF_SIZE	server/main_channel.c	51;"	d	file:
-ZLIB_DEFAULT_COMPRESSION_LEVEL	server/red_worker.c	148;"	d	file:
+ZLIB_DEFAULT_COMPRESSION_LEVEL	server/red_worker.c	173;"	d	file:
 ZLIB_WINAPI	client/zlib_decoder.h	26;"	d
 Z_LIBS	Makefile	/^Z_LIBS = -lz$/;"	m
 Z_LIBS	client/Makefile	/^Z_LIBS = -lz$/;"	m
@@ -6998,6 +7033,7 @@ _canvas_types	client/application.h	/^    std::vector<int> _canvas_types;$/;"	m	c
 _caps	client/red_channel.h	/^    ChannelCaps _caps;$/;"	m	class:RedChannelBase
 _capture_mode	client/red_client.cpp	/^        bool _capture_mode;$/;"	m	class:MouseModeEvent::SetModeFunc	file:
 _capture_mouse_mode	client/display_channel.h	/^    bool _capture_mouse_mode;$/;"	m	class:DisplayChannel
+_cb	server/red_spice_common_defines.h	/^   void* (*_cb)(void* ctx,void * ud);    $/;"	m	struct:LCXCALLBACK
 _cert_subject	client/application.h	/^    std::string _cert_subject;$/;"	m	class:SwitchHostEvent
 _changing_screens	client/application.h	/^    bool _changing_screens;$/;"	m	class:Application
 _channel	client/cursor_channel.cpp	/^        CursorChannel& _channel;$/;"	m	class:AttachDispayEvent::UpdateDisplayChannel	file:
@@ -7078,6 +7114,7 @@ _count	client/windows/atomic_count.h	/^    LONG _count;$/;"	m	class:AtomicCount
 _count	client/x11/atomic_count.h	/^    uint32_t _count;$/;"	m	class:AtomicCount
 _crtc	client/x11/platform.cpp	/^    RRCrtc _crtc;$/;"	m	class:XMonitor	file:
 _ctx	client/red_peer.h	/^    SSL_CTX *_ctx;$/;"	m	class:RedPeer
+_ctx	server/red_spice_common_defines.h	/^   void* _ctx;   $/;"	m	struct:LCXCALLBACK
 _cursor	client/application.cpp	/^    AutoRef<LocalCursor> _cursor;$/;"	m	class:GUIBarrier	file:
 _cursor	client/cursor_channel.h	/^    CursorData* _cursor;$/;"	m	class:CursorChannel
 _cursor	client/display_channel.h	/^    AutoRef<CursorData> _cursor;$/;"	m	class:DisplayChannel
@@ -7332,6 +7369,7 @@ _lock	client/red_client.h	/^    Mutex _lock;$/;"	m	class:Migrate
 _lock	client/red_peer.h	/^    Mutex _lock;$/;"	m	class:RedPeer
 _lock	client/shared_cache.hpp	/^    Mutex _lock;$/;"	m	class:SharedCache
 _lock	client/x11/event_sources_p.h	/^    Mutex _lock;$/;"	m	class:Trigger_p
+_lock	server/red_decoding_data.h	/^   pthread_mutex_t _lock;$/;"	m	struct:RedDecodingThreading
 _locked	client/threads.h	/^    bool _locked;$/;"	m	class:Lock
 _login_dialog	client/gui/gui.cpp	/^    LoginDialog* _login_dialog;$/;"	m	class:PreLoginDialog	file:
 _long_options	client/cmd_line_parser.h	/^    std::vector<struct option> _long_options;$/;"	m	class:CmdLineParser
@@ -7715,6 +7753,7 @@ _type_count	client/red_client.h	/^    uint32_t _type_count;$/;"	m	class:Clipboar
 _types	client/red_client.h	/^    uint32_t *_types;$/;"	m	class:ClipboardGrabEvent
 _types	spice-common/python_modules/ptypes.py	/^_types = []$/;"	v
 _types_by_name	spice-common/python_modules/ptypes.py	/^_types_by_name = {}$/;"	v
+_ud	server/red_spice_common_defines.h	/^   void* _ud;$/;"	m	struct:LCXCALLBACK
 _unallocated_readers_by_vreader	client/smartcard_channel.h	/^    readers_by_vreader_t _unallocated_readers_by_vreader;$/;"	m	class:SmartCardChannel
 _uncompressed_data	client/display_channel.cpp	/^    uint8_t *_uncompressed_data;$/;"	m	class:VideoStream	file:
 _undim_info_list	client/gui/gui.cpp	/^    std::list<UndimInfo*> _undim_info_list;$/;"	m	class:GUI::Dialog	file:
@@ -8527,8 +8566,10 @@ as_fn_unset	spice-common/spice-protocol/configure	/^as_fn_unset ()$/;"	f
 assign	spice-common/python_modules/codegen.py	/^    def assign(self, var, val):$/;"	m	class:CodeWriter
 assign_monitors	client/application.cpp	/^void Application::assign_monitors()$/;"	f	class:Application
 async_command_alloc	server/red_dispatcher.c	/^static AsyncCommand *async_command_alloc(RedDispatcher *dispatcher,$/;"	f	file:
+async_commands	server/red_decoding_dispatcher.h	/^    Ring async_commands;$/;"	m	struct:DecodingDispatcher
 async_commands	server/red_dispatcher.c	/^    Ring async_commands;$/;"	m	struct:RedDispatcher	file:
 async_complete	server/spice.h	/^    void (*async_complete)(QXLInstance *qin, uint64_t cookie);$/;"	m	struct:QXLInterface
+async_lock	server/red_decoding_dispatcher.h	/^    pthread_mutex_t  async_lock;$/;"	m	struct:DecodingDispatcher
 async_lock	server/red_dispatcher.c	/^    pthread_mutex_t  async_lock;$/;"	m	struct:RedDispatcher	file:
 async_read	server/reds_stream.c	/^    AsyncRead async_read;$/;"	m	struct:RedsStreamPrivate	file:
 async_read_clear_handlers	server/reds_stream.c	/^static inline void async_read_clear_handlers(AsyncRead *async)$/;"	f	file:
@@ -8573,6 +8614,7 @@ b	spice-common/common/quic.c	/^    BYTE b;$/;"	m	struct:four_bytes_pixel_t	file:
 b	spice-common/common/quic.c	/^    BYTE b;$/;"	m	struct:rgb24_pixel_t	file:
 b	spice-common/common/quic.c	/^    BYTE b;$/;"	m	struct:rgb32_pixel_t	file:
 b	spice-common/common/quic.c	/^    BYTE b;$/;"	m	struct:three_bytes_pixel_t	file:
+bClose	server/red_threading.h	/^   bool bClose;$/;"	m	struct:RedBaseThreading
 back_area	spice-common/common/draw.h	/^    SpiceRect back_area;$/;"	m	struct:SpiceText
 back_area	spice-common/spice-protocol/spice/qxl_dev.h	/^    QXLRect back_area;$/;"	m	struct:QXLText
 back_brush	spice-common/common/draw.h	/^    SpiceBrush back_brush;$/;"	m	struct:SpiceText
@@ -8693,6 +8735,7 @@ base_channel	server/snd_worker.c	/^    RedChannel *base_channel;$/;"	m	struct:Sn
 base_enc_size	server/mjpeg_encoder.c	/^    uint64_t base_enc_size;$/;"	m	struct:MJpegEncoderRateControl	file:
 basic_event_loop_init	server/tests/basic_event_loop.c	/^SpiceCoreInterface *basic_event_loop_init(void)$/;"	f
 basic_event_loop_mainloop	server/tests/basic_event_loop.c	/^void basic_event_loop_mainloop(void)$/;"	f
+bbox	server/red_decoding_data.h	/^   SpiceRect bbox;$/;"	m	struct:SpiceDecodingData
 bbox	server/red_parse_qxl.h	/^    SpiceRect bbox;$/;"	m	struct:RedDrawable
 bbox	server/tests/test_display_base.h	/^    QXLRect bbox;$/;"	m	struct:CommandDrawBitmap
 bbox	server/tests/test_display_base.h	/^    QXLRect bbox;$/;"	m	struct:CommandDrawSolid
@@ -8728,6 +8771,7 @@ bindir	spice-common/spice-protocol/Makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
 bindir	spice-common/spice-protocol/spice/Makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
 bit	client/windows/platform.cpp	/^    int bit;$/;"	m	struct:KeyboardModifier	file:
 bit_rate	server/h264_type.h	/^    int bit_rate;$/;"	m	struct:_H264StreamInfo
+bit_rate	server/red_dispatcher.h	/^   int bit_rate;$/;"	m	struct:RedWorkerMessageSetStreamingVideoInfo
 bit_rate_info	server/mjpeg_encoder.c	/^    MJpegEncoderBitRateInfo bit_rate_info;$/;"	m	struct:MJpegEncoderRateControl	file:
 bitat	spice-common/common/quic.c	/^static const unsigned int bitat[32] = {$/;"	v	file:
 bitmap	server/tests/test_display_base.c	/^    uint8_t *bitmap;$/;"	m	struct:SimpleSpiceUpdate	file:
@@ -8758,6 +8802,7 @@ bitmap_fmt_is_rgb	server/red_common.h	/^static inline int bitmap_fmt_is_rgb(uint
 bitmap_format_to_string	server/red_parse_qxl.c	/^static const char *bitmap_format_to_string(int format)$/;"	f	file:
 bitmap_offset	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint16_t bitmap_offset;$/;"	m	struct:QXLCompatDrawable
 bitrate_per_sec	server/main_channel.c	/^    uint64_t bitrate_per_sec;$/;"	m	struct:MainChannelClient	file:
+bits	server/red_decoding_data.h	/^   char * bits; $/;"	m	struct:SpiceDecodingData
 bits	server/red_dispatcher.c	/^    uint32_t bits;$/;"	m	struct:RedWorkeState	file:
 bits	server/spice.h	/^    uint32_t bits;$/;"	m	struct:QXLDevInfo
 bits	spice-common/common/messages.h	/^    uint32_t bits;$/;"	m	struct:SpiceMsgDisplayMode
@@ -8922,7 +8967,7 @@ buttons_state	spice-common/common/messages.h	/^    int32_t buttons_state;$/;"	m	
 buttons_state	spice-common/common/messages.h	/^    uint32_t buttons_state;$/;"	m	struct:SpiceMsgcMouseMotion
 buttons_state	spice-common/common/messages.h	/^    uint32_t buttons_state;$/;"	m	struct:SpiceMsgcMousePosition
 byte_rate	server/mjpeg_encoder.c	/^    uint64_t byte_rate;$/;"	m	struct:MJpegEncoderRateControl	file:
-bytes_count	server/glz_encoder.c	/^        size_t bytes_count;$/;"	m	struct:Encoder::__anon203	file:
+bytes_count	server/glz_encoder.c	/^        size_t bytes_count;$/;"	m	struct:Encoder::__anon204	file:
 bytes_per_pixel	server/mjpeg_encoder.c	/^    unsigned int bytes_per_pixel; \/* bytes per pixel of the input buffer *\/$/;"	m	struct:MJpegEncoder	file:
 c	spice-common/common/quic.c	/^    BYTE c;$/;"	m	struct:four_bytes_pixel_t	file:
 c	spice-common/common/quic.c	/^    BYTE c;$/;"	m	struct:three_bytes_pixel_t	file:
@@ -9453,6 +9498,8 @@ copy_bits	spice-common/spice-protocol/spice/qxl_dev.h	/^        QXLCopyBits copy
 copy_bits	spice-common/spice-protocol/spice/qxl_dev.h	/^        QXLCopyBits copy_bits;$/;"	m	union:QXLDrawable::__anon77
 copy_bits_down	spice-common/common/pixman_utils.c	/^static void copy_bits_down(uint8_t *data, const int stride, int bpp,$/;"	f	file:
 copy_bits_same_line	spice-common/common/pixman_utils.c	/^static void copy_bits_same_line(uint8_t *data, const int stride, int bpp,$/;"	f	file:
+copy_bits_to_decoding_threading	server/red_decoding_data.c	/^void copy_bits_to_decoding_threading(RedDecodingThreading * threading,char* bits,int size,SpiceRect *bbox)$/;"	f
+copy_bits_to_decoding_threading	server/red_decoding_data.h	/^   void (*copy_bits_to_decoding_threading)(RedDecodingThreading * threading,char* bits,int size,SpiceRect *bbox);$/;"	m	struct:RedDecodingThreading
 copy_bits_up	spice-common/common/pixman_utils.c	/^static void copy_bits_up(uint8_t *data, const int stride, int bpp,$/;"	f	file:
 copy_opposite_image	spice-common/common/gl_canvas.c	/^static inline uint8_t *copy_opposite_image(GLCanvas *canvas, void *data, int stride, int height)$/;"	f	file:
 copy_paste_enabled	server/agent-msg-filter.h	/^    int copy_paste_enabled;$/;"	m	struct:AgentMsgFilter
@@ -9528,6 +9575,7 @@ create_bitmap_from_pixman	spice-common/common/gdi_canvas.c	/^static uint8_t *cre
 create_canvas	client/display_channel.cpp	/^void DisplayChannel::create_canvas(int surface_id, const std::vector<int>& canvas_types, int width,$/;"	f	class:DisplayChannel
 create_canvas_for_surface	server/red_worker.c	/^static inline void *create_canvas_for_surface(RedWorker *worker, RedSurface *surface,$/;"	f	file:
 create_channel	client/red_client.cpp	/^void RedClient::create_channel(uint32_t type, uint32_t id)$/;"	f	class:RedClient
+create_client_stream_global	server/red_worker.c	/^static void create_client_stream_global(RedWorker *worker)$/;"	f	file:
 create_clipped_frame	server/tests/test_display_streaming.c	/^static void create_clipped_frame(Test *test, Command *command, int clipping_factor)$/;"	f	file:
 create_compatible_dc	client/windows/platform_utils.cpp	/^HDC create_compatible_dc()$/;"	f
 create_compatible_dc	spice-common/common/canvas_base.c	/^static HDC create_compatible_dc()$/;"	f	file:
@@ -9567,6 +9615,7 @@ create_primary_surface	server/tests/test_display_base.c	/^static void create_pri
 create_recorder	client/windows/platform.cpp	/^WaveRecordAbstract* Platform::create_recorder(RecordClient& client,$/;"	f	class:Platform
 create_recorder	client/x11/platform.cpp	/^WaveRecordAbstract* Platform::create_recorder(RecordClient& client,$/;"	f	class:Platform
 create_socket	client/x11/named_pipe.cpp	/^int LinuxListener::create_socket(const char *socket_name)$/;"	f	class:LinuxListener
+create_spice_decoding_threading_h264_streaming	server/red_decoding_data.c	/^static void create_spice_decoding_threading_h264_streaming(H264Encoder* h264_encoder,enum AVPixelFormat pix_fmt,$/;"	f	file:
 create_surface	client/display_channel.cpp	/^void DisplayChannel::create_surface(int surface_id, int width, int height, uint32_t format)$/;"	f	class:DisplayChannel
 create_surface	server/tests/test_display_base.c	/^static SimpleSurfaceCmd *create_surface(int surface_id, int format, int width, int height, uint8_t *data)$/;"	f	file:
 create_surface	server/tests/test_display_base.h	/^        CommandCreateSurface create_surface;$/;"	m	union:Command::__anon131
@@ -9583,7 +9632,7 @@ crtc_overlap_test	client/x11/platform.cpp	/^XMonitor* MultyMonScreen::crtc_overl
 ctx	server/reds-private.h	/^    SSL_CTX *ctx;$/;"	m	struct:RedsState
 cur_bit_rate	server/mjpeg_encoder.h	/^    uint64_t cur_bit_rate;$/;"	m	struct:MJpegEncoderStats
 cur_dash	spice-common/common/glc.c	/^    int cur_dash;$/;"	m	struct:LineDash	file:
-cur_image	server/glz_encoder.c	/^    } cur_image;$/;"	m	struct:Encoder	typeref:struct:Encoder::__anon202	file:
+cur_image	server/glz_encoder.c	/^    } cur_image;$/;"	m	struct:Encoder	typeref:struct:Encoder::__anon203	file:
 cur_image	server/jpeg_encoder.c	/^    } cur_image;$/;"	m	struct:JpegEncoder	typeref:struct:JpegEncoder::__anon167	file:
 cur_usr	server/glz_encoder_dictionary_protected.h	/^    GlzEncoderUsrContext       *cur_usr; \/\/ each encoder has other context.$/;"	m	struct:SharedDictionary
 cur_write_buf	server/char_device.c	/^    SpiceCharDeviceWriteBuffer *cur_write_buf;$/;"	m	struct:SpiceCharDeviceState	file:
@@ -9804,6 +9853,8 @@ decode_header	client/glz_decoder.cpp	/^void GlzDecoder::decode_header()$/;"	f	cl
 decode_run	spice-common/common/quic.c	/^static inline unsigned int decode_run(Encoder *encoder)$/;"	f	file:
 decode_run	spice-common/common/quic.c	/^static int decode_run(Encoder *encoder)$/;"	f	file:
 decoder	spice-common/common/canvas_base.c	/^    SpiceGlzDecoder *decoder;$/;"	m	struct:GlzData	file:
+decoding_threading_delete	server/red_decoding_data.c	/^void decoding_threading_delete(RedDecodingThreading * threading)$/;"	f
+decoding_threading_new	server/red_decoding_data.c	/^RedDecodingThreading * decoding_threading_new()$/;"	f
 decompress	spice-common/common/lz_decompress_tmpl.c	/^static size_t FNAME(decompress)(Encoder *encoder, OUT_PIXEL *out_buf, int size)$/;"	f	file:
 decorelate	spice-common/common/quic_tmpl.c	/^static inline BYTE FNAME(decorelate)(const PIXEL *const prev, const PIXEL * const curr,$/;"	f	file:
 decorelate_0	spice-common/common/quic_tmpl.c	/^static inline BYTE FNAME(decorelate_0)(const PIXEL * const curr, const unsigned int bpc_mask)$/;"	f	file:
@@ -9872,6 +9923,7 @@ destroyTexture	client/gui/softrenderer.cpp	/^void SoftRenderer::destroyTexture(T
 destroy_all_surfaces	client/display_channel.cpp	/^void DisplayChannel::destroy_all_surfaces()$/;"	f	class:DisplayChannel
 destroy_canvas	client/display_channel.cpp	/^void DisplayChannel::destroy_canvas(int surface_id)$/;"	f	class:DisplayChannel
 destroy_channel	spice-common/common/quic.c	/^static void destroy_channel(Channel *channel)$/;"	f	file:
+destroy_client_stream_global	server/red_worker.c	/^static void destroy_client_stream_global(RedWorker *worker)$/;"	f	file:
 destroy_composit_area	client/screen.cpp	/^void RedScreen::destroy_composit_area()$/;"	f	class:RedScreen
 destroy_connection	client/windows/platform.cpp	/^void NamedPipe::destroy_connection(ConnectionRef conn_ref)$/;"	f	class:NamedPipe
 destroy_connection	client/x11/platform.cpp	/^void NamedPipe::destroy_connection(ConnectionRef conn_ref)$/;"	f	class:NamedPipe
@@ -9927,6 +9979,7 @@ disconnect_channels	client/red_client.cpp	/^void RedClient::disconnect_channels(
 disconnect_migration_src	client/red_channel.cpp	/^void RedChannel::disconnect_migration_src()$/;"	f	class:RedChannel
 disconnecting	server/red_channel.h	/^    int disconnecting;$/;"	m	struct:RedClient
 dispatch_agent_message	client/red_client.cpp	/^void RedClient::dispatch_agent_message(VDAgentMessage* msg, void* data)$/;"	f	class:RedClient
+dispatcher	server/red_decoding_dispatcher.h	/^    Dispatcher dispatcher;$/;"	m	struct:DecodingDispatcher
 dispatcher	server/red_dispatcher.c	/^    Dispatcher dispatcher;$/;"	m	struct:RedDispatcher	file:
 dispatcher	server/reds.h	/^    struct RedDispatcher  *dispatcher;$/;"	m	struct:QXLState	typeref:struct:QXLState::RedDispatcher
 dispatcher_allows_client_mouse	server/reds-private.h	/^    int dispatcher_allows_client_mouse;$/;"	m	struct:RedsState
@@ -9992,6 +10045,7 @@ distuninstallcheck_listfiles	Makefile	/^distuninstallcheck_listfiles = find . -t
 distuninstallcheck_listfiles	spice-common/Makefile	/^distuninstallcheck_listfiles = find . -type f -print$/;"	m
 distuninstallcheck_listfiles	spice-common/spice-protocol/Makefile	/^distuninstallcheck_listfiles = find . -type f -print$/;"	m
 doRender	client/gui/softrenderer.cpp	/^void SoftRenderer::doRender()$/;"	f	class:CEGUI::SoftRenderer
+do_callback	server/red_decoding_data.c	/^static void do_callback(RedDecodingThreading * threading,char * slice,int outbuf_size)$/;"	f	file:
 do_command	client/application.cpp	/^void Application::do_command(int command)$/;"	f	class:Application
 do_connect	client/application.cpp	/^bool Application::do_connect()$/;"	f	class:Application
 do_destroy_all_surfaces	client/display_channel.cpp	/^void DisplayChannel::do_destroy_all_surfaces()$/;"	f	class:DisplayChannel
@@ -10201,7 +10255,7 @@ encoder_usr_more_space	server/red_worker.c	/^static inline int encoder_usr_more_
 encoders_heads	server/glz_encoder_dictionary_protected.h	/^        uint32_t            *encoders_heads; \/\/ Holds for each encoder (by id), the window head when$/;"	m	struct:SharedDictionary::__anon170
 encrypted_data	spice-common/spice-protocol/spice/protocol.h	/^    uint8_t encrypted_data[SPICE_TICKET_KEY_PAIR_LENGTH \/ 8];$/;"	m	struct:SpiceLinkEncryptedTicket
 encrypted_ticket	server/reds-private.h	/^    SpiceLinkEncryptedTicket encrypted_ticket;$/;"	m	struct:TicketInfo
-end	server/glz_encoder.c	/^        uint8_t            *end;$/;"	m	struct:Encoder::__anon203	file:
+end	server/glz_encoder.c	/^        uint8_t            *end;$/;"	m	struct:Encoder::__anon204	file:
 end	server/red_worker.c	/^   uint64_t end;$/;"	m	struct:StreamStats	file:
 end	server/reds_stream.c	/^    uint8_t *end;$/;"	m	struct:AsyncRead	file:
 end	server/snd_worker.c	/^        uint8_t *end;$/;"	m	struct:SndChannel::__anon140	file:
@@ -10306,6 +10360,7 @@ family_stat_8bpc	spice-common/common/quic.c	/^    FamilyStat family_stat_8bpc;$/
 fb_config	client/x11/platform.cpp	/^static GLXFBConfig **fb_config = NULL;$/;"	v	file:
 fbo	client/x11/pixels_source_p.h	/^                GLuint fbo;$/;"	m	union:PixelsSource_p::__anon116::__anon118::__anon119
 fbo	client/x11/pixels_source_p.h	/^                GLuint fbo;$/;"	m	union:PixelsSource_p::__anon116::__anon120::__anon121
+fd	server/red_decoding_data.h	/^   int fd[2];$/;"	m	struct:RedDecodingThreading
 fd	server/tests/basic_event_loop.c	/^    int fd;$/;"	m	struct:SpiceWatch	file:
 fgGroup	spice-common/common/lines.c	/^    SpanGroup fgGroup, bgGroup;$/;"	m	struct:_SpanData	file:
 file_xfer_enabled	server/agent-msg-filter.h	/^    int file_xfer_enabled;$/;"	m	struct:AgentMsgFilter
@@ -10374,7 +10429,7 @@ find_sub	client/menu.cpp	/^Menu* Menu::find_sub(int id)$/;"	f	class:Menu
 first_child_index	spice-common/spice-protocol/spice/stats.h	/^    uint32_t first_child_index;$/;"	m	struct:SpiceStatNode
 first_frame	server/mjpeg_encoder.c	/^    int first_frame;$/;"	m	struct:MJpegEncoder	file:
 first_seg	server/glz_encoder_dictionary_protected.h	/^    uint32_t first_seg;$/;"	m	struct:WindowImage
-first_win_seg	server/glz_encoder.c	/^        uint32_t first_win_seg;$/;"	m	struct:Encoder::__anon202	file:
+first_win_seg	server/glz_encoder.c	/^        uint32_t first_win_seg;$/;"	m	struct:Encoder::__anon203	file:
 fix_to_double	spice-common/common/canvas_base.c	/^static inline double fix_to_double(SPICE_FIXED28_4 fixed)$/;"	f	file:
 fix_to_int	spice-common/common/canvas_base.c	/^ static inline int fix_to_int(SPICE_FIXED28_4 fixed)$/;"	f	file:
 flags	server/red_parse_qxl.h	/^    uint32_t flags;$/;"	m	struct:RedSurfaceCmd
@@ -10418,6 +10473,7 @@ flush_all_qxl_commands	server/red_worker.c	/^static inline void flush_all_qxl_co
 flush_all_surfaces	server/red_worker.c	/^static void flush_all_surfaces(RedWorker *worker)$/;"	f	file:
 flush_cursor_commands	server/red_worker.c	/^static inline void flush_cursor_commands(RedWorker *worker)$/;"	f	file:
 flush_display_commands	server/red_worker.c	/^static inline void flush_display_commands(RedWorker *worker)$/;"	f	file:
+flush_frame_timer	server/red_worker.c	/^    SpiceTimer *flush_frame_timer;$/;"	m	struct:RedWorker	file:
 flush_resources	server/spice.h	/^    int (*flush_resources)(QXLInstance *qin);$/;"	m	struct:QXLInterface
 flush_resources	server/tests/test_display_base.c	/^static int flush_resources(QXLInstance *qin)$/;"	f	file:
 focus_count	client/x11/platform.cpp	/^static int focus_count = 0;$/;"	v	file:
@@ -10457,9 +10513,11 @@ format_to_pixman	client/red_drawable.h	/^    static pixman_format_code_t format_
 four_bytes_pixel_t	spice-common/common/quic.c	/^typedef struct ATTR_PACKED four_bytes_pixel_t {$/;"	s	file:
 four_bytes_t	spice-common/common/quic.c	/^} four_bytes_t;$/;"	t	typeref:struct:four_bytes_pixel_t	file:
 fps	server/mjpeg_encoder.c	/^    uint32_t fps;$/;"	m	struct:MJpegEncoderRateControl	file:
+fps	server/red_dispatcher.h	/^   int fps;$/;"	m	struct:RedWorkerMessageSetStreamingVideoInfo
 fps	server/red_worker.c	/^    int fps;$/;"	m	struct:StreamAgent	file:
 frame	server/tests/test_playback.c	/^uint32_t *frame;$/;"	v
 frame_drawable	client/x11/red_drawable.cpp	/^static inline void frame_drawable(RedDrawable_p* dest, const SpiceRect& area, rgb32_t color,$/;"	f	file:
+frame_mm_time	server/red_decoding_data.h	/^   uint32_t frame_mm_time;$/;"	m	struct:H264DataItem
 frame_pixmap	client/x11/red_drawable.cpp	/^static inline void frame_pixmap(RedDrawable_p* dest, const SpiceRect& area, rgb32_t color,$/;"	f	file:
 frame_rect	client/windows/red_drawable.cpp	/^void RedDrawable::frame_rect(const SpiceRect& rect, rgb32_t color)$/;"	f	class:RedDrawable
 frame_rect	client/x11/red_drawable.cpp	/^void RedDrawable::frame_rect(const SpiceRect& area, rgb32_t color)$/;"	f	class:RedDrawable
@@ -11046,10 +11104,17 @@ g	spice-common/common/lz.c	/^    uint8_t g;$/;"	m	struct:rgb24_pixel_t	file:
 g	spice-common/common/lz.c	/^    uint8_t g;$/;"	m	struct:rgb32_pixel_t	file:
 g	spice-common/common/quic.c	/^    BYTE g;$/;"	m	struct:rgb24_pixel_t	file:
 g	spice-common/common/quic.c	/^    BYTE g;$/;"	m	struct:rgb32_pixel_t	file:
+g_base_thread	server/red_threading.h	/^   pthread_t g_base_thread;$/;"	m	struct:RedBaseThreading
+g_create_item	server/red_worker.c	/^    PipeItem g_create_item;$/;"	m	struct:RedWorker	file:
+g_decoding_data	server/red_decoding_data.h	/^   SpiceDecodingData g_decoding_data; $/;"	m	struct:RedDecodingThreading
+g_destroy_item	server/red_worker.c	/^    PipeItem g_destroy_item;$/;"	m	struct:RedWorker	file:
+g_h264_encoder	server/red_decoding_data.h	/^   H264Encoder *g_h264_encoder;$/;"	m	struct:RedDecodingThreading
+g_h264_encoder	server/red_worker.c	/^    H264Encoder *g_h264_encoder;$/;"	m	struct:RedWorker	file:
 g_inputs_channel	server/inputs_channel.c	/^static InputsChannel *g_inputs_channel = NULL;$/;"	v	file:
 g_smartcard_channel	client/smartcard_channel.cpp	/^SmartCardChannel* g_smartcard_channel = NULL; \/\/ used for insert\/remove of virtual card. Can be$/;"	v
 g_smartcard_channel	server/smartcard.c	/^SmartCardChannel *g_smartcard_channel;$/;"	v
 g_smartcard_readers	server/smartcard.c	/^} g_smartcard_readers = {0, {NULL}};$/;"	v	typeref:struct:Readers	file:
+g_stream_timout_item	server/red_worker.c	/^    PipeItem g_stream_timout_item;$/;"	m	struct:RedWorker	file:
 g_surface_data	server/tests/test_display_width_stride.c	/^static uint8_t *g_surface_data;$/;"	v	file:
 g_surface_id	server/tests/test_display_width_stride.c	/^static int g_surface_id = 1;$/;"	v	file:
 g_vcard_inited	client/smartcard_channel.cpp	/^static bool g_vcard_inited = false;$/;"	v	file:
@@ -11212,6 +11277,9 @@ get_generation	server/red_memslots.h	/^static inline int get_generation(RedMemSl
 get_glz_window	client/red_client.h	/^    GlzDecoderWindow& get_glz_window() {return _glz_window;}$/;"	f	class:RedClient
 get_glz_window_size	client/red_client.h	/^    int get_glz_window_size() { return _glz_window_size;}$/;"	f	class:RedClient
 get_h264_encode_frame_buffer	server/red_worker.c	/^static int get_h264_encode_frame_buffer(DisplayChannelClient *dcc, const SpiceRect *src,$/;"	f	file:
+get_h264_slice_data_from_decoding_threading	server/red_decoding_data.c	/^static void get_h264_slice_data_from_decoding_threading(RedDecodingThreading * threading,$/;"	f	file:
+get_h264_slice_from_decoding_threading	server/red_decoding_data.c	/^void get_h264_slice_from_decoding_threading(RedDecodingThreading * threading,char * slice , int *size)$/;"	f
+get_h264_slice_from_decoding_threading	server/red_decoding_data.h	/^   void (*get_h264_slice_from_decoding_threading)(RedDecodingThreading * threading,char ** slice , int *size);$/;"	m	struct:RedDecodingThreading
 get_handle	client/windows/win_platform.h	/^    HICON get_handle() {return _icon;}$/;"	f	class:WinIcon
 get_head	client/x11/platform.cpp	/^    static int get_head(const SpiceRect& area)$/;"	f	class:BottomVariant
 get_head	client/x11/platform.cpp	/^    static int get_head(const SpiceRect& area)$/;"	f	class:LeftVariant
@@ -11398,6 +11466,8 @@ get_socket	client/x11/named_pipe.h	/^    virtual int get_socket() {return _liste
 get_soonest_timeout	client/process_loop.cpp	/^unsigned ProcessLoop::get_soonest_timeout()$/;"	f	class:ProcessLoop
 get_soonest_timeout	client/process_loop.cpp	/^unsigned int TimersQueue::get_soonest_timeout()$/;"	f	class:TimersQueue
 get_source_fps	server/mjpeg_encoder.h	/^    uint32_t (*get_source_fps)(void *opaque);$/;"	m	struct:MJpegEncoderRateControlCbs
+get_spice_base_threading_close	server/red_threading.c	/^int get_spice_base_threading_close(RedBaseThreading * basethreading)$/;"	f
+get_spice_base_threading_close	server/red_threading.h	/^   int (*get_spice_base_threading_close)(RedBaseThreading * basethreading);$/;"	m	struct:RedBaseThreading
 get_sport	client/application.cpp	/^int Application::get_sport()$/;"	f	class:Application
 get_sport	client/red_client.h	/^    int get_sport() { return _sport;}$/;"	f	class:RedClient
 get_state	client/menu.h	/^        int get_state() { return _state;}$/;"	f	class:Menu::MenuCommand
@@ -11603,8 +11673,10 @@ group_start	spice-common/common/canvas_base.h	/^    void (*group_start)(SpiceCan
 guest_set_client_capabilities	server/red_worker.c	/^static void guest_set_client_capabilities(RedWorker *worker)$/;"	f	file:
 gui_system	client/gui/gui.cpp	/^    CEGUI::System& gui_system() { return _gui.gui_system();}$/;"	f	class:GUI::Dialog
 gui_system	client/gui/gui.h	/^    CEGUI::System& gui_system() { return *_gui_system;}$/;"	f	class:GUI
+h264_data_list	server/red_decoding_data.h	/^   Ring h264_data_list;$/;"	m	struct:RedDecodingThreading
 h264_encode	server/h264_encoder.c	/^int h264_encode(H264Encoder * encoder,char * rgb,int rgb_len,char *slice,int *slice_len)$/;"	f
 h264_encoder	server/red_worker.c	/^    H264Encoder *h264_encoder;$/;"	m	struct:StreamAgent	file:
+h264_encoder_delete	server/h264_encoder.c	/^void h264_encoder_delete(H264Encoder * encoder)$/;"	f
 h264_encoder_env_init	server/h264_encoder.c	/^void  h264_encoder_env_init()$/;"	f
 h264_encoder_get_bits_per_pixel	server/h264_encoder.c	/^int h264_encoder_get_bits_per_pixel(H264Encoder * encoder)$/;"	f
 h264_encoder_get_bytes_per_pixel	server/h264_encoder.c	/^int h264_encoder_get_bytes_per_pixel(H264Encoder * encoder)$/;"	f
@@ -11666,6 +11738,7 @@ handle_dev_set_compression	server/red_worker.c	/^void handle_dev_set_compression
 handle_dev_set_mouse_mode	server/red_worker.c	/^void handle_dev_set_mouse_mode(void *opaque, void *payload)$/;"	f
 handle_dev_set_streaming_video	server/red_worker.c	/^void handle_dev_set_streaming_video(void *opaque, void *payload)$/;"	f
 handle_dev_set_streaming_video_compression	server/red_worker.c	/^void handle_dev_set_streaming_video_compression(void *opaque, void *payload)$/;"	f
+handle_dev_set_streaming_video_info	server/red_worker.c	/^void handle_dev_set_streaming_video_info(void *opaque, void *payload)$/;"	f
 handle_dev_start	server/red_worker.c	/^void handle_dev_start(void *opaque, void *payload)$/;"	f
 handle_dev_stop	server/red_worker.c	/^void handle_dev_stop(void *opaque, void *payload)$/;"	f
 handle_dev_update	server/red_worker.c	/^void handle_dev_update(void *opaque, void *payload)$/;"	f
@@ -11955,7 +12028,7 @@ id	client/playback_channel.cpp	/^    uint32_t id;$/;"	m	struct:ChunkHeader	file:
 id	client/shared_cache.hpp	/^        uint64_t id;$/;"	m	class:SharedCache::Item
 id	client/x11/res.cpp	/^    int id;$/;"	m	struct:ResIcon	file:
 id	client/x11/res.cpp	/^    int id;$/;"	m	struct:ResImage	file:
-id	server/glz_encoder.c	/^        uint32_t id;$/;"	m	struct:Encoder::__anon202	file:
+id	server/glz_encoder.c	/^        uint32_t id;$/;"	m	struct:Encoder::__anon203	file:
 id	server/glz_encoder.c	/^    uint8_t id;$/;"	m	struct:Encoder	file:
 id	server/glz_encoder_dictionary_protected.h	/^    uint64_t id;$/;"	m	struct:WindowImage
 id	server/migration_protocol.h	/^    uint32_t id;$/;"	m	struct:MigrateDisplaySurfaceLossless
@@ -12127,6 +12200,14 @@ init_scan_code	client/inputs_channel.cpp	/^void InputsChannel::init_scan_code(in
 init_scan_table	client/inputs_channel.cpp	/^void InputsChannel::init_scan_table()$/;"	f	class:InputsChannel
 init_sent	server/main_channel.c	/^    int init_sent;$/;"	m	struct:MainChannelClient	file:
 init_source	client/mjpeg_decoder.cpp	/^    static void init_source(j_decompress_ptr cinfo)$/;"	f	file:
+init_spice_base_threading	server/red_threading.c	/^void init_spice_base_threading(RedBaseThreading * basethreading,void* (*start_rtn)(void*))$/;"	f
+init_spice_base_threading	server/red_threading.h	/^   void (*init_spice_base_threading)(RedBaseThreading * basethreading,void* (*start_rtn)(void*));$/;"	m	struct:RedBaseThreading
+init_spice_base_threading_data	server/red_threading.c	/^void init_spice_base_threading_data(RedBaseThreading* basethreading,void* thread_data)$/;"	f
+init_spice_base_threading_data	server/red_threading.h	/^   void (*init_spice_base_threading_data)(RedBaseThreading* basethreading,void* thread_data);$/;"	m	struct:RedBaseThreading
+init_spice_decoding_threading	server/red_decoding_data.c	/^void init_spice_decoding_threading(RedDecodingThreading * threading,void *worker,int bits_size,SpiceRect *bbox,$/;"	f
+init_spice_decoding_threading	server/red_decoding_data.h	/^   void (*init_spice_decoding_threading)(RedDecodingThreading * threading,void *worker,int bits_size,SpiceRect *bbox,LCXCALLBACK *job,enum AVPixelFormat pix_fmt,int fr,int br);$/;"	m	struct:RedDecodingThreading
+init_spice_decoding_threading_data	server/red_decoding_data.c	/^void init_spice_decoding_threading_data(RedDecodingThreading* threading,int bits_size,SpiceRect *bbox)$/;"	f
+init_spice_decoding_threading_data	server/red_decoding_data.h	/^   void (*init_spice_decoding_threading_data)(RedDecodingThreading* threading,int bits_size,SpiceRect *bbox);$/;"	m	struct:RedDecodingThreading
 init_vcard_local_certs	client/smartcard_channel.cpp	/^static VCardEmulError init_vcard_local_certs(const char* dbname, const char* cert1,$/;"	f	file:
 init_vd_agent_resources	server/reds.c	/^static void init_vd_agent_resources(void)$/;"	f	file:
 init_version_string	client/windows/main.cpp	/^static void init_version_string()$/;"	f	file:
@@ -12170,6 +12251,8 @@ inputs_set_mouse	server/inputs_channel.c	/^int inputs_set_mouse(SpiceMouseInstan
 inputs_set_tablet	server/inputs_channel.c	/^int inputs_set_tablet(SpiceTabletInstance *_tablet)$/;"	f
 inputs_set_tablet_logical_size	server/inputs_channel.c	/^void inputs_set_tablet_logical_size(int x_res, int y_res)$/;"	f
 insert_command	client/windows/red_window.cpp	/^static void insert_command(HMENU menu, const std::string& name, int id, int state)$/;"	f	file:
+insert_h264_slice_in_decoding_threading	server/red_decoding_data.c	/^void insert_h264_slice_in_decoding_threading(RedDecodingThreading * threading,char* slice,int size)$/;"	f
+insert_h264_slice_in_decoding_threading	server/red_decoding_data.h	/^   void (*insert_h264_slice_in_decoding_threading)(RedDecodingThreading * threading,char* slice,int size);$/;"	m	struct:RedDecodingThreading
 insert_menu	client/windows/red_window.cpp	/^static void insert_menu(Menu* menu, HMENU native, CommandMap& _commands_map)$/;"	f	file:
 insert_separator	client/windows/red_window.cpp	/^static void insert_separator(HMENU menu)$/;"	f	file:
 insert_stat_node	server/reds.c	/^static void insert_stat_node(StatNodeRef parent, StatNodeRef ref)$/;"	f	file:
@@ -12262,7 +12345,7 @@ invalidate_rect	client/screen_layer.cpp	/^uint64_t ScreenLayer::invalidate_rect(
 invers	server/red_parse_qxl.h	/^        SpiceInvers invers;$/;"	m	union:RedDrawable::__anon161
 invers	spice-common/spice-protocol/spice/qxl_dev.h	/^        QXLInvers invers;$/;"	m	union:QXLCompatDrawable::__anon76
 invers	spice-common/spice-protocol/spice/qxl_dev.h	/^        QXLInvers invers;$/;"	m	union:QXLDrawable::__anon77
-io	server/glz_encoder.c	/^    } io;$/;"	m	struct:Encoder	typeref:struct:Encoder::__anon203	file:
+io	server/glz_encoder.c	/^    } io;$/;"	m	struct:Encoder	typeref:struct:Encoder::__anon204	file:
 io_available_bits	spice-common/common/quic.c	/^    unsigned int io_available_bits;$/;"	m	struct:Encoder	file:
 io_base	server/red_dispatcher.c	/^    uint8_t *io_base;$/;"	m	struct:RedWorkeState	file:
 io_bytes_count	spice-common/common/lz.c	/^    size_t io_bytes_count;$/;"	m	struct:Encoder	file:
@@ -12393,6 +12476,7 @@ is_visible	client/gui/gui.h	/^    bool is_visible() { return !!_dialog;}$/;"	f	c
 is_x_shm_avail	client/x11/platform.cpp	/^bool XPlatform::is_x_shm_avail()$/;"	f	class:XPlatform
 item	server/red_channel.h	/^            PipeItem *item;$/;"	m	struct:RedChannelClient::__anon148::__anon149
 item	server/red_channel.h	/^        PipeItem *item;$/;"	m	struct:RedChannelClient::__anon148
+item	server/red_decoding_data.h	/^   RingItem  item;$/;"	m	struct:H264DataItem
 item_nr	spice-common/common/marshaller.c	/^    int item_nr;$/;"	m	struct:__anon19	file:
 item_type_at	client/menu.cpp	/^Menu::ItemType Menu::item_type_at(int pos)$/;"	f	class:Menu
 items	server/red_worker.c	/^    Ring items;$/;"	m	struct:Container	file:
@@ -12405,6 +12489,7 @@ jerr	server/mjpeg_encoder.c	/^    struct jpeg_error_mgr jerr;$/;"	m	struct:MJpeg
 jmp_env	server/red_worker.c	/^    jmp_buf jmp_env;$/;"	m	struct:__anon177	file:
 jmp_env	spice-common/common/canvas_base.c	/^    jmp_buf jmp_env;$/;"	m	struct:LzData	file:
 jmp_env	spice-common/common/canvas_base.c	/^    jmp_buf jmp_env;$/;"	m	struct:QuicData	file:
+job	server/red_decoding_data.h	/^   LCXCALLBACK job;$/;"	m	struct:RedDecodingThreading
 join	client/threads.cpp	/^void Thread::join()$/;"	f	class:Thread
 joinStyle	spice-common/common/lines.h	/^    unsigned int joinStyle:2;$/;"	m	struct:lineGC
 join_style	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint8_t join_style;$/;"	m	struct:QXLLineAttr
@@ -12459,7 +12544,7 @@ keycode_map	client/x11/red_window.cpp	/^static RedKey keycode_map[256];$/;"	v	fi
 keyfile_password	server/reds.c	/^    char keyfile_password[256];$/;"	m	struct:RedSSLParameters	file:
 label	spice-common/python_modules/codegen.py	/^    def label(self, s):$/;"	m	class:CodeWriter
 laddr_ext	server/spice.h	/^    struct sockaddr_storage laddr_ext;$/;"	m	struct:SpiceChannelEventInfo	typeref:struct:SpiceChannelEventInfo::sockaddr_storage
-last_copy	server/glz_encoder.c	/^        uint8_t            *last_copy;  \/\/ pointer to the last byte in which copy count was written$/;"	m	struct:Encoder::__anon203	file:
+last_copy	server/glz_encoder.c	/^        uint8_t            *last_copy;  \/\/ pointer to the last byte in which copy count was written$/;"	m	struct:Encoder::__anon204	file:
 last_enc_size	server/mjpeg_encoder.c	/^    uint64_t last_enc_size;$/;"	m	struct:MJpegEncoderRateControl	file:
 last_frame_delay	spice-common/common/messages.h	/^    int32_t last_frame_delay;$/;"	m	struct:SpiceMsgcDisplayStreamReport
 last_frame_time	server/mjpeg_encoder.c	/^    uint64_t last_frame_time;$/;"	m	struct:MJpegEncoderBitRateInfo	file:
@@ -12579,6 +12664,7 @@ link_mess	server/reds.c	/^    SpiceLinkMess *link_mess;$/;"	m	struct:RedLinkInfo
 link_msg	server/reds-private.h	/^    SpiceLinkMess *link_msg;$/;"	m	struct:RedsMigPendingLink
 list_link	server/red_worker.c	/^    RingItem list_link;$/;"	m	struct:Drawable	file:
 list_link	spice-common/common/glc.c	/^    TassVertex *list_link;$/;"	m	struct:TassVertex	file:
+list_size	server/red_decoding_data.h	/^   int list_size;$/;"	m	struct:RedDecodingThreading
 listen_socket	server/reds-private.h	/^    int listen_socket;$/;"	m	struct:RedsState
 listen_watch	server/reds-private.h	/^    SpiceWatch *listen_watch;$/;"	m	struct:RedsState
 llen_ext	server/spice.h	/^    socklen_t llen_ext, plen_ext;$/;"	m	struct:SpiceChannelEventInfo
@@ -12823,6 +12909,7 @@ marshal	spice-common/spice_codegen.py	/^from python_modules import marshal$/;"	i
 marshall_motion_event	client/inputs_channel.cpp	/^void InputsChannel::marshall_motion_event(SpiceMarshaller *marshaller)$/;"	f	class:InputsChannel
 marshall_position_event	client/inputs_channel.cpp	/^void InputsChannel::marshall_position_event(SpiceMarshaller *marshaller)$/;"	f	class:InputsChannel
 marshall_qxl_drawable	server/red_worker.c	/^static inline void marshall_qxl_drawable(RedChannelClient *rcc,$/;"	f	file:
+marshall_qxl_drawable_global	server/red_worker.c	/^static inline void marshall_qxl_drawable_global(RedChannelClient *rcc,$/;"	f	file:
 marshaller	client/red_peer.h	/^    SpiceMarshaller *marshaller() { return _marshaller;}$/;"	f	class:RedPeer::OutMessage
 marshaller	server/red_channel.h	/^            SpiceMarshaller *marshaller;$/;"	m	struct:RedChannelClient::__anon148::__anon149
 marshaller	server/red_channel.h	/^            SpiceMarshaller *marshaller;$/;"	m	struct:RedChannelClient::__anon148::__anon150
@@ -12858,6 +12945,7 @@ max_allowed	spice-common/common/messages.h	/^    uint16_t max_allowed;$/;"	m	str
 max_allowed	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint16_t max_allowed; \/* If it is 0 no fixed limit is given by the driver *\/$/;"	m	struct:QXLMonitorsConfig
 max_audio_latency	server/mjpeg_encoder.c	/^    uint32_t max_audio_latency;$/;"	m	struct:MJpegEncoderClientState	file:
 max_b_frames	server/h264_type.h	/^    int max_b_frames;$/;"	m	struct:_H264StreamInfo
+max_bits_size	server/red_decoding_data.h	/^   int max_bits_size;$/;"	m	struct:SpiceDecodingData
 max_encoders	server/glz_encoder_dictionary.h	/^    uint32_t max_encoders;$/;"	m	struct:GlzEncDictRestoreData
 max_encoders	server/glz_encoder_dictionary_protected.h	/^    uint32_t max_encoders;$/;"	m	struct:SharedDictionary
 max_message_type	server/dispatcher.h	/^    size_t max_message_type;$/;"	m	struct:Dispatcher
@@ -13244,6 +13332,8 @@ nelements	spice-common/common/generated_server_demarshallers.c	/^    uint32_t ne
 net_test_id	server/main_channel.c	/^    uint32_t net_test_id;$/;"	m	struct:MainChannelClient	file:
 net_test_stage	server/main_channel.c	/^    int net_test_stage;$/;"	m	struct:MainChannelClient	file:
 new_cursor_pipe_item	server/red_worker.c	/^static PipeItem *new_cursor_pipe_item(RedChannelClient *rcc, void *data, int num)$/;"	f	file:
+new_global_stream_draw_timout_item	server/red_worker.c	/^static void new_global_stream_draw_timout_item(DisplayChannelClient *dcc)$/;"	f	file:
+new_global_stream_msg_item	server/red_worker.c	/^static void new_global_stream_msg_item(DisplayChannelClient *dcc)$/;"	f	file:
 new_pipe_item_t	server/red_channel.h	/^typedef PipeItem *(*new_pipe_item_t)(RedChannelClient *rcc, void *data, int num);$/;"	t
 newline	spice-common/python_modules/codegen.py	/^    def newline(self):$/;"	m	class:CodeWriter
 next	client/cache.hpp	/^        Item* next;$/;"	m	class:Cache::Item
@@ -13252,6 +13342,7 @@ next	client/shared_cache.hpp	/^        Item* next;$/;"	m	class:SharedCache::Item
 next	client/x11/platform.cpp	/^    selection_request *next;$/;"	m	struct:selection_request	file:
 next	server/glz_encoder_dictionary_protected.h	/^    WindowImage*       next;$/;"	m	struct:WindowImage
 next	server/glz_encoder_dictionary_protected.h	/^    uint32_t next;$/;"	m	struct:WindowImageSegment
+next	server/red_decoding_dispatcher.h	/^    DecodingDispatcher * next;$/;"	m	struct:DecodingDispatcher
 next	server/red_dispatcher.c	/^    RedDispatcher *next;$/;"	m	struct:RedDispatcher	file:
 next	server/red_worker.c	/^            CacheItem *next;$/;"	m	struct:CacheItem::__anon173::__anon174	file:
 next	server/red_worker.c	/^            RedCompressBuf* next;$/;"	m	struct:__anon177::__anon178::__anon180	file:
@@ -13300,7 +13391,7 @@ notify_new_size	client/screen.cpp	/^void RedScreen::notify_new_size()$/;"	f	clas
 notify_one	client/threads.h	/^    void notify_one()$/;"	f	class:Condition
 notify_update	server/spice.h	/^    void (*notify_update)(QXLInstance *qin, uint32_t update_id);$/;"	m	struct:QXLInterface
 notify_update	server/tests/test_display_base.c	/^static void notify_update(QXLInstance *qin, uint32_t update_id)$/;"	f	file:
-now	server/glz_encoder.c	/^        uint8_t            *now;$/;"	m	struct:Encoder::__anon203	file:
+now	server/glz_encoder.c	/^        uint8_t            *now;$/;"	m	struct:Encoder::__anon204	file:
 now	server/reds_stream.c	/^    uint8_t *now;$/;"	m	struct:AsyncRead	file:
 now	server/snd_worker.c	/^        uint8_t *now;$/;"	m	struct:SndChannel::__anon140	file:
 now	server/tests/basic_event_loop.c	/^struct timeval now;$/;"	v	typeref:struct:timeval
@@ -13992,6 +14083,7 @@ peer_message	client/inputs_channel.cpp	/^RedPeer::OutMessage& PositionMessage::p
 peer_message	client/record_channel.cpp	/^    virtual RedPeer::OutMessage& peer_message() { return *_message;}$/;"	f	class:RecordSamplesMessage
 peer_message	client/red_channel.h	/^    virtual RedPeer::OutMessage& peer_message() { return *this;}$/;"	f	class:Message
 peer_minor_version	server/reds-private.h	/^    int peer_minor_version;$/;"	m	struct:RedsState
+pending	server/red_decoding_dispatcher.h	/^    uint32_t pending;$/;"	m	struct:DecodingDispatcher
 pending	server/red_dispatcher.c	/^    uint32_t pending;$/;"	m	struct:RedDispatcher	file:
 pending	server/red_worker.c	/^    uint32_t *pending;$/;"	m	struct:RedWorker	file:
 pending	server/red_worker.h	/^    uint32_t *pending;$/;"	m	struct:WorkerInitData
@@ -14035,6 +14127,7 @@ pipe_rendered_drawables_intersect_with_areas	server/red_worker.c	/^static int pi
 pipe_size	server/red_channel.h	/^    uint32_t pipe_size;$/;"	m	struct:RedChannelClient
 pipes	server/red_worker.c	/^    Ring pipes;$/;"	m	struct:Drawable	file:
 pix_fmt	server/h264_type.h	/^    enum AVPixelFormat pix_fmt;$/;"	m	struct:_H264StreamInfo	typeref:enum:_H264StreamInfo::AVPixelFormat
+pix_fmt	server/red_decoding_data.h	/^   enum AVPixelFormat pix_fmt;$/;"	m	struct:SpiceDecodingData	typeref:enum:SpiceDecodingData::AVPixelFormat
 pixel_converter	server/mjpeg_encoder.c	/^    void (*pixel_converter)(uint8_t *src, uint8_t *dest);$/;"	m	struct:MJpegEncoder	file:
 pixel_data	client/x11/images/alt_image.c	/^        uint8_t pixel_data[17496];$/;"	m	struct:__anon122	file:
 pixel_rgb16bpp_to_24	server/mjpeg_encoder.c	/^static void pixel_rgb16bpp_to_24(uint8_t *src, uint8_t *dest)$/;"	f	file:
@@ -14235,16 +14328,16 @@ primitive_type	spice-common/python_modules/ptypes.py	/^    def primitive_type(se
 primitive_type	spice-common/python_modules/ptypes.py	/^    def primitive_type(self):$/;"	m	class:PointerType
 primitive_type	spice-common/python_modules/ptypes.py	/^    def primitive_type(self):$/;"	m	class:TypeAlias
 print_base_item	server/red_worker.c	/^static void print_base_item(const char* prefix, const TreeItem *base)$/;"	f	file:
-print_base_item	server/red_worker.c	2221;"	d	file:
+print_base_item	server/red_worker.c	2303;"	d	file:
 print_compress_stats	server/red_worker.c	/^static void print_compress_stats(DisplayChannel *display_channel)$/;"	f	file:
 print_container_item	server/red_worker.c	/^static void print_container_item(const char* prefix, const Container *item)$/;"	f	file:
 print_draw_item	server/red_worker.c	/^static void print_draw_item(const char* prefix, const DrawItem *draw_item)$/;"	f	file:
-print_draw_private	server/red_worker.c	2218;"	d	file:
+print_draw_private	server/red_worker.c	2300;"	d	file:
 print_memslots	server/red_memslots.c	/^static void print_memslots(RedMemSlotInfo *info)$/;"	f	file:
 print_rgn	server/red_worker.c	/^static void print_rgn(const char* prefix, const QRegion* rgn)$/;"	f	file:
-print_rgn	server/red_worker.c	2217;"	d	file:
+print_rgn	server/red_worker.c	2299;"	d	file:
 print_shadow_item	server/red_worker.c	/^static void print_shadow_item(const char* prefix, const Shadow *item)$/;"	f	file:
-print_shadow_item	server/red_worker.c	2220;"	d	file:
+print_shadow_item	server/red_worker.c	2302;"	d	file:
 print_spice_bmp_fmt	server/red_worker.c	/^static void print_spice_bmp_fmt(SpiceBitmapFmt fmt)$/;"	f	file:
 print_targets	client/x11/platform.cpp	/^static void print_targets(const char *action, Atom *atoms, int c)$/;"	f	file:
 priv	server/reds_stream.h	/^    RedsStreamPrivate *priv;$/;"	m	struct:RedsStream
@@ -14720,11 +14813,13 @@ red_client_remove_channel	server/red_channel.c	/^static void red_client_remove_c
 red_client_semi_seamless_migrate_complete	server/red_channel.c	/^void red_client_semi_seamless_migrate_complete(RedClient *client)$/;"	f
 red_client_set_main	server/red_channel.c	/^void red_client_set_main(RedClient *client, MainChannelClient *mcc) {$/;"	f
 red_client_set_migration_seamless	server/red_channel.c	/^void red_client_set_migration_seamless(RedClient *client) \/\/ dest$/;"	f
+red_client_stream_timout_global	server/red_worker.c	/^static void red_client_stream_timout_global(RedWorker *worker)$/;"	f	file:
 red_client_unref	server/red_channel.c	/^RedClient *red_client_unref(RedClient *client)$/;"	f
 red_compress_image	server/red_worker.c	/^static inline int red_compress_image(DisplayChannelClient *dcc,$/;"	f	file:
 red_connect_cursor	server/red_worker.c	/^static void red_connect_cursor(RedWorker *worker, RedClient *client, RedsStream *stream,$/;"	f	file:
 red_create_glz_dictionary	server/red_worker.c	/^static GlzSharedDictionary *red_create_glz_dictionary(DisplayChannelClient *dcc,$/;"	f	file:
 red_create_h264_stream	server/red_worker.c	/^static void red_create_h264_stream(DisplayChannelClient *dcc, Stream *stream)$/;"	f	file:
+red_create_h264_stream_global	server/red_worker.c	/^static void red_create_h264_stream_global(DisplayChannelClient *dcc, H264Encoder** h264_encoder)$/;"	f	file:
 red_create_pixmap_cache	server/red_worker.c	/^static PixmapCache *red_create_pixmap_cache(RedClient *client, uint8_t id, int64_t size)$/;"	f	file:
 red_create_restored_glz_dictionary	server/red_worker.c	/^static GlzSharedDictionary *red_create_restored_glz_dictionary(DisplayChannelClient *dcc,$/;"	f	file:
 red_create_stream	server/red_worker.c	/^static void red_create_stream(RedWorker *worker, Drawable *drawable)$/;"	f	file:
@@ -14785,6 +14880,7 @@ red_dispatcher_init	server/red_dispatcher.c	/^void red_dispatcher_init(QXLInstan
 red_dispatcher_loadvm_commands	server/red_dispatcher.c	/^static void red_dispatcher_loadvm_commands(RedDispatcher *dispatcher,$/;"	f	file:
 red_dispatcher_monitors_config_async	server/red_dispatcher.c	/^static void red_dispatcher_monitors_config_async(RedDispatcher *dispatcher,$/;"	f	file:
 red_dispatcher_on_ic_change	server/red_dispatcher.c	/^void red_dispatcher_on_ic_change(void)$/;"	f
+red_dispatcher_on_stinfo_change	server/red_dispatcher.c	/^void red_dispatcher_on_stinfo_change(void)$/;"	f
 red_dispatcher_on_sv_change	server/red_dispatcher.c	/^void red_dispatcher_on_sv_change(void)$/;"	f
 red_dispatcher_on_svc_change	server/red_dispatcher.c	/^void red_dispatcher_on_svc_change(void)$/;"	f
 red_dispatcher_on_vm_start	server/red_dispatcher.c	/^void red_dispatcher_on_vm_start(void)$/;"	f
@@ -14827,7 +14923,9 @@ red_display_handle_glz_drawables_to_free	server/red_worker.c	/^static void red_d
 red_display_init_glz_data	server/red_worker.c	/^static inline void red_display_init_glz_data(DisplayChannelClient *dcc)$/;"	f	file:
 red_display_marshall_stream_clip	server/red_worker.c	/^static void red_display_marshall_stream_clip(RedChannelClient *rcc,$/;"	f	file:
 red_display_marshall_stream_end	server/red_worker.c	/^static void red_display_marshall_stream_end(RedChannelClient *rcc,$/;"	f	file:
+red_display_marshall_stream_end_global	server/red_worker.c	/^static void red_display_marshall_stream_end_global(RedChannelClient *rcc,$/;"	f	file:
 red_display_marshall_stream_start	server/red_worker.c	/^static void red_display_marshall_stream_start(RedChannelClient *rcc,$/;"	f	file:
+red_display_marshall_stream_start_global	server/red_worker.c	/^static void red_display_marshall_stream_start_global(RedChannelClient *rcc,$/;"	f	file:
 red_display_marshall_upgrade	server/red_worker.c	/^static void red_display_marshall_upgrade(RedChannelClient *rcc, SpiceMarshaller *m,$/;"	f	file:
 red_display_release_stream	server/red_worker.c	/^static void red_display_release_stream(RedWorker *worker, StreamAgent *agent)$/;"	f	file:
 red_display_release_stream_clip	server/red_worker.c	/^static void red_display_release_stream_clip(RedWorker *worker, StreamClipItem *item)$/;"	f	file:
@@ -14837,8 +14935,9 @@ red_display_stream_agent_stop	server/red_worker.c	/^static void red_display_stre
 red_display_update_streams_max_latency	server/red_worker.c	/^static void red_display_update_streams_max_latency(DisplayChannelClient *dcc, StreamAgent *remove_agent)$/;"	f	file:
 red_disply_start_streams	server/red_worker.c	/^static void red_disply_start_streams(DisplayChannelClient *dcc)$/;"	f	file:
 red_draw_drawable	server/red_worker.c	/^static void red_draw_drawable(RedWorker *worker, Drawable *drawable)$/;"	f	file:
-red_draw_drawable	server/red_worker.c	1071;"	d	file:
+red_draw_drawable	server/red_worker.c	1123;"	d	file:
 red_draw_qxl_drawable	server/red_worker.c	/^static void red_draw_qxl_drawable(RedWorker *worker, Drawable *drawable)$/;"	f	file:
+red_draw_qxl_drawable_global	server/red_worker.c	/^ void red_draw_qxl_drawable_global(RedWorker *worker, Drawable *drawable)$/;"	f
 red_drawable	server/red_worker.c	/^    RedDrawable *red_drawable;$/;"	m	struct:Drawable	file:
 red_drawable	server/red_worker.c	/^    RedDrawable *red_drawable;$/;"	m	struct:RedGlzDrawable	file:
 red_drawable_count	server/red_worker.c	/^    uint32_t red_drawable_count;$/;"	m	struct:RedWorker	file:
@@ -14877,6 +14976,7 @@ red_get_path	server/red_parse_qxl.c	/^static SpicePath *red_get_path(RedMemSlotI
 red_get_pixmap_cache	server/red_worker.c	/^static PixmapCache *red_get_pixmap_cache(RedClient *client, uint8_t id, int64_t size)$/;"	f	file:
 red_get_point16_ptr	server/red_parse_qxl.c	/^static void red_get_point16_ptr(SpicePoint16 *red, QXLPoint16 *qxl)$/;"	f	file:
 red_get_point_ptr	server/red_parse_qxl.c	/^static void red_get_point_ptr(SpicePoint *red, QXLPoint *qxl)$/;"	f	file:
+red_get_primary_surface_bits	server/red_worker.c	/^static uint8_t * red_get_primary_surface_bits(RedWorker *worker, uint8_t * bits)$/;"	f	file:
 red_get_qmask_ptr	server/red_parse_qxl.c	/^static void red_get_qmask_ptr(RedMemSlotInfo *slots, int group_id,$/;"	f	file:
 red_get_rect_ptr	server/red_parse_qxl.c	/^void red_get_rect_ptr(SpiceRect *red, const QXLRect *qxl)$/;"	f
 red_get_rop3_ptr	server/red_parse_qxl.c	/^static void red_get_rop3_ptr(RedMemSlotInfo *slots, int group_id,$/;"	f	file:
@@ -14894,6 +14994,7 @@ red_handle_depends_on_target_surface	server/red_worker.c	/^static inline int red
 red_handle_drawable_surfaces_client_synced	server/red_worker.c	/^static inline void red_handle_drawable_surfaces_client_synced($/;"	f	file:
 red_handle_self_bitmap	server/red_worker.c	/^static inline int red_handle_self_bitmap(RedWorker *worker, Drawable *drawable)$/;"	f	file:
 red_handle_streams_timout	server/red_worker.c	/^static inline void red_handle_streams_timout(RedWorker *worker)$/;"	f	file:
+red_handle_streams_timout_global	server/red_worker.c	/^static inline void red_handle_streams_timout_global(void *args)$/;"	f	file:
 red_handle_surfaces_dependencies	server/red_worker.c	/^static inline int red_handle_surfaces_dependencies(RedWorker *worker, Drawable *drawable)$/;"	f	file:
 red_icon	client/x11/res.cpp	/^static const IconHeader red_icon = {$/;"	v	file:
 red_inc_surfaces_drawable_dependencies	server/red_worker.c	/^static inline void red_inc_surfaces_drawable_dependencies(RedWorker *worker, Drawable *drawable)$/;"	f	file:
@@ -15028,7 +15129,7 @@ red_stream_update_client_playback_latency	server/red_worker.c	/^static void red_
 red_streams_update_visible_region	server/red_worker.c	/^static void red_streams_update_visible_region(RedWorker *worker, Drawable *drawable)$/;"	f	file:
 red_time_t	server/red_worker.c	/^typedef int64_t red_time_t;$/;"	t	file:
 red_update_area	server/red_worker.c	/^static void red_update_area(RedWorker *worker, const SpiceRect *area, int surface_id)$/;"	f	file:
-red_update_area	server/red_worker.c	1070;"	d	file:
+red_update_area	server/red_worker.c	1122;"	d	file:
 red_update_area_till	server/red_worker.c	/^static void red_update_area_till(RedWorker *worker, const SpiceRect *area, int surface_id,$/;"	f	file:
 red_update_copy_graduality	server/red_worker.c	/^static inline void red_update_copy_graduality(RedWorker* worker, Drawable *drawable)$/;"	f	file:
 red_update_streamable	server/red_worker.c	/^static inline void red_update_streamable(RedWorker *worker, Drawable *drawable,$/;"	f	file:
@@ -15828,6 +15929,14 @@ set_screen	client/gui/gui.cpp	/^void GUI::set_screen(RedScreen* in_screen)$/;"	f
 set_screen	client/screen_layer.h	/^    void set_screen(RedScreen* screen) { _screen = screen;}$/;"	f	class:ScreenLayer
 set_screen_size	client/x11/platform.cpp	/^bool DynamicScreen::set_screen_size(int size_index)$/;"	f	class:DynamicScreen
 set_size	client/x11/platform.cpp	/^void MultyMonScreen::set_size(int width, int height)$/;"	f	class:MultyMonScreen
+set_spice_base_threading_close	server/red_threading.c	/^void set_spice_base_threading_close(RedBaseThreading * basethreading,bool bClose)$/;"	f
+set_spice_base_threading_close	server/red_threading.h	/^   void (*set_spice_base_threading_close)(RedBaseThreading * basethreading,bool bClose);$/;"	m	struct:RedBaseThreading
+set_spice_base_threading_run	server/red_threading.c	/^void set_spice_base_threading_run(RedBaseThreading* basethreading,void* (*start_rtn)(void*))$/;"	f
+set_spice_base_threading_run	server/red_threading.h	/^   void (*set_spice_base_threading_run)(RedBaseThreading* basethreading,void* (*start_rtn)(void*));$/;"	m	struct:RedBaseThreading
+set_spice_base_threading_status	server/red_threading.c	/^void set_spice_base_threading_status(RedBaseThreading * basethreading,RedBaseThreadingStatus status)$/;"	f
+set_spice_base_threading_status	server/red_threading.h	/^   void (*set_spice_base_threading_status)(RedBaseThreading * basethreading,RedBaseThreadingStatus status);$/;"	m	struct:RedBaseThreading
+set_spice_decoding_threading_run	server/red_decoding_data.c	/^void set_spice_decoding_threading_run(RedDecodingThreading * threading,void* (*start_rtn)(void*))$/;"	f
+set_spice_decoding_threading_run	server/red_decoding_data.h	/^   void (*set_spice_decoding_threading_run)(RedDecodingThreading * threading,void* (*start_rtn)(void*));$/;"	m	struct:RedDecodingThreading
 set_state	client/application.cpp	/^void Application::set_state(State state)$/;"	f	class:Application
 set_state	client/gui/gui.cpp	/^void GUI::set_state(Application::State state)$/;"	f	class:GUI
 set_state	client/red_channel.cpp	/^void RedChannel::set_state(int state)$/;"	f	class:RedChannel
@@ -15879,7 +15988,7 @@ show	client/screen.cpp	/^void RedScreen::show(bool activate, RedScreen* pos)$/;"
 show	client/windows/red_window.cpp	/^void RedWindow::show(int screen_id)$/;"	f	class:RedWindow
 show	client/x11/red_window.cpp	/^void RedWindow::show(int screen_id)$/;"	f	class:RedWindow
 show_current	server/red_worker.c	/^static void show_current(RedWorker *worker, Ring *ring)$/;"	f	file:
-show_current	server/red_worker.c	2219;"	d	file:
+show_current	server/red_worker.c	2301;"	d	file:
 show_cursor	client/windows/red_window.cpp	/^void RedWindow::show_cursor()$/;"	f	class:RedWindow
 show_cursor	client/x11/red_window.cpp	/^void RedWindow::show_cursor()$/;"	f	class:RedWindow
 show_draw_item	server/red_worker.c	/^static void show_draw_item(RedWorker *worker, DrawItem *draw_item, const char *prefix)$/;"	f	file:
@@ -15920,6 +16029,7 @@ size	server/main_channel.c	/^    int size;$/;"	m	struct:PingPipeItem	file:
 size	server/red_channel.h	/^        uint32_t size;$/;"	m	struct:RedChannelClient::__anon148
 size	server/red_channel.h	/^    int size;$/;"	m	struct:OutgoingHandler
 size	server/red_channel.h	/^    uint32_t size;$/;"	m	struct:BufDescriptor
+size	server/red_decoding_data.h	/^   int size;$/;"	m	struct:H264DataItem
 size	server/red_worker.c	/^    int64_t size;$/;"	m	struct:PixmapCache	file:
 size	server/red_worker.c	/^    size_t size;$/;"	m	struct:CacheItem	file:
 size	server/red_worker.c	/^    size_t size;$/;"	m	struct:NewCacheItem	file:
@@ -15954,6 +16064,7 @@ sizeof	spice-common/python_modules/ptypes.py	/^    def sizeof(self):$/;"	m	class
 sizeof	spice-common/python_modules/ptypes.py	/^    def sizeof(self):$/;"	m	class:Type
 skip_auth	server/reds.c	/^    int skip_auth;$/;"	m	struct:RedLinkInfo	file:
 sleep	server/tests/test_display_base.h	/^        CommandSleep sleep;$/;"	m	union:Command::__anon131
+slice	server/red_decoding_data.h	/^   char * slice;$/;"	m	struct:H264DataItem
 slot	server/tests/test_display_base.c	/^QXLDevMemSlot slot = {$/;"	v
 slot_gen_bits	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint8_t slot_gen_bits;$/;"	m	struct:QXLRom
 slot_generation	spice-common/spice-protocol/spice/qxl_dev.h	/^    uint8_t slot_generation;$/;"	m	struct:QXLRom
@@ -16100,6 +16211,8 @@ spice_backtrace	spice-common/common/backtrace.c	/^void spice_backtrace(void)$/;"
 spice_backtrace	spice-common/common/backtrace.h	27;"	d
 spice_backtrace_backtrace	spice-common/common/backtrace.c	/^static void spice_backtrace_backtrace(void)$/;"	f	file:
 spice_backtrace_gstack	spice-common/common/backtrace.c	/^static int spice_backtrace_gstack(void)$/;"	f	file:
+spice_base_threading_delete	server/red_threading.c	/^void spice_base_threading_delete(RedBaseThreading * basethreading)$/;"	f
+spice_base_threading_new	server/red_threading.c	/^RedBaseThreading * spice_base_threading_new()$/;"	f
 spice_bit_find_msb	spice-common/common/bitops.h	/^static inline int spice_bit_find_msb(unsigned int val)$/;"	f
 spice_bit_next_pow2	spice-common/common/bitops.h	/^static inline int spice_bit_next_pow2(unsigned int val)$/;"	f
 spice_bitmap_convert_to_pixman	spice-common/common/pixman_utils.c	/^pixman_image_t *spice_bitmap_convert_to_pixman(pixman_format_code_t dest_format,$/;"	f
@@ -16498,6 +16611,7 @@ spice_server_set_sasl	server/reds.c	/^SPICE_GNUC_VISIBLE int spice_server_set_sa
 spice_server_set_sasl_appname	server/reds.c	/^SPICE_GNUC_VISIBLE int spice_server_set_sasl_appname(SpiceServer *s, const char *appname)$/;"	f
 spice_server_set_seamless_migration	server/reds.c	/^SPICE_GNUC_VISIBLE void spice_server_set_seamless_migration(SpiceServer *s, int enable)$/;"	f
 spice_server_set_streaming_compression	server/reds.c	/^SPICE_GNUC_VISIBLE int spice_server_set_streaming_compression(SpiceServer *s, int value)$/;"	f
+spice_server_set_streaming_h264_info	server/reds.c	/^SPICE_GNUC_VISIBLE int spice_server_set_streaming_h264_info(SpiceServer *s, int vfps,int vbit_rate)$/;"	f
 spice_server_set_streaming_video	server/reds.c	/^SPICE_GNUC_VISIBLE int spice_server_set_streaming_video(SpiceServer *s, int value)$/;"	f
 spice_server_set_ticket	server/reds.c	/^SPICE_GNUC_VISIBLE int spice_server_set_ticket(SpiceServer *s,$/;"	f
 spice_server_set_tls	server/reds.c	/^SPICE_GNUC_VISIBLE int spice_server_set_tls(SpiceServer *s, int port,$/;"	f
@@ -16639,7 +16753,7 @@ start	client/red_channel.cpp	/^void RedChannel::start()$/;"	f	class:RedChannel
 start	client/red_client.cpp	/^void Migrate::start(const SpiceMsgMainMigrationBegin* migrate)$/;"	f	class:Migrate
 start	client/windows/record.cpp	/^void WaveRecorder::start()$/;"	f	class:WaveRecorder
 start	client/x11/record.cpp	/^void WaveRecorder::start()$/;"	f	class:WaveRecorder
-start	server/glz_encoder.c	/^        uint8_t            *start;$/;"	m	struct:Encoder::__anon203	file:
+start	server/glz_encoder.c	/^        uint8_t            *start;$/;"	m	struct:Encoder::__anon204	file:
 start	server/red_worker.c	/^   uint64_t start;$/;"	m	struct:StreamStats	file:
 start_draw	spice-common/common/glc.c	/^static inline void start_draw(InternaCtx *ctx)$/;"	f	file:
 start_frame_mm_time	spice-common/common/messages.h	/^    uint32_t start_frame_mm_time;$/;"	m	struct:SpiceMsgcDisplayStreamReport
@@ -16647,6 +16761,13 @@ start_key_interception	client/windows/red_window.cpp	/^void RedWindow::start_key
 start_key_interception	client/x11/red_window.cpp	/^void RedWindow::start_key_interception()$/;"	f	class:RedWindow
 start_multi	client/cmd_line_parser.cpp	/^char* CmdLineParser::start_multi(char *optarg, char separator)$/;"	f	class:CmdLineParser
 start_point	spice-common/common/glc.c	/^    int start_point;$/;"	m	struct:Pathpath	file:
+start_rtn	server/red_threading.h	/^   void* (*start_rtn)(void*);$/;"	m	struct:RedBaseThreading
+start_run	server/red_decoding_data.c	/^static void * start_run(void * args)$/;"	f	file:
+start_run	server/red_threading.c	/^static void *start_run(void * args)$/;"	f	file:
+start_spice_base_threading	server/red_threading.c	/^int start_spice_base_threading(RedBaseThreading* basethreading)$/;"	f
+start_spice_base_threading	server/red_threading.h	/^   int (*start_spice_base_threading)(RedBaseThreading* basethreading);$/;"	m	struct:RedBaseThreading
+start_spice_decoding_threading	server/red_decoding_data.c	/^void start_spice_decoding_threading(RedDecodingThreading * threading)$/;"	f
+start_spice_decoding_threading	server/red_decoding_data.h	/^   void (*start_spice_decoding_threading)(RedDecodingThreading * threading);$/;"	m	struct:RedDecodingThreading
 start_time	server/snd_worker.c	/^    uint32_t start_time;$/;"	m	struct:RecordChannel	file:
 start_wave	client/playback_channel.cpp	/^static void start_wave()$/;"	f	file:
 starting_bit_rate	server/mjpeg_encoder.c	/^    uint64_t starting_bit_rate;$/;"	m	struct:MJpegEncoder	file:
@@ -16656,23 +16777,23 @@ stat	server/red_worker.c	/^    StatNodeRef stat;$/;"	m	struct:DisplayChannel	fil
 stat	server/red_worker.c	/^    StatNodeRef stat;$/;"	m	struct:RedWorker	file:
 stat	server/reds-private.h	/^    SpiceStat *stat;$/;"	m	struct:RedsState
 stat_add	server/red_worker.c	/^static inline void stat_add(stat_info_t *info, stat_time_t start)$/;"	f	file:
-stat_add	server/red_worker.c	244;"	d	file:
+stat_add	server/red_worker.c	269;"	d	file:
 stat_add_counter	server/reds.c	/^uint64_t *stat_add_counter(StatNodeRef parent, const char *name, int visible)$/;"	f
 stat_add_counter	server/stat.h	42;"	d
 stat_add_node	server/reds.c	/^StatNodeRef stat_add_node(StatNodeRef parent, const char *name, int visible)$/;"	f
 stat_add_node	server/stat.h	40;"	d
 stat_byte_to_mega	server/red_worker.c	/^double inline stat_byte_to_mega(uint64_t size)$/;"	f
 stat_compress_add	server/red_worker.c	/^static inline void stat_compress_add(stat_info_t *info, stat_time_t start, int orig_size,$/;"	f	file:
-stat_compress_add	server/red_worker.c	282;"	d	file:
+stat_compress_add	server/red_worker.c	307;"	d	file:
 stat_compress_init	server/red_worker.c	/^static inline void stat_compress_init(stat_info_t *info, const char *name)$/;"	f	file:
-stat_compress_init	server/red_worker.c	281;"	d	file:
+stat_compress_init	server/red_worker.c	306;"	d	file:
 stat_cpu_time_to_sec	server/red_worker.c	/^double stat_cpu_time_to_sec(stat_time_t time)$/;"	f
 stat_inc_counter	server/stat.h	33;"	d
 stat_inc_counter	server/stat.h	44;"	d
 stat_info_s	server/red_worker.c	/^typedef struct stat_info_s {$/;"	s	file:
 stat_info_t	server/red_worker.c	/^} stat_info_t;$/;"	t	typeref:struct:stat_info_s	file:
 stat_init	server/red_worker.c	/^static inline void stat_init(stat_info_t *info, const char *name)$/;"	f	file:
-stat_init	server/red_worker.c	245;"	d	file:
+stat_init	server/red_worker.c	270;"	d	file:
 stat_lock	server/reds-private.h	/^    pthread_mutex_t stat_lock;$/;"	m	struct:RedsState
 stat_now	server/red_worker.c	/^static stat_time_t stat_now(void)$/;"	f	file:
 stat_remove	server/reds.c	/^static void stat_remove(SpiceStatNode *node)$/;"	f	file:
@@ -16694,6 +16815,7 @@ static_buffer	spice-common/common/marshaller.c	/^    MarshallerBuffer static_buf
 static_items	spice-common/common/marshaller.c	/^    MarshallerItem static_items[N_STATIC_ITEMS];$/;"	m	struct:SpiceMarshaller	file:
 static_marshaller	spice-common/common/marshaller.c	/^    SpiceMarshaller static_marshaller;$/;"	m	struct:SpiceMarshallerData	file:
 stats	server/red_worker.c	/^    StreamStats stats;$/;"	m	struct:StreamAgent	file:
+status	server/red_threading.h	/^   RedBaseThreadingStatus status;$/;"	m	struct:RedBaseThreading
 stencil_mask	spice-common/common/glc.c	/^    int stencil_mask;$/;"	m	struct:InternaCtx	file:
 stencil_refs	spice-common/common/glc.c	/^    int stencil_refs;$/;"	m	struct:InternaCtx	file:
 stencil_tex	client/x11/pixels_source_p.h	/^            GLuint stencil_tex;$/;"	m	struct:PixelsSource_p::__anon116::__anon120
@@ -16705,6 +16827,10 @@ stop	client/x11/playback.cpp	/^void WavePlayer::stop()$/;"	f	class:WavePlayer
 stop	client/x11/record.cpp	/^void WaveRecorder::stop()$/;"	f	class:WaveRecorder
 stop_key_interception	client/windows/red_window.cpp	/^void RedWindow::stop_key_interception()$/;"	f	class:RedWindow
 stop_key_interception	client/x11/red_window.cpp	/^void RedWindow::stop_key_interception()$/;"	f	class:RedWindow
+stop_wait_spice_base_threading	server/red_threading.c	/^void stop_wait_spice_base_threading(RedBaseThreading * basethreading)$/;"	f
+stop_wait_spice_base_threading	server/red_threading.h	/^   void (*stop_wait_spice_base_threading)(RedBaseThreading * basethreading);$/;"	m	struct:RedBaseThreading
+stop_wait_spice_decoding_threading	server/red_decoding_data.c	/^void stop_wait_spice_decoding_threading(RedDecodingThreading * threading)$/;"	f
+stop_wait_spice_decoding_threading	server/red_decoding_data.h	/^   void (*stop_wait_spice_decoding_threading)(RedDecodingThreading * threading);$/;"	m	struct:RedDecodingThreading
 str	client/gui/resource_provider.cpp	/^    const char* str;$/;"	m	struct:ResString	file:
 str	spice-common/common/draw.h	/^    SpiceString *str;$/;"	m	struct:SpiceText
 str	spice-common/spice-protocol/spice/qxl_dev.h	/^    QXLPHYSICAL str;$/;"	m	struct:QXLText
@@ -16732,6 +16858,14 @@ stream_read_cb	server/reds_stream.c	/^static ssize_t stream_read_cb(RedsStream *
 stream_ssl_read_cb	server/reds_stream.c	/^static ssize_t stream_ssl_read_cb(RedsStream *s, void *buf, size_t size)$/;"	f	file:
 stream_ssl_write_cb	server/reds_stream.c	/^static ssize_t stream_ssl_write_cb(RedsStream *s, const void *buf, size_t size)$/;"	f	file:
 stream_update_request	client/display_channel.cpp	/^void DisplayChannel::stream_update_request(uint32_t mm_time)$/;"	f	class:DisplayChannel
+stream_video_h264_all_bit_rate	server/red_worker.c	/^    int stream_video_h264_all_bit_rate; $/;"	m	struct:DisplayChannelClient	file:
+stream_video_h264_all_bit_rate	server/red_worker.c	/^    int stream_video_h264_all_bit_rate; $/;"	m	struct:RedWorker	file:
+stream_video_h264_all_bit_rate	server/red_worker.h	/^    int stream_video_h264_all_bit_rate;$/;"	m	struct:WorkerInitData
+stream_video_h264_all_bit_rate	server/reds.c	/^int stream_video_h264_all_fps = 30, stream_video_h264_all_bit_rate = 1048576;$/;"	v
+stream_video_h264_all_fps	server/red_worker.c	/^    int stream_video_h264_all_fps;$/;"	m	struct:DisplayChannelClient	file:
+stream_video_h264_all_fps	server/red_worker.c	/^    int stream_video_h264_all_fps;$/;"	m	struct:RedWorker	file:
+stream_video_h264_all_fps	server/red_worker.h	/^    int stream_video_h264_all_fps;$/;"	m	struct:WorkerInitData
+stream_video_h264_all_fps	server/reds.c	/^int stream_video_h264_all_fps = 30, stream_video_h264_all_bit_rate = 1048576;$/;"	v
 stream_width	spice-common/common/messages.h	/^    uint32_t stream_width;$/;"	m	struct:SpiceMsgDisplayStreamCreate
 stream_write_cb	server/reds_stream.c	/^static ssize_t stream_write_cb(RedsStream *s, const void *buf, size_t size)$/;"	f	file:
 stream_writev_cb	server/reds_stream.c	/^static ssize_t stream_writev_cb(RedsStream *s, const struct iovec *iov, int iovcnt)$/;"	f	file:
@@ -16963,6 +17097,7 @@ target_alias	spice-common/spice-protocol/Makefile	/^target_alias = $/;"	m
 target_alias	spice-common/spice-protocol/spice/Makefile	/^target_alias = $/;"	m
 target_surface	server/tests/test_display_base.h	/^    int target_surface;$/;"	m	struct:Test
 targets_atom	client/x11/platform.cpp	/^static Atom targets_atom;$/;"	v	file:
+tbase	server/red_decoding_data.h	/^   RedBaseThreading *tbase;$/;"	m	struct:RedDecodingThreading
 tcp_nodelay	server/red_channel.h	/^    int tcp_nodelay;$/;"	m	struct:RedChannelClientLatencyMonitor
 term_mem_destination	server/mjpeg_encoder.c	/^static void term_mem_destination(j_compress_ptr cinfo)$/;"	f	file:
 term_printf	client/windows/platform.cpp	/^void Platform::term_printf(const char* format, ...)$/;"	f	class:Platform
@@ -17047,12 +17182,14 @@ textures_lost	client/x11/red_pixmap_gl.cpp	/^void RedPixmapGL::textures_lost()$/
 textures_lost	spice-common/common/gl_canvas.c	/^    int textures_lost;$/;"	m	struct:GLCanvas	file:
 thread	server/spice_timer_queue.c	/^    pthread_t thread;$/;"	m	struct:SpiceTimerQueue	file:
 thread_count	server/h264_type.h	/^    int thread_count;$/;"	m	struct:_H264StreamInfo
+thread_data	server/red_threading.h	/^   void * thread_data;$/;"	m	struct:RedBaseThreading
 thread_id	server/red_channel.h	/^    pthread_t thread_id;$/;"	m	struct:RedChannel
 thread_id	server/red_channel.h	/^    pthread_t thread_id;$/;"	m	struct:RedClient
 thread_main_t	client/threads.h	/^    typedef void* (*thread_main_t)(void*);$/;"	t	class:Thread
 thread_touch	client/red_gdi_canvas.h	/^    virtual void thread_touch() {}$/;"	f	class:GDICanvas
 thread_touch	client/red_gl_canvas.h	/^    void thread_touch() {}$/;"	f	class:GCanvas
 thread_touch	client/red_sw_canvas.h	/^    virtual void thread_touch() {}$/;"	f	class:SCanvas
+threading	server/red_worker.c	/^    RedDecodingThreading * threading;$/;"	m	struct:RedWorker	file:
 three_bytes_pixel_t	spice-common/common/quic.c	/^typedef struct ATTR_PACKED three_bytes_pixel_t {$/;"	s	file:
 three_bytes_t	spice-common/common/quic.c	/^} three_bytes_t;$/;"	t	typeref:struct:three_bytes_pixel_t	file:
 tiTicketing	server/reds.c	/^    TicketInfo tiTicketing;$/;"	m	struct:RedLinkInfo	file:
@@ -17217,7 +17354,7 @@ type	client/red_peer.h	/^    uint16_t type() { return _type;}$/;"	f	class:RedPee
 type	client/windows/platform.cpp	/^    uint32_t type;$/;"	m	struct:ImageType	file:
 type	client/x11/pixels_source_p.h	/^    int type;$/;"	m	struct:PixelsSource_p
 type	client/x11/platform.cpp	/^    uint32_t type;$/;"	m	struct:clipboard_format_info	file:
-type	server/glz_encoder.c	/^        LzImageType type;$/;"	m	struct:Encoder::__anon202	file:
+type	server/glz_encoder.c	/^        LzImageType type;$/;"	m	struct:Encoder::__anon203	file:
 type	server/glz_encoder_dictionary_protected.h	/^    LzImageType type;$/;"	m	struct:WindowImage
 type	server/jpeg_encoder.c	/^        JpegEncoderImageType type;$/;"	m	struct:JpegEncoder::__anon167	file:
 type	server/mjpeg_encoder.c	/^    int type;$/;"	m	struct:MJpegEncoderQualityEval	file:
@@ -17319,6 +17456,8 @@ underscores_to_camel	spice-common/python_modules/codegen.py	/^def underscores_to
 undim	client/gui/gui.cpp	/^void GUI::Dialog::undim()$/;"	f	class:GUI::Dialog
 unimplemented_op	spice-common/common/canvas_base.c	/^static void unimplemented_op(SpiceCanvas *canvas)$/;"	f	file:
 unindent	spice-common/python_modules/codegen.py	/^    def unindent(self):$/;"	m	class:CodeWriter
+uninit_spice_decoding_threading	server/red_decoding_data.c	/^void uninit_spice_decoding_threading(RedDecodingThreading * threading)$/;"	f
+uninit_spice_decoding_threading	server/red_decoding_data.h	/^   void (*uninit_spice_decoding_threading)(RedDecodingThreading * threading);$/;"	m	struct:RedDecodingThreading
 unique	server/tests/test_display_base.c	/^static int unique = 1;$/;"	v	file:
 unique	spice-common/common/draw.h	/^    uint64_t unique;$/;"	m	struct:SpiceCursorHeader
 unique	spice-common/common/draw.h	/^    uint64_t unique;$/;"	m	struct:SpicePalette
@@ -17654,6 +17793,7 @@ wmidx	spice-common/common/quic.c	/^    unsigned int wmidx;$/;"	m	struct:CommonSt
 wmileft	spice-common/common/quic.c	/^    unsigned int wmileft;$/;"	m	struct:CommonState	file:
 wmimax	spice-common/common/quic.c	/^static int wmimax = DEFwmimax;$/;"	v	file:
 wminext	spice-common/common/quic.c	/^static int wminext = DEFwminext;$/;"	v	file:
+worker	server/red_decoding_data.h	/^   void *worker;$/;"	m	struct:RedDecodingThreading
 worker	server/red_worker.c	/^    RedWorker *worker;$/;"	m	struct:ShowTreeData	file:
 worker	server/red_worker.c	/^    struct RedWorker *worker;$/;"	m	struct:CommonChannel	typeref:struct:CommonChannel::RedWorker	file:
 worker	server/red_worker.c	/^    struct RedWorker *worker;$/;"	m	struct:CommonChannelClient	typeref:struct:CommonChannelClient::RedWorker	file:

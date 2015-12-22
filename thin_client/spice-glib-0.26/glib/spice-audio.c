@@ -67,7 +67,7 @@ enum {
 
 static void spice_audio_finalize(GObject *gobject)
 {
-//    printf("[file :%s][fun : %s][line : %d] begin ??=================================\n",__FILE__,__FUNCTION__,__LINE__);
+    //printf("[file :%s][fun : %s][line : %d] begin ??=================================\n",__FILE__,__FUNCTION__,__LINE__);
     SpiceAudio *self = SPICE_AUDIO(gobject);
     SpiceAudioPrivate *priv = self->priv;
 
@@ -166,8 +166,8 @@ static void connect_channel(SpiceAudio *self, SpiceChannel *channel)
 
     if (SPICE_AUDIO_GET_CLASS(self)->connect_channel(self, channel))
     {
- //       printf("[file :%s][fun : %s][line : %d] ???????????????????????????????????new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
-//        printf("[file :%s][fun : %s][line : %d] new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
+        //printf("[file :%s][fun : %s][line : %d] ???????????????????????????????????new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
+        //printf("[file :%s][fun : %s][line : %d] new audio spice_channel_connect\n",__FILE__,__FUNCTION__,__LINE__);
         spice_channel_connect(channel);
     }
 }
@@ -189,7 +189,7 @@ static void update_audio_channels(SpiceAudio *self, SpiceSession *session)
 
 static void channel_new(SpiceSession *session, SpiceChannel *channel, SpiceAudio *self)
 {
-//    printf("[file :%s][fun : %s][line : %d] come to channel new\n",__FILE__,__FUNCTION__,__LINE__);
+    //printf("[file :%s][fun : %s][line : %d] come to channel new\n",__FILE__,__FUNCTION__,__LINE__);
     connect_channel(self, channel);
 }
 
@@ -256,7 +256,7 @@ SpiceAudio *spice_audio_new(SpiceSession *session, GMainContext *context,
  **/
 SpiceAudio *spice_audio_get(SpiceSession *session, GMainContext *context)
 {
-//    printf("[file :%s][fun : %s][line : %d] come to audio get\n",__FILE__,__FUNCTION__,__LINE__);
+    //printf("[file :%s][fun : %s][line : %d] come to audio get\n",__FILE__,__FUNCTION__,__LINE__);
     static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
     SpiceAudio *self;
 

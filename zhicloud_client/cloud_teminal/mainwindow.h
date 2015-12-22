@@ -14,6 +14,7 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QPushButton>
+#include <QStringList>
 #include "mytextedit.h"
 #include "zc_message_box.h"
 #include "log.h"
@@ -56,6 +57,7 @@ typedef struct MyStruct
 {
 	QString* username;
 	QString* logopath;
+	QString* nickname;
 }USERCARDINFO;
 
 
@@ -154,7 +156,8 @@ public:
 	void menushutdown();
 	void menustarthost();
 	bool checkComplete(int & filesize);
-
+	void readDns(QString &dns);
+	void readMac(QString &mac);
 public:
 
 	enum 
@@ -174,6 +177,7 @@ public:
 	CDiagnoseItem* itemarr[5];
 	QLabel* staticon;
 	QLabel* txt;
+	QLabel* m_mac;
 	QString errorstr;
 
 	CLoading* diagnoseload;
@@ -197,6 +201,13 @@ public:
 
 	QPushButton* dhcpbutton;
 	QPushButton* usersetbtn;
+	//LXL add for DNS
+	QPushButton* moresetBtn;
+	CMyTextEdit* dnsedit;
+	bool isMoresetSelect;
+	QLabel* svrurl;
+	QLabel* svrport;
+	//LXL add for DNS
 	QNetworkAccessManager* m_manager;
 	QNetworkAccessManager m_downloadmgr;
 	//QJson::Parser parser;
@@ -225,6 +236,8 @@ private:
 	bool                ismultihost;
 	bool 				m_isAppComplete;
 	bool				isfblBtnShow;
+   //add by lcx
+   bool           isUpgradeCheckd;
 	double				widthRatio;
 	double				heightRatio;
 	QString				_savePackagePath;
@@ -236,6 +249,10 @@ private:
 	QWidget				*netwidget;
 	QWidget				*aboutwidget;
 	QWidget				*netdiagnosewidget;
+	QLabel* netset_ipaddr;
+	QLabel* netset_mask;
+	QLabel* netset_gateway;
+	QLabel* netset_dnslable;
 protected:
 	virtual void customEvent(QEvent *event);
 public slots:
@@ -252,6 +269,7 @@ public slots:
 	void changepwd();
 	void changepwdret();
 	void changepwdsure();
+	void netsetreadonly(bool isreadonly);
 	void checkurl();
 	void clicklogin();
 	void logintohost();
@@ -270,14 +288,18 @@ public slots:
 	void adduserret();
 	//void maintimerout(); 
 	void netcheckfunc();
+	void reconnectfunc();
 	void fblBtn1Clicked();
 	void fblBtn2Clicked();
 	void fblBtn3Clicked();
 	void fblBtn4Clicked();
 	void fblBtn5Clicked();
+	void moresetclickfunc(); //LXL add for DNS
 public:
+	int reconnecting;
 	int isadduser;
 	int ishasmail;
+	QTimer* reconnecttimer;
 	QTimer* netchecktimer;
 
 	QTimer dohttptimer;
@@ -285,7 +307,9 @@ public:
 
 	CMyTextEdit* uuuurledit;
 	CMyTextEdit* pppportedit;
+	bool isadduserretshow;
 	QPushButton *adduserretbtn;
+	QPushButton *changesetretbtn;
 	QPushButton *cs_btn;
 	QPushButton *userchangeBtn;
 	QPushButton *changsetBtn;
@@ -302,9 +326,12 @@ public:
 	map<QString, K_yType> m_hostinfo;
 	CHostList * hostlistwd;
 	QString uname;
+	QString passwd;
 	QString currenthostname;
 	QString upic;
+	QString m_strnickname;
 	QString lastsucuname;
+	QString lastsucupwd;
 	QString newwsvrurl;
 	CUserCard* photoLabel;
 	vector<QString>m_user;
@@ -342,6 +369,7 @@ public:
 	bool okButtonIsRet;
 	bool isstarthost;
 	bool hasonceclick;
+	bool ismacright;
 	int fblIndex;
 	QPushButton *m_okBtn;
 	ZCMessageBox *msgbox;

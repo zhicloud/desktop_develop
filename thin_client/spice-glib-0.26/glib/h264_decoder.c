@@ -1,5 +1,7 @@
 #include "h264_decoder.h"
 
+#define DECODING_CORE_NUM 16
+
 void  h264_decoder_env_init()
 {
     H264_ENV_INIT(H264_VERSION);
@@ -43,6 +45,8 @@ int h264_decoder_init(H264Decoder * decoder, H264StreamInfo * info)
     }
     if (codec->capabilities&CODEC_CAP_TRUNCATED)
         decoder->codec_context->flags |= CODEC_FLAG_TRUNCATED;
+
+    //decoder->codec_context->thread_count = DECODING_CORE_NUM;
 
     if (avcodec_open2(decoder->codec_context, codec, NULL) < 0) 
     {
@@ -122,15 +126,16 @@ void h264_decoder_uninit(H264Decoder * decoder)
 
 int h264_decode(H264Decoder * decoder,char * rgb,int *rgb_len, char *slice ,int slice_len,int *width,int *height,int *hpp)
 {
+    struct timeval tpstart, tpend;
+    float timeuse;
+
     int ret = 0;
     int got = 0;
     int bytes = 0;
-
     AVPacket pkt;
     av_init_packet(&pkt);
     pkt.data = slice;
     pkt.size = slice_len;
-    
     ret = avcodec_decode_video2(decoder->codec_context, decoder->yuvframe, &got, &pkt);
     if(ret < 0)
     {
@@ -138,8 +143,8 @@ int h264_decode(H264Decoder * decoder,char * rgb,int *rgb_len, char *slice ,int 
     }
     if (got)
     {
-        //printf("decoding length = %d, package length = %d\n", ret, slice_len);
-    
+//        gettimeofday(&tpstart, NULL);
+
         if (!decoder->sws_context)
         {
             decoder->sws_context = sws_getContext(decoder->codec_context->width, decoder->codec_context->height, 
@@ -166,6 +171,13 @@ int h264_decode(H264Decoder * decoder,char * rgb,int *rgb_len, char *slice ,int 
         *width = decoder->rgbframe->width;
         *height = decoder->rgbframe->height;
         *hpp = bytes;
+
+//        gettimeofday(&tpend, NULL);
+//
+//        timeuse = 1000000 * (tpend.tv_sec - tpstart.tv_sec) + (tpend.tv_usec - tpstart.tv_usec);
+//        timeuse /= 1000000;
+//        printf("scale use time:%f sec\n", timeuse);
+	
 
         return H264_DECODER_OK; 
 

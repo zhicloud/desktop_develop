@@ -1448,8 +1448,10 @@ static void main_handle_mm_time(SpiceChannel *channel, SpiceMsgIn *in)
     SpiceSession *session;
     SpiceMsgMainMultiMediaTime *msg = spice_msg_in_parsed(in);
 
+    SPICE_DEBUG("main_handle_mm_time: ==== begin");
     session = spice_channel_get_session(channel);
     spice_session_set_mm_time(session, msg->time);
+    SPICE_DEBUG("main_handle_mm_time: ==== end");
 }
 
 typedef struct channel_new {

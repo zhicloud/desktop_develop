@@ -28,7 +28,7 @@ bool CSpiceMultVEx::m_isInit = false;
 #define SPICE_CHANNEL_CLOSED QEvent::User+104  
 #define SPICE_CHANNEL_ERROR_AUTH QEvent::User+105
 #define SPICE_REFRESH QEvent::User+106
-
+#define ERROR_IO_SHOW_WIDGET QEvent::User+120
 
 class MyThread : public QThread
 {
@@ -138,18 +138,53 @@ CSpiceMultVEx::CSpiceMultVEx(QWidget *parent)
 CSpiceMultVEx::~CSpiceMultVEx()
 {
 	m_heartbeattimer->stop();
+      SpiceCallBacks callBack[CB_NULL];
+	callBack[0].type = CB_SETTING_CHANGE;
+	callBack[0].lcb._cb = NULL;
+	callBack[0].lcb._ctx = this;
+
+	callBack[1].type = CB_INVALIDATE;
+	callBack[1].lcb._cb = NULL;
+	callBack[1].lcb._ctx = this;
+
+	callBack[2].type = CB_MAIN_CHANNEL_EVENT;
+	callBack[2].lcb._cb = NULL;
+	callBack[2].lcb._ctx = this;
+
+	callBack[3].type = CB_CURSOr_SET;
+	callBack[3].lcb._cb = NULL;
+	callBack[3].lcb._ctx = this;
+
+	callBack[4].type = CB_CURSOR_MOVE;
+	callBack[4].lcb._cb = NULL;
+	callBack[4].lcb._ctx = this;
+
+	callBack[5].type = CB_CURSOR_HIDE;
+	callBack[5].lcb._cb = NULL;
+	callBack[5].lcb._ctx = this;
+
+	callBack[6].type = CB_CURSOR_RESET;
+	callBack[6].lcb._cb = NULL;
+	callBack[6].lcb._ctx = this;
+
+	int cc = 7;
+
+	int ret = -1;
+	SpiceSetCalls(CSpiceMultVEx::m_hContext, m_hspice, callBack, cc);
+
 	CloseSpice();
 	m_ptimer->stop();
 	m_thread.t_stop();
 	m_thread.wait();
+	
+	logout();
 
-	if (m_pImage)
+	if (m_pImage != NULL)
 	{
 		free(m_pImage);
 		m_pImage = NULL;
 	}
-
-	logout();
+	m_height = m_width = 0;
 }
 
 
@@ -159,6 +194,7 @@ bool CSpiceMultVEx::Spice_Init()
 	{
 		return true;
 	}
+
 	//初始化运行环境
 	m_hContext = SpiceInit();
 	if (!m_hContext)
@@ -199,6 +235,7 @@ bool CSpiceMultVEx::Spice_Uninit()
 
 int CSpiceMultVEx::OpenSpice(char* szIP, char* port, char* uname, char* password, int timeout)
 {
+	printf("ip:%s,port:%s,password:%s",szIP,port,password);
 	m_isOpen = false;
 	m_opCode[OPEN] = LCX_SPICE_CHANNEL_ERROR_CONNECT;
 
@@ -250,7 +287,7 @@ int CSpiceMultVEx::OpenSpice(char* szIP, char* port, char* uname, char* password
 	SpiceSetCalls(CSpiceMultVEx::m_hContext, m_hspice, callBack, cc);
    SetUsbEnable(true);
 
-qDebug() << "ip: " << szIP << "\n port: " << port;
+	//qDebug() << "ip: " << szIP << "\n port: " << port;
 
 
 
@@ -264,6 +301,7 @@ qDebug() << "ip: " << szIP << "\n port: " << port;
 	//ret = SpiceConnect(CSpiceMultVEx::m_hContext, m_hspice, "172.16.6.1", "5926", NULL,
 	ret = SpiceConnect(CSpiceMultVEx::m_hContext, m_hspice,szIP,port,NULL,
 		password, NULL, NULL, 1);
+
 	if (ret != 0)
 	{
 		printf("SpiceConnect failed! error:%d\n", ret);
@@ -284,26 +322,28 @@ qDebug() << "ip: " << szIP << "\n port: " << port;
 
 bool CSpiceMultVEx::CloseSpice()
 {
-	printf("closespice$$$$$$$$$$$$$$$$$$$$$\n");
-	
-	//if (m_isOpen == false)
-	{
-	printf("2222222222222222222222222222222222\n");
-	//	return true;
-	}
 	if (m_hspice == -1)
-	{
-	printf("3333333333333333333333333333333333\n");
 		return true;
-	}
-	printf("11111111111111111111111111111111111111111\n");
 
 	if (m_hspice >= 0)
 	{
-		SpiceDisconnect(CSpiceMultVEx::m_hContext, m_hspice);
-		SpiceClose(CSpiceMultVEx::m_hContext, m_hspice);
+      SpiceDisconnect(CSpiceMultVEx::m_hContext, m_hspice);
+      SpiceClose(CSpiceMultVEx::m_hContext, m_hspice);
 		m_hspice = -1;
+   }
+
+
+
+/*
+	m_pbufmutex.lock();
+	if (m_pImage != NULL)
+	{
+		free(m_pImage);
+		m_pImage = NULL;
 	}
+	m_height = m_width = 0;
+	m_pbufmutex.unlock();
+*/	
 	m_isOpen = false;
 	return true;
 }
@@ -318,9 +358,10 @@ void* CSpiceMultVEx::changeSetting(void* ctx, void *ud)
 		(pThis->m_height != sc->height))
 	{
 		pThis->m_pbufmutex.lock();
-		if (pThis->m_pImage)
+		if (pThis->m_pImage != NULL)
 		{
 			free(pThis->m_pImage);
+			pThis->m_pImage = NULL;
 		}
 		pThis->m_pImage = (char*)malloc(sc->width * sc->height * 4);
 
@@ -392,7 +433,7 @@ void* CSpiceMultVEx::invalidate(void* ctx, void *ud)
 
 	
 
-	MyZCLog::Instance().WriteToLog(ZCERROR, QString("invalidate cost %1 %2 %3").arg(iqq - iq).arg(iqqq - iqq).arg(pud->w * pud->h * 4));
+	//MyZCLog::Instance().WriteToLog(ZCERROR, QString("invalidate cost %1 %2 %3").arg(iqq - iq).arg(iqqq - iqq).arg(pud->w * pud->h * 4));
 
 	return NULL;
 }
@@ -428,16 +469,32 @@ void* CSpiceMultVEx::mainChannel(void* ctx, void *ud)
 		pThis->CloseSpice();
 		pThis->m_isOpen = false;
 		pThis->m_mutex.unlock();*/
+
 	{
+
+		printf("[%s][%d] [%s] is called!\n"
+            , __FILE__
+            , __LINE__
+            , __FUNCTION__);
+
+				MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====T==========================LCX_SPICE_CHANNEL_CLOSED:=============================="));
 
 									 QEvent *event = new QEvent(QEvent::Type(SPICE_CHANNEL_CLOSED));
 									 QCoreApplication::postEvent(pThis->GetMainWin(), event);
 									 break;
 	}
 		break;
+      
+      //qDebug() << "LCX_SPICE_CHANNEL_CLOSED  main channel: closed";
 	case LCX_SPICE_CHANNEL_ERROR_IO:
+	{
 		//SPICE_LOG("main channel: closed\n");
+		 //qDebug() << "SPICE_CHANNEL_ERROR_IO main channel: closed";
+		 QEvent *event1 = new QEvent(QEvent::Type(ERROR_IO_SHOW_WIDGET));
+		 QCoreApplication::postEvent(pThis->GetMainWin(), event1);
+
 		break;
+	}
 	case LCX_SPICE_CHANNEL_ERROR_TLS:
 	case LCX_SPICE_CHANNEL_ERROR_LINK:
 		//SPICE_LOG("main channel: auth failure (wrong password?\n");
@@ -457,34 +514,24 @@ void* CSpiceMultVEx::mainChannel(void* ctx, void *ud)
 
 void CSpiceMultVEx::paintEvent(QPaintEvent *event)
 {
-
-	QTime q = QTime::currentTime();
-	int iq = q.msec();
 	m_pbufmutex.lock();
+	if (m_pImage == NULL)
+	{
+		m_pbufmutex.unlock();
+		return;
+	}
 	QImage image = QImage((uchar*)m_pImage, m_width, m_height, QImage::Format_RGB32);
 	m_pbufmutex.unlock();
-	QTime qq = QTime::currentTime();
-	int iqq = qq.msec();
 	
  	QDesktopWidget* desktopWidget = QApplication::desktop();
  	QRect screenRect = desktopWidget->screenGeometry();
 	if (image.width() != screenRect.width() || image.height() != screenRect.height())
-	{
-	//	ChangeResolution(screenRect.width(), screenRect.height());
-	//	usleep(500*1000);
 		image = image.scaled(screenRect.width(), screenRect.height());
-	}
 
-	QTime qqq = QTime::currentTime();
-	int iqqq = qqq.msec();
 	QPainter paint(this);
 	paint.drawImage(QPoint(0, 0), image);
 	paint.end();
 	this->resize(screenRect.width(), screenRect.height());
-	QTime qqqq = QTime::currentTime();
-	int iqqqq = qqqq.msec();
-	
-	//MyZCLog::Instance().WriteToLog(ZCERROR, QString("paint_lock_interval %1 paint_cost %2").arg(iqq - iq).arg(iqqqq - iqqq));
 }
 
 void CSpiceMultVEx::closeEvent(QCloseEvent * event)
@@ -546,16 +593,19 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
 			break;
 		}
 
+   /*
 		if (QString("%1").arg(1) != m_hostisusb)
 		{
 			return QWidget::eventFilter(obj, ev);
 		}
-
+*/
+      
 		QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(ev);
 		
 
 		QPoint pt = CalcPos(mouseEvent->pos());
 
+//		MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====EVENT POS:x=%1,y=%2========").arg(pt.x()).arg(pt.y()));
 		if (m_menu)
 		{
 			QDesktopWidget* desktopWidget = QApplication::desktop();
@@ -569,7 +619,11 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
 				m_menushow = true;
 				if (!m_menutimer->isActive())
 				{
-					m_menutimer->start(2000);
+					MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====TIME START EVENT POS:x=%1,y=%2========").arg(even->pos().x()).arg(even->pos().y()));
+					if (ev->type() == QEvent::MouseMove)
+					{
+						m_menutimer->start(2000);
+					}
 					//qDebug() << "timer start ....................";
 				}
 			}
@@ -581,6 +635,43 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
 		{
 			if (m_menu)
 			{
+			
+				int haveunread = 0;
+				QSettings* msgfile = new QSettings(MSGFILE, QSettings::IniFormat);
+				if (msgfile)
+				{
+					msgfile->beginReadArray("messages");
+					QStringList keys = msgfile->allKeys();
+					keys.removeOne("lasttime");
+					int size = keys.size();
+					for (int i = 0; i < size; i++)
+					{
+						QString val = msgfile->value(keys.at(i)).toString();
+						QStringList list = val.split(",");
+						if (list[3] == "unread")
+						{
+							haveunread = 1;
+							MyZCLog::Instance().WriteToLog(ZCERROR, QString("haveunread mail = %1").arg(haveunread));
+							break;
+						}
+						else
+						{
+							continue;
+						}
+
+					}
+				}
+				
+				if(haveunread == 0)
+				{
+					if(m_menu->mail_status == 1)
+					{
+						m_menu->mail_status == 0;
+						m_menu->mail->setStyleSheet("QPushButton#mail{border-image: url(:/menu/msgno);}"
+										"QPushButton#mail:hover{border-image: url(:/menu/msgno);}"
+										"QPushButton#mail:pressed{border-image: url(:/menu/msgnoclick);}");
+					}
+		
 
 				QDesktopWidget* desktopWidget = QApplication::desktop();
                         	QRect screenRect = desktopWidget->screenGeometry();
@@ -593,9 +684,23 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
 					{
 						m_menutimer->stop();
 						m_menushow = false;
-						qDebug() << "timer out stop .....................";
+						//qDebug() << "timer out stop .....................";
 					}
 					m_menu->hide();
+				}
+				
+				
+				}
+				else
+				{
+					if(m_menu->mail_status == 0)
+					{
+						m_menu->mail_status = 1;
+						m_menu->mail->setStyleSheet("QPushButton#mail{border-image: url(:/menu/msghave);}"
+						"QPushButton#mail:hover{border-image: url(:/menu/msghave);}"
+						"QPushButton#mail:pressed{border-image: url(:/menu/msghaveclick);}");
+					}
+					m_menu->show();
 				}
 			}
 			SpiceButtonEvent(CSpiceMultVEx::m_hContext, m_hspice, pt.x(), pt.y(), 0, 0);
@@ -683,30 +788,41 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
 		else if (ev->type() == QEvent::KeyPress)
 		{
 
-			printf("KeyPress\n");
+			//printf("KeyPress\n");
 
 			QKeyEvent *keyEvent = static_cast<QKeyEvent*>(ev);
 			quint32 virtualKey = keyEvent->nativeVirtualKey();
-			SpiceKeyEvent(m_hContext, m_hspice, true, keymap_win322xtkbd[virtualKey]);
-			qDebug() << "===========" << virtualKey;
+			MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY PRESS EVENT -> VIRTUALKEY : %1========").arg(virtualKey));
+			if (virtualKey <= 65536)
+			{
+            MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY PRESS EVENT -> WIN32KEY : %1==333333333333333333======").arg(keymap_win322xtkbd[virtualKey]));
+				SpiceKeyEvent(m_hContext, m_hspice, true, keymap_win322xtkbd[virtualKey]);
+			}
+		//	MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY PRESS EVENT -> WIN32KEY : %1========").arg(keymap_win322xtkbd[virtualKey]));
+			//qDebug() << "P===========" << virtualKey;
+         /*
 			if(virtualKey == 65289)
 			ev->ignore();
+         */
 		}
 		else if (ev->type() == QEvent::KeyRelease)
 		{
 			QKeyEvent *keyEvent = static_cast<QKeyEvent*>(ev);
 			quint32 virtualKey = keyEvent->nativeVirtualKey();
-			qDebug() << ".............................." << virtualKey;
+			//qDebug() << "R.............................." << virtualKey;
 			if (virtualKey <= 65536)
-				SpiceKeyEvent(m_hContext, m_hspice, false, keymap_win322xtkbd[virtualKey]);
-		}
+            {
+               MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY RELEASE EVENT -> VIRTUALKEY : %1========").arg(virtualKey));
+			   	SpiceKeyEvent(m_hContext, m_hspice, false, keymap_win322xtkbd[virtualKey]);
+            }
+      }
 //		else
 		{
 //			printf("type = %d\n", ev->type());
 		}
 
 	} while (0);
-
+//	MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY EVENT -> VIRTUALKEY : %1========").arg(virtualKey));
 	return QWidget::eventFilter(obj, ev);
 }
 
@@ -717,6 +833,12 @@ QPoint CSpiceMultVEx::CalcPos(QPoint pt)
 		return QPoint(pt.x() - m_LTPt.x(),pt.y() - m_LTPt.y());
 	}
 	return pt;
+}
+
+void CSpiceMultVEx::setMenu(CMenuWidget* menu) 
+{
+	m_menu = menu; 
+	m_menu->setViewer(this);
 }
 
 void CSpiceMultVEx::SetScrollA(QScrollArea* pScollA)
@@ -824,6 +946,7 @@ void CSpiceMultVEx::menutimerOut()
 	//qDebug() << "in the timerout stop .........................." << QString("%1").arg(m_menushow);
 	if (m_menushow)
 		m_menu->show();
+		MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====m_menu->show();========"));
 }
 
 void CSpiceMultVEx::setHostUsb(const QString &isusb)
@@ -846,65 +969,53 @@ void CSpiceMultVEx::Update()
 		m_mutex.unlock();
 		return;
 	}
-	
+	if(m_width == 0)
+	{
+		return;
+	}
 	list<char*>tmplist = m_bmplist;
 	m_bmplist.clear();
 	m_mutex.unlock();
 
-	QTime time = QTime::currentTime();
-	int begin = time.msec();
 	list<char*>::iterator ita = tmplist.begin();
 	int size = tmplist.size();
 	int x, y, w, h;
 	find_max_range(tmplist,x,y,w,h);
 
-	QTime q = QTime::currentTime();
-	int iq = q.msec();
 
 	m_pbufmutex.lock();
 	for (; ita != tmplist.end(); ita++)
 	{
 		char* ptr = *ita;
 		SPICE_Invalidate* ud = (SPICE_Invalidate*)ptr;
-		imageCombined((char*)ud->bitmap,ud->x,ud->y,ud->w,ud->h);
+	
+	   if(ud->w == m_width && ud->h == m_height)
+      {
+          int size = sizeof(uint32_t) * ud->w * ud->h;
+          memcpy(m_pImage, ud->bitmap, size);
+      }
+      else if (ud->x >= 0 && ud->y >= 0 && (ud->x + ud->w) <= m_width && (ud->y + ud->h) <= m_height)
+      {
+         imageCombined((char*)ud->bitmap,ud->x,ud->y,ud->w,ud->h);
+      }
+	
 		ud->free_bitmap(ud->bitmap);
 		free(*ita);
 	}
 	m_pbufmutex.unlock();
 	tmplist.clear();
 
-	QTime qq = QTime::currentTime();
-	int iqq = qq.msec();
-
-
 	QRectEvent *event = new QRectEvent(QEvent::Type(SPICE_REFRESH));
 	event->SetRect(QRect(x,y,w,h));
-
-	QTime time2 = QTime::currentTime();
-	int interval = time2.msec() - begin;
-
-	if(interval < 0)
-	{
-		interval = 1000+interval;
-	}
-	if(interval < 30)
-	{
-	  //usleep(1000*(30 - interval));	
-	}
 	QCoreApplication::postEvent(this, event);
-
-	//MyZCLog::Instance().WriteToLog(ZCERROR, QString("Update_lock_interval %1===list size %2==interval =%3").arg(iqq - iq).arg(size).arg(interval));
 }
 
 void CSpiceMultVEx::imageCombined(char* bitmap, int x, int y, int width, int height)
 {
-	uchar* pixels;
-
-	if (!bitmap)
-	{
+	if (bitmap == NULL || m_pImage == NULL)
 		return;
-	}
-	pixels = (uchar*)m_pImage;
+
+	uchar* pixels = (uchar*)m_pImage;
 
 	int slen = m_width * 4;
 	int slen1 = width * 4;
@@ -996,7 +1107,7 @@ void CSpiceMultVEx::logout()
         QString strfmt("logout?user_name=%1");
         QString url = strfmt.arg(uname);
         svrurl.replace("connect", url);
-        qDebug() << "LogOut : " << svrurl;
+//        qDebug() << "LogOut : " << svrurl;
 	m_mainwin->m_cmd=LogOut;
         m_mainwin->doHttpGet(LogOut, svrurl);
 
@@ -1027,7 +1138,7 @@ void CSpiceMultVEx::heartbeat()
 	QString strfmt("keepalive?user_name=%1&time=%2");
 	QString url = strfmt.arg(uname).arg(lasttime);
 	svrurl.replace("connect", url);
-	qDebug() << "HeartBeat : " << svrurl;
+	//qDebug() << "HeartBeat : " << svrurl;
 	m_mainwin->m_cmd = HeartBeat;
 	m_mainwin->doHttpGet(HeartBeat, svrurl);
 
@@ -1092,7 +1203,10 @@ int SpiceMulViewer::OpenSpice(char* szIP, char* port, char* uname /*= NULL*/, ch
 
 bool SpiceMulViewer::CloseSpice()
 {
-	return m_SpiceViewer->CloseSpice();
+   if(m_SpiceViewer == NULL)
+      return false;
+   
+   return m_SpiceViewer->CloseSpice();
 }
 
 bool SpiceMulViewer::Spice_IsInit()

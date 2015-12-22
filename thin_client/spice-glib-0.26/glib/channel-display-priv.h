@@ -76,10 +76,8 @@ typedef struct display_stream {
 
     /*H264 decoder*/
     H264Decoder                    *h264_decoder;
-    H264StreamInfo                 *h264_info;
-    FILE                           *log_file;
-    unsigned long                   total_frames;               
-
+    H264StreamInfo                *h264_info;
+    FILE                                   *h264_log_file;
 
     gboolean                g_thread_exit;
     GCond			g_queue_cond;
@@ -128,6 +126,7 @@ void stream_mjpeg_cleanup(display_stream *st);
 void stream_h264_init(display_stream* st);
 void stream_h264_data(display_stream* st,  SpiceRect* rc);
 void stream_h264_cleanup(display_stream* st);
+
 G_END_DECLS
 
 #endif // CHANNEL_DISPLAY_PRIV_H_

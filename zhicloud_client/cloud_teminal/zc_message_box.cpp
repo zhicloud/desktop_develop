@@ -12,6 +12,7 @@ ZCMessageBox::ZCMessageBox(QString message, QWidget *parent,CUserCard* card)
 	: QDialog(parent)
 {
 	m_win = (CMainWindow*)parent;
+	m_isClose = false;
 	this->setFixedSize(188, 144);
 	g_card3 = card;
 	setAutoFillBackground(true);
@@ -168,6 +169,26 @@ void ZCMessageBox::closeDialogSlot()
 		delete dialogLabel;
 		dialogLabel = NULL;
 	}
+	m_isClose = true;
 	close();
+}
 
+bool ZCMessageBox::isClose()
+{
+	return m_isClose;
+}
+
+void ZCMessageBox::setFontColor(ZCMFONTCOLOR color)
+{
+	QPalette palette2;
+	if (color == ZCMFONTRED)
+	{
+		palette2.setColor(QPalette::WindowText, QColor(232, 86, 86));
+		dialogLabel->setPalette(palette2);
+	}
+	else
+	{
+		palette2.setColor(QPalette::WindowText, Qt::green);
+		dialogLabel->setPalette(palette2);
+	}
 }

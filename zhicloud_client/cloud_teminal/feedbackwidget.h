@@ -37,6 +37,7 @@
 #include <QComboBox>
 #include <QPlainTextEdit>
 #include <QMessageBox>
+#include "zc_message_box.h"
 
 class FeedbackWidget : public QWidget
 {
@@ -45,13 +46,16 @@ class FeedbackWidget : public QWidget
 public:
     FeedbackWidget(QWidget *parent = 0);
     ~FeedbackWidget();
+	void grabKey();
+	void setUnamePwd(QString &uname,QString &pwd);
 public slots:
     void uploadFeedbackSlot();
-    void  closeFeedbackSlot();
 	void replyFinished(QNetworkReply* reply);
 	void timeabort();
+	void closeFeedbackSlot();
+signals:
+	void closeFeebackSignal();
 private:
-    void createView();
 	void parseResult(QByteArray &data,bool &ret);
 private:
     int currentScreenWidth;
@@ -63,12 +67,13 @@ private:
     QPushButton* upnowButton;
     QPushButton* cancelButton;
     QPlainTextEdit* _versionInfo;
-    QPushButton* closeButton;
     QComboBox* typeBox;
     QStackedLayout* update_stack_layout;
-	QMessageBox m_messageBox;
+	ZCMessageBox *m_messageBox;
 	QString m_strError;
 	QString m_strUrl;
+	QString m_strUname;
+	QString m_strPwd;
 };
 
 #endif // FEEDBACKWIDGET_H

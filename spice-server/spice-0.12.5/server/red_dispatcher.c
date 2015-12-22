@@ -82,7 +82,10 @@ typedef struct RedWorkeState {
 //add by lcx 
 //int streaming_h264_video = 1;
 extern uint32_t streaming_video_compression; 
+extern int stream_video_h264_all_fps;
+extern int stream_video_h264_all_bit_rate;
 extern uint32_t streaming_video;
+
 extern spice_image_compression_t image_compression;
 extern spice_wan_compression_t jpeg_state;
 extern spice_wan_compression_t zlib_glz_state;
@@ -822,6 +825,24 @@ void red_dispatcher_on_svc_change(void)
 
 }
 
+//add by lcx for h264
+void red_dispatcher_on_stinfo_change(void)
+{
+    RedWorkerMessageSetStreamingVideoInfo payload;
+    RedDispatcher *now = dispatchers;
+    spice_printerr("i come to red_dispatcher_on_stinfo_change");
+    while (now){
+        payload.fps = stream_video_h264_all_fps;
+        payload.bit_rate =  stream_video_h264_all_bit_rate;
+        dispatcher_send_message(&now->dispatcher,
+                                RED_WORKER_MESSAGE_SET_STREAMING_VIDEO_INFO,
+                                &payload);
+        now = now->next;
+    }
+}
+
+
+
 void red_dispatcher_set_mouse_mode(uint32_t mode)
 {
     RedWorkerMessageSetMouseMode payload;
@@ -1134,6 +1155,8 @@ void red_dispatcher_init(QXLInstance *qxl)
     //add by lcx for h264
     //init_data.streaming_h264_video = streaming_h264_video;
     init_data.streaming_video_compression = streaming_video_compression;
+    init_data.stream_video_h264_all_fps = stream_video_h264_all_fps;
+    init_data.stream_video_h264_all_bit_rate = stream_video_h264_all_bit_rate;
 
 
     red_dispatcher->base.major_version = SPICE_INTERFACE_QXL_MAJOR;

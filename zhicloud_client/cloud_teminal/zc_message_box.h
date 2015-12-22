@@ -40,7 +40,11 @@ public slots:
 };
 
 
-
+enum ZCMFONTCOLOR
+{
+	ZCMFONTRED = 0,
+	ZCMFONTGREEN
+};
 
 class ZCMessageBox : public QDialog
 {
@@ -49,15 +53,17 @@ class ZCMessageBox : public QDialog
 public:
 	ZCMessageBox(QString message="", QWidget *parent = 0,CUserCard* card = 0);
 	~ZCMessageBox();
+	bool isClose();
+	void setFontColor(ZCMFONTCOLOR color);
 
 private:	
 	QPushButton *dialogButton;
 	QLabel      *dialogLabel;
 
 	CMainWindow* m_win;
-
+	bool m_isClose;
 signals:
-	private slots:
+private slots:
 	void closeDialogSlot();
 };
 

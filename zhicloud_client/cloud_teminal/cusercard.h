@@ -22,7 +22,8 @@ public:
 	void setText(QString str);
 	QString GetPixPath();
 	QString GetUsername(){ return struname;}
-	void SetUname(QString name){ struname = name; setText(struname); }
+	QString GetNickname() {return strnickname;}
+	void SetUname(QString name,QString nickname){ struname = name; strnickname = nickname; setText(strnickname); }
 	int isshow;
 public slots:
 	void clspressfunc();
@@ -39,6 +40,7 @@ public:
 	CMainWindow* main_win;
 private:
 	QString struname;
+	QString strnickname;
 	QPushButton* closebtn;
 	QPushButton* editbtn;
 	QLabel*		username;

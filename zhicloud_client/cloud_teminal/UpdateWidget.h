@@ -55,6 +55,8 @@ public slots :
 	void  downloadWindowSlot();
 	void  installWindowSlot();
 	void  sliderMovedSlot1(int pos);
+
+	void  okBtnClickSlot();
 	void timerFunc();
 
 	void httpFinished();
@@ -70,18 +72,22 @@ private:
 	void createupdateNow();
 	void createupdating();
 	void createupdateAbout();
+	void createcomfirmUpdate();
 	void sendUrlRequst();
 
 private:
 	int				isDownloadding;
 	QStackedLayout* update_stack_layout;
 	QWidget			*_updateNowWidget;
+	QWidget			*_comfirmUpdateWidget;
 	QWidget			*_updatingWidget;
 	QWidget			*_updateAboutWidget;
 	QWidget			*_pagesWidget[MAX_PAGES];
 	int				_maxPages;
 	QPushButton     *cancelButton;
 	QPushButton		*upnowButton;
+	QPushButton     *comfirmOkButton;
+	QPushButton		*comfirmCancelButton;
 	QPushButton		*_installButton;
 	QPushButton		*_bu;
 	CQueryVersionInfo *_queryVersionInfo;
@@ -107,6 +113,7 @@ private:
 	QLabel          *_queryVersionlabel;
 	//MyClickLabel    *_queryVersionlabel2;
 	QLabel			*_versionInfo;
+	QLabel			*_imformationInfo;
 	QTextEdit		*_showVersionInfo;
 	//MyClickLabel	*_updateDetail;
 	QPushButton		*_confirm;

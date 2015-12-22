@@ -1,5 +1,3 @@
-#include <time.h>
-
 #include "config.h"
 
 #include "spice-client.h"
@@ -10,7 +8,7 @@
 
 #define DEFAULT_MAX_FRAME_SIZE 1920 * 1080 * 4
 
-static int file_index = 1;
+static int h264_file_index = 0;
 
 void stream_h264_init(display_stream* st)
 {
@@ -41,14 +39,15 @@ void stream_h264_init(display_stream* st)
         return;
     } 
 
-    char h264_file_name[1024] = {0};
-    sprintf(h264_file_name, "./de_dir/H264-channel%d.h264", file_index++);
-
-    st->log_file = fopen(h264_file_name, "wb+");
-    if(st->log_file == NULL)
-    {
-       printf("open h264 file lost!\n");
-    }
+//   char h264_file_name[64] = {0};
+//   sprintf(h264_file_name, "./de_dir/channel%d.h264", h264_file_index++);
+//
+//   st->h264_log_file = fopen(h264_file_name, "wb+");
+//   if(st->h264_log_file == NULL)
+//   {
+//      printf("open h264 file lost!\n");
+//      return;
+//   }
 }
 
 void stream_h264_data(display_stream* st, SpiceRect* rc)
@@ -73,11 +72,11 @@ void stream_h264_data(display_stream* st, SpiceRect* rc)
     h264_frame = (char*)(st->msg_data->data + 12);
     h264_frame_size =(int*)(st->msg_data->data + 8);   
 
-    if(st->log_file != NULL)
-    {
-         fwrite(h264_frame, 1, *h264_frame_size, st->log_file);
-         fflush(st->log_file);
-    }
+//    if(st->h264_log_file != NULL)
+//    {
+//         fwrite(h264_frame, 1, *h264_frame_size, st->h264_log_file);
+//         fflush(st->h264_log_file);
+//    }
 
     rgb_frame = (char*)g_malloc0(DEFAULT_MAX_FRAME_SIZE);
     ret = h264_decode(st->h264_decoder, rgb_frame, &rgb_frame_size, h264_frame, *h264_frame_size, &width, &height, &hpp);
@@ -87,28 +86,36 @@ void stream_h264_data(display_stream* st, SpiceRect* rc)
               g_free(st->out_frame);
 
 
-     	auto ack_width = abs(rc->right - rc->left);
-    	auto ack_height = abs(rc->top - rc->bottom);
-
-      if(ack_width % 2 == 1)
-     	{
-         auto ack_row = 4 * ack_width;
-     		auto row = 4 * width;
-     
-     		char* tmp_pic = (char*)g_malloc0(ack_row * ack_height);
-     		for(auto i = 0;i < ack_height; i++)
-     		{
-     			memcpy(tmp_pic + i * ack_row, rgb_frame + i * row, ack_row);
-     		}
-     
-     		st->out_frame = tmp_pic;
-     		g_free(rgb_frame);       
-    	}
-     	else
-     	{
-     		 st->out_frame = (uint8_t*)rgb_frame;
-      }
-      
+//        	int ack_width = abs(rc->right - rc->left);
+//        	int ack_height = abs(rc->top - rc->bottom);
+//
+//        	if(ack_width % 2 == 1)
+//        	{
+//        		printf("[FILE:%s] [LINE:%d] [FUNCTION:%s] msg = \"ack_width = %d, ack_height = %d, width=%d, height=%d\"\n"
+//                    , __FILE__
+//                    , __LINE__
+//                    , __FUNCTION__ 
+//                    , ack_width
+//                    , ack_height 
+//                    , width                     
+//                    , height);
+            
+//            int ack_row = 4 * ack_width;
+//        		int row = 4 * width;
+//        
+//        		char* tmp_pic = (char*)g_malloc0(ack_row * ack_height);
+//        		for(auto i = 0;i < ack_height; i++)
+//        		{
+//        			memcpy(tmp_pic + i * ack_row, rgb_frame + i * row, ack_row);
+//        		}
+//        
+//        		st->out_frame = tmp_pic;
+//        		g_free(rgb_frame);        
+//        	}
+//        	else
+//        	{
+        		 st->out_frame = (uint8_t*)rgb_frame;
+//         }
      } 
      else
      {
@@ -137,9 +144,9 @@ void stream_h264_cleanup(display_stream* st)
       st->out_frame = NULL;
    }
 
-   if(st->log_file != NULL)
-   {
-      fclose(st->log_file);
-      st->log_file = NULL;
-   }
+//   if(st->h264_log_file != NULL)
+//   {
+//      fclose(st->h264_log_file);
+//      st->h264_log_file = NULL;
+//   }
 }

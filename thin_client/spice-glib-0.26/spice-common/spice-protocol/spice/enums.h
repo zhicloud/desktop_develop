@@ -139,7 +139,7 @@ typedef enum SpicePathFlags {
 
 typedef enum SpiceVideoCodecType {
     SPICE_VIDEO_CODEC_TYPE_MJPEG = 1,
-    SPICE_VIDEO_CODEC_TYPE_H264 = 2,
+    SPICE_VIDEO_CODEC_TYPE_H264, 
     SPICE_VIDEO_CODEC_TYPE_ENUM_END
 } SpiceVideoCodecType;
 

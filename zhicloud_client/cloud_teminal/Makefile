@@ -10,18 +10,18 @@ MAKEFILE      = Makefile
 
 ####### Compiler, tools and options
 
+#-DLXLLOG  -DZS
+
 CC            = gcc
 CXX           = g++
-DEFINES       = -DLINUX -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB
-CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIE $(DEFINES) -g
-CXXFLAGS      = -pipe -O2 -Wall -W -D_REENTRANT -fPIE $(DEFINES) -g
+DEFINES       = -DLINUX -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB  
+CFLAGS        = -g -pipe -Wall -W -D_REENTRANT -fPIE $(DEFINES)
+CXXFLAGS      = -g -pipe -Wall -W -D_REENTRANT -fPIE $(DEFINES)
 INCPATH       = -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I. -I. -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtWidgets -I/usr/local/Qt-5.3.2-static/include/QtNetwork -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I. -I.
 LINK          = g++
 LFLAGS        = -Wl,-O1
-LIBS          = $(SUBLIBS) -L../packet/lib/ -lspice_glib -lspice_without_gtk -lspice-common-client \
-					 -L/usr/lib/ -lusbredirhost -lusbredirparser \
-					 -lz -L/usr/local/lib/ -lcelt051 -lpixman-1 -lssl -lgstbase-0.10 -lgstreamer-0.10 -lxml2 -lcrypto -lpulse-mainloop-glib -lpulse -lsasl2  -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lusb-1.0 -ljpeg -L/usr/local/Qt-5.3.2-static/lib -L/usr/local/Qt-5.3.2-static/plugins/accessible -lqtaccessiblewidgets -lQt5Widgets -L/usr/local/Qt-5.3.2-static/plugins/bearer -lqconnmanbearer -lqgenericbearer -lqnmbearer -lQt5Network -L/usr/local/Qt-5.3.2-static/plugins/platforms -lqxcb -lSM -lICE -ldbus-1 -lxcb -L/home/qt-everywhere-opensource-src-5.3.2/qtbase/src/plugins/platforms/xcb/xcb-static -lxcb-static -lQt5PlatformSupport -lfontconfig -lfreetype -lQt5DBus -L/usr/local/Qt-5.3.2-static/plugins/imageformats -lqdds -lqicns -lqico -lqjp2 -lqmng -lqtga -lqtiff -lqwbmp -lqwebp -lQt5Gui -lQt5Core -lm -ldl -pthread -lgthread-2.0 -lglib-2.0 -lrt -lGLESv2 -lpthread -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 \
-					 -L../spice-glib-0.26/ffmpeg/lib/ -lavformat -lavcodec -lx264 -lpthread -lva -lswresample -lswscale -lavutil
+LIBS          = $(SUBLIBS) ../packet/lib/libspice_glib.a ../packet/lib/libspice_without_gtk.a ../packet/lib/libspice-common-client.a -lz /usr/local/lib/libcelt051.a -lpixman-1 -lssl -lgstbase-0.10 -lgstreamer-0.10 -lxml2 -lcrypto -lpulse-mainloop-glib -lpulse -lsasl2 /usr/lib/libusbredirhost.a /usr/lib/libusbredirparser.a -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lusb-1.0 -ljpeg -L/usr/local/Qt-5.3.2-static/lib -L/usr/local/Qt-5.3.2-static/plugins/accessible -lqtaccessiblewidgets -lQt5Widgets -L/usr/local/Qt-5.3.2-static/plugins/bearer -lqconnmanbearer -lqgenericbearer -lqnmbearer -lQt5Network -L/usr/local/Qt-5.3.2-static/plugins/platforms -lqxcb -lSM -lICE -ldbus-1 -lxcb -L/home/qt-everywhere-opensource-src-5.3.2/qtbase/src/plugins/platforms/xcb/xcb-static -lxcb-static -lQt5PlatformSupport -lfontconfig -lfreetype -lQt5DBus -L/usr/local/Qt-5.3.2-static/plugins/imageformats -lqdds -lqicns -lqico -lqjp2 -lqmng -lqtga -lqtiff -lqwbmp -lqwebp -lQt5Gui -lQt5Core -lm -ldl -pthread -lgthread-2.0 -lglib-2.0 -lrt -lGLESv2 -lpthread -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 \
+	  				 -pthread -L/home/lichenxiang/opt/lib -lavdevice -lavfilter -lpostproc -lavformat -lavcodec -lva-x11 -lva -lxcb-shm -lxcb-xfixes -lxcb-render -lxcb-shape -lxcb -lXau -lXdmcp -lpulse-simple -lpulse -lX11 -lXext -lstdc++ -lrt -lx264 -ldl -lpthread -lfontconfig -lexpat -lfreetype -lpng12 -lz -lswresample -lswscale -lavutil -lm -lX11
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /usr/bin/qmake
@@ -49,6 +49,8 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = cdiagnoseitem.cpp \
+		cesulabel.cpp \
+		cfblbutton.cpp \
 		chostlist.cpp \
 		clabel.cpp \
 		cleftarrawpwdedit.cpp \
@@ -56,13 +58,22 @@ SOURCES       = cdiagnoseitem.cpp \
 		clogthred.cpp \
 		cloud_teminal_plugin_import.cpp \
 		cloud_terminal.cpp \
+		cmailboxwidget.cpp \
+		cmaildelwidget.cpp \
+		cmailitemwidget.cpp \
+		cmailsearch.cpp \
 		cmenuwidget.cpp \
 		cmythread.cpp \
 		cnetaboutspilter.cpp \
 		cnetdiswidget.cpp \
 		common_operater.cpp \
+		crolatepoint.cpp \
+		ctoolbox.cpp \
 		cusercard.cpp \
 		cuserpicpanel.cpp \
+		fbl_message_box.cpp \
+		fblsetwidget.cpp \
+		feedbackwidget.cpp \
 		getway.cpp \
 		log.cpp \
 		main.cpp \
@@ -81,19 +92,12 @@ SOURCES       = cdiagnoseitem.cpp \
 		zc_message_box.cpp \
 		cloud_teminal_plugin_import.cpp qrc_cloud_terminal.cpp \
 		moc_cdiagnoseitem.cpp \
+		moc_cesulabel.cpp \
+		moc_cfblbutton.cpp \
 		moc_chostlist.cpp \
 		moc_clabel.cpp \
 		moc_cleftarrawpwdedit.cpp \
 		moc_cloading.cpp \
-		moc_clogthred.cpp \
-		moc_cloud_terminal.cpp \
-		moc_cmenuwidget.cpp \
-		moc_cmythread.cpp \
-		moc_cnetaboutspilter.cpp \
-		moc_cnetdiswidget.cpp \
-		moc_cusercard.cpp \
-		moc_cuserpicpanel.cpp \
-		moc_mainwindow.cpp \
 		moc_clogthred.cpp \
 		moc_cloud_terminal.cpp \
 		moc_cmailboxwidget.cpp \
@@ -104,6 +108,8 @@ SOURCES       = cdiagnoseitem.cpp \
 		moc_cmythread.cpp \
 		moc_cnetaboutspilter.cpp \
 		moc_cnetdiswidget.cpp \
+		moc_crolatepoint.cpp \
+		moc_ctoolbox.cpp \
 		moc_cusercard.cpp \
 		moc_cuserpicpanel.cpp \
 		moc_fbl_message_box.cpp \
@@ -119,6 +125,7 @@ SOURCES       = cdiagnoseitem.cpp \
 		moc_UpdateWidget.cpp \
 		moc_zc_message_box.cpp
 OBJECTS       = cdiagnoseitem.o \
+		cesulabel.o \
 		cfblbutton.o \
 		chostlist.o \
 		clabel.o \
@@ -136,6 +143,8 @@ OBJECTS       = cdiagnoseitem.o \
 		cnetaboutspilter.o \
 		cnetdiswidget.o \
 		common_operater.o \
+		crolatepoint.o \
+		ctoolbox.o \
 		cusercard.o \
 		cuserpicpanel.o \
 		fbl_message_box.o \
@@ -160,6 +169,7 @@ OBJECTS       = cdiagnoseitem.o \
 		cloud_teminal_plugin_import.o \
 		qrc_cloud_terminal.o \
 		moc_cdiagnoseitem.o \
+		moc_cesulabel.o \
 		moc_cfblbutton.o \
 		moc_chostlist.o \
 		moc_clabel.o \
@@ -175,6 +185,8 @@ OBJECTS       = cdiagnoseitem.o \
 		moc_cmythread.o \
 		moc_cnetaboutspilter.o \
 		moc_cnetdiswidget.o \
+		moc_crolatepoint.o \
+		moc_ctoolbox.o \
 		moc_cusercard.o \
 		moc_cuserpicpanel.o \
 		moc_fbl_message_box.o \
@@ -336,6 +348,7 @@ DIST          = /usr/local/Qt-5.3.2-static/mkspecs/features/spec_pre.prf \
 		/usr/local/Qt-5.3.2-static/mkspecs/features/yacc.prf \
 		/usr/local/Qt-5.3.2-static/mkspecs/features/lex.prf \
 		cloud_teminal.pro cdiagnoseitem.cpp \
+		cesulabel.cpp \
 		cfblbutton.cpp \
 		chostlist.cpp \
 		clabel.cpp \
@@ -353,6 +366,8 @@ DIST          = /usr/local/Qt-5.3.2-static/mkspecs/features/spec_pre.prf \
 		cnetaboutspilter.cpp \
 		cnetdiswidget.cpp \
 		common_operater.cpp \
+		crolatepoint.cpp \
+		ctoolbox.cpp \
 		cusercard.cpp \
 		cuserpicpanel.cpp \
 		fbl_message_box.cpp \
@@ -741,7 +756,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/cloud_teminal1.0.0 || mkdir -p .tmp/cloud_teminal1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/cloud_teminal1.0.0/ && $(COPY_FILE) --parents cloud_terminal.qrc .tmp/cloud_teminal1.0.0/ && $(COPY_FILE) --parents cdiagnoseitem.h cfblbutton.h chostlist.h clabel.h cleftarrawpwdedit.h cloading.h clogthred.h cloud_terminal.h cmailboxwidget.h cmaildelwidget.h cmailitemwidget.h cmailsearch.h cmenuwidget.h cmythread.h cnetaboutspilter.h cnetdiswidget.h common.h common_operater.h cusercard.h cuserpicpanel.h fbl_message_box.h fblsetwidget.h feedbackwidget.h getway.h log.h mainwindow.h menu_box.h myclicklabel.h mylabel.h mylog.h mytextedit.h qrectevent.h resource.h ringlist.h singleton.h SpiceMulViewer.h togglebutton.h ui_cloud_terminal.h UpdateWidget.h util.h zc_message_box.h ../packet/include/win32_spice_interface_types.h ../packet/include/win32_spice_interface.h .tmp/cloud_teminal1.0.0/ && $(COPY_FILE) --parents cdiagnoseitem.cpp cfblbutton.cpp chostlist.cpp clabel.cpp cleftarrawpwdedit.cpp cloading.cpp clogthred.cpp cloud_teminal_plugin_import.cpp cloud_terminal.cpp cmailboxwidget.cpp cmaildelwidget.cpp cmailitemwidget.cpp cmailsearch.cpp cmenuwidget.cpp cmythread.cpp cnetaboutspilter.cpp cnetdiswidget.cpp common_operater.cpp cusercard.cpp cuserpicpanel.cpp fbl_message_box.cpp fblsetwidget.cpp feedbackwidget.cpp getway.cpp log.cpp main.cpp mainwindow.cpp menu_box.cpp myclicklabel.cpp mylabel.cpp mylog.cpp mytextedit.cpp qrectevent.cpp ringlist.cpp SpiceMulViewer.cpp togglebutton.cpp UpdateWidget.cpp util.cpp zc_message_box.cpp cloud_teminal_plugin_import.cpp .tmp/cloud_teminal1.0.0/ && $(COPY_FILE) --parents cloud_terminal_zh.ts .tmp/cloud_teminal1.0.0/ && (cd `dirname .tmp/cloud_teminal1.0.0` && $(TAR) cloud_teminal1.0.0.tar cloud_teminal1.0.0 && $(COMPRESS) cloud_teminal1.0.0.tar) && $(MOVE) `dirname .tmp/cloud_teminal1.0.0`/cloud_teminal1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/cloud_teminal1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/cloud_teminal1.0.0/ && $(COPY_FILE) --parents cloud_terminal.qrc .tmp/cloud_teminal1.0.0/ && $(COPY_FILE) --parents cdiagnoseitem.h cesulabel.h cfblbutton.h chostlist.h clabel.h cleftarrawpwdedit.h cloading.h clogthred.h cloud_terminal.h cmailboxwidget.h cmaildelwidget.h cmailitemwidget.h cmailsearch.h cmenuwidget.h cmythread.h cnetaboutspilter.h cnetdiswidget.h common.h common_operater.h crolatepoint.h ctoolbox.h cusercard.h cuserpicpanel.h fbl_message_box.h fblsetwidget.h feedbackwidget.h getway.h log.h mainwindow.h menu_box.h myclicklabel.h mylabel.h mylog.h mytextedit.h qrectevent.h resource.h ringlist.h singleton.h SpiceMulViewer.h togglebutton.h ui_cloud_terminal.h UpdateWidget.h util.h zc_message_box.h ../packet/include/win32_spice_interface_types.h ../packet/include/win32_spice_interface.h .tmp/cloud_teminal1.0.0/ && $(COPY_FILE) --parents cdiagnoseitem.cpp cesulabel.cpp cfblbutton.cpp chostlist.cpp clabel.cpp cleftarrawpwdedit.cpp cloading.cpp clogthred.cpp cloud_teminal_plugin_import.cpp cloud_terminal.cpp cmailboxwidget.cpp cmaildelwidget.cpp cmailitemwidget.cpp cmailsearch.cpp cmenuwidget.cpp cmythread.cpp cnetaboutspilter.cpp cnetdiswidget.cpp common_operater.cpp crolatepoint.cpp ctoolbox.cpp cusercard.cpp cuserpicpanel.cpp fbl_message_box.cpp fblsetwidget.cpp feedbackwidget.cpp getway.cpp log.cpp main.cpp mainwindow.cpp menu_box.cpp myclicklabel.cpp mylabel.cpp mylog.cpp mytextedit.cpp qrectevent.cpp ringlist.cpp SpiceMulViewer.cpp togglebutton.cpp UpdateWidget.cpp util.cpp zc_message_box.cpp cloud_teminal_plugin_import.cpp .tmp/cloud_teminal1.0.0/ && $(COPY_FILE) --parents cloud_terminal_zh.ts .tmp/cloud_teminal1.0.0/ && (cd `dirname .tmp/cloud_teminal1.0.0` && $(TAR) cloud_teminal1.0.0.tar cloud_teminal1.0.0 && $(COMPRESS) cloud_teminal1.0.0.tar) && $(MOVE) `dirname .tmp/cloud_teminal1.0.0`/cloud_teminal1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/cloud_teminal1.0.0
 
 
 clean:compiler_clean 
@@ -835,6 +850,26 @@ qrc_cloud_terminal.cpp: cloud_terminal.qrc \
 		Resources/dialog_res/dialogButton_pressed.png \
 		Resources/dialog_res/dialogClose_hover.png \
 		Resources/dialog_res/dialogBackground.png \
+		Resources/sysset_res/1280X720-move.png \
+		Resources/sysset_res/1336X768-move.png \
+		Resources/sysset_res/1280X720-ICON.png \
+		Resources/sysset_res/800X600-choose.png \
+		Resources/sysset_res/1336X768-choose.png \
+		Resources/sysset_res/1336X768-ICON.png \
+		Resources/sysset_res/1024X768-move.png \
+		Resources/sysset_res/1920X1080-choose.png \
+		Resources/sysset_res/1024X768-ICON.png \
+		Resources/sysset_res/800X600-move.png \
+		Resources/sysset_res/1920X1080-down.png \
+		Resources/sysset_res/800X600-ICON.png \
+		Resources/sysset_res/1280X720-choose.png \
+		Resources/sysset_res/1024X768-choose.png \
+		Resources/sysset_res/1280X720-down.png \
+		Resources/sysset_res/1336X768-down.png \
+		Resources/sysset_res/1920X1080-move.png \
+		Resources/sysset_res/1920X1080-ICON.png \
+		Resources/sysset_res/1024X768-down.png \
+		Resources/sysset_res/800X600-down.png \
 		Resources/loading/20.png \
 		Resources/loading/21.png \
 		Resources/loading/22.png \
@@ -866,8 +901,10 @@ qrc_cloud_terminal.cpp: cloud_terminal.qrc \
 		Resources/changeuser/adduserhover.png \
 		Resources/first_login_res/cs_hover.png \
 		Resources/first_login_res/cancelclick.png \
+		Resources/first_login_res/zslogo.png \
 		Resources/first_login_res/cancelnomal.png \
 		Resources/first_login_res/neterror.png \
+		Resources/first_login_res/zylogo.png \
 		Resources/first_login_res/default_photo.png \
 		Resources/first_login_res/btn_pressed.png \
 		Resources/first_login_res/save_user_uncheck.png \
@@ -877,7 +914,6 @@ qrc_cloud_terminal.cpp: cloud_terminal.qrc \
 		Resources/first_login_res/adduserclick.png \
 		Resources/first_login_res/adduserretnomal.png \
 		Resources/first_login_res/input.png \
-		Resources/first_login_res/logo.png \
 		Resources/first_login_res/background.jpg \
 		Resources/first_login_res/cs_click.png \
 		Resources/first_login_res/cs_nomal.png \
@@ -913,6 +949,25 @@ qrc_cloud_terminal.cpp: cloud_terminal.qrc \
 		Resources/userpic/default11.png \
 		Resources/userpic/default9.png \
 		Resources/userpic/default12.png \
+		Resources/toolbox/fankuimove.png \
+		Resources/toolbox/againmove.png \
+		Resources/toolbox/fankuiclick.png \
+		Resources/toolbox/fankuinomal.png \
+		Resources/toolbox/startmove.png \
+		Resources/toolbox/toolboxclick.png \
+		Resources/toolbox/toolboxnomal.png \
+		Resources/toolbox/cancelmove.png \
+		Resources/toolbox/againclick.png \
+		Resources/toolbox/cancelclick.png \
+		Resources/toolbox/againnomal.png \
+		Resources/toolbox/cancelnomal.png \
+		Resources/toolbox/startclick.png \
+		Resources/toolbox/pointer.png \
+		Resources/toolbox/speedbtnmove.png \
+		Resources/toolbox/speedbtnclick.png \
+		Resources/toolbox/bg.png \
+		Resources/toolbox/startnomal.png \
+		Resources/toolbox/speedbtnnomal.png \
 		Resources/changpswd_res/surehover.png \
 		Resources/changpswd_res/surenomal.png \
 		Resources/changpswd_res/retclicked.png \
@@ -980,11 +1035,14 @@ qrc_cloud_terminal.cpp: cloud_terminal.qrc \
 		Resources/hostselect/itemhover.png
 	/usr/local/Qt-5.3.2-static/bin/rcc -name cloud_terminal cloud_terminal.qrc -o qrc_cloud_terminal.cpp
 
-compiler_moc_header_make_all: moc_cdiagnoseitem.cpp moc_cfblbutton.cpp moc_chostlist.cpp moc_clabel.cpp moc_cleftarrawpwdedit.cpp moc_cloading.cpp moc_clogthred.cpp moc_cloud_terminal.cpp moc_cmailboxwidget.cpp moc_cmaildelwidget.cpp moc_cmailitemwidget.cpp moc_cmailsearch.cpp moc_cmenuwidget.cpp moc_cmythread.cpp moc_cnetaboutspilter.cpp moc_cnetdiswidget.cpp moc_cusercard.cpp moc_cuserpicpanel.cpp moc_fbl_message_box.cpp moc_fblsetwidget.cpp moc_feedbackwidget.cpp moc_mainwindow.cpp moc_menu_box.cpp moc_myclicklabel.cpp moc_mylabel.cpp moc_mytextedit.cpp moc_SpiceMulViewer.cpp moc_togglebutton.cpp moc_UpdateWidget.cpp moc_zc_message_box.cpp
+compiler_moc_header_make_all: moc_cdiagnoseitem.cpp moc_cesulabel.cpp moc_cfblbutton.cpp moc_chostlist.cpp moc_clabel.cpp moc_cleftarrawpwdedit.cpp moc_cloading.cpp moc_clogthred.cpp moc_cloud_terminal.cpp moc_cmailboxwidget.cpp moc_cmaildelwidget.cpp moc_cmailitemwidget.cpp moc_cmailsearch.cpp moc_cmenuwidget.cpp moc_cmythread.cpp moc_cnetaboutspilter.cpp moc_cnetdiswidget.cpp moc_crolatepoint.cpp moc_ctoolbox.cpp moc_cusercard.cpp moc_cuserpicpanel.cpp moc_fbl_message_box.cpp moc_fblsetwidget.cpp moc_feedbackwidget.cpp moc_mainwindow.cpp moc_menu_box.cpp moc_myclicklabel.cpp moc_mylabel.cpp moc_mytextedit.cpp moc_SpiceMulViewer.cpp moc_togglebutton.cpp moc_UpdateWidget.cpp moc_zc_message_box.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_cdiagnoseitem.cpp moc_cfblbutton.cpp moc_chostlist.cpp moc_clabel.cpp moc_cleftarrawpwdedit.cpp moc_cloading.cpp moc_clogthred.cpp moc_cloud_terminal.cpp moc_cmailboxwidget.cpp moc_cmaildelwidget.cpp moc_cmailitemwidget.cpp moc_cmailsearch.cpp moc_cmenuwidget.cpp moc_cmythread.cpp moc_cnetaboutspilter.cpp moc_cnetdiswidget.cpp moc_cusercard.cpp moc_cuserpicpanel.cpp moc_fbl_message_box.cpp moc_fblsetwidget.cpp moc_feedbackwidget.cpp moc_mainwindow.cpp moc_menu_box.cpp moc_myclicklabel.cpp moc_mylabel.cpp moc_mytextedit.cpp moc_SpiceMulViewer.cpp moc_togglebutton.cpp moc_UpdateWidget.cpp moc_zc_message_box.cpp
+	-$(DEL_FILE) moc_cdiagnoseitem.cpp moc_cesulabel.cpp moc_cfblbutton.cpp moc_chostlist.cpp moc_clabel.cpp moc_cleftarrawpwdedit.cpp moc_cloading.cpp moc_clogthred.cpp moc_cloud_terminal.cpp moc_cmailboxwidget.cpp moc_cmaildelwidget.cpp moc_cmailitemwidget.cpp moc_cmailsearch.cpp moc_cmenuwidget.cpp moc_cmythread.cpp moc_cnetaboutspilter.cpp moc_cnetdiswidget.cpp moc_crolatepoint.cpp moc_ctoolbox.cpp moc_cusercard.cpp moc_cuserpicpanel.cpp moc_fbl_message_box.cpp moc_fblsetwidget.cpp moc_feedbackwidget.cpp moc_mainwindow.cpp moc_menu_box.cpp moc_myclicklabel.cpp moc_mylabel.cpp moc_mytextedit.cpp moc_SpiceMulViewer.cpp moc_togglebutton.cpp moc_UpdateWidget.cpp moc_zc_message_box.cpp
 moc_cdiagnoseitem.cpp: cdiagnoseitem.h
 	/usr/local/Qt-5.3.2-static/bin/moc $(DEFINES) -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I/home/cloud_teminal -I/home/cloud_teminal -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I/usr/include/c++/4.8 -I/usr/include/arm-linux-gnueabihf/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include cdiagnoseitem.h -o moc_cdiagnoseitem.cpp
+
+moc_cesulabel.cpp: cesulabel.h
+	/usr/local/Qt-5.3.2-static/bin/moc $(DEFINES) -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I/home/cloud_teminal -I/home/cloud_teminal -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I/usr/include/c++/4.8 -I/usr/include/arm-linux-gnueabihf/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include cesulabel.h -o moc_cesulabel.cpp
 
 moc_cfblbutton.cpp: cfblbutton.h
 	/usr/local/Qt-5.3.2-static/bin/moc $(DEFINES) -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I/home/cloud_teminal -I/home/cloud_teminal -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I/usr/include/c++/4.8 -I/usr/include/arm-linux-gnueabihf/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include cfblbutton.h -o moc_cfblbutton.cpp
@@ -1829,6 +1887,9 @@ moc_cmenuwidget.cpp: mainwindow.h \
 		/usr/local/Qt-5.3.2-static/include/QtGui/qdesktopservices.h \
 		/usr/local/Qt-5.3.2-static/include/QtGui/qtguiversion.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/QTextCodec \
+		ctoolbox.h \
+		crolatepoint.h \
+		cesulabel.h \
 		cmenuwidget.h
 	/usr/local/Qt-5.3.2-static/bin/moc $(DEFINES) -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I/home/cloud_teminal -I/home/cloud_teminal -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I/usr/include/c++/4.8 -I/usr/include/arm-linux-gnueabihf/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include cmenuwidget.h -o moc_cmenuwidget.cpp
 
@@ -1943,6 +2004,394 @@ moc_cnetdiswidget.cpp: /usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
 		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
 		cnetdiswidget.h
 	/usr/local/Qt-5.3.2-static/bin/moc $(DEFINES) -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I/home/cloud_teminal -I/home/cloud_teminal -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I/usr/include/c++/4.8 -I/usr/include/arm-linux-gnueabihf/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include cnetdiswidget.h -o moc_cnetdiswidget.cpp
+
+moc_crolatepoint.cpp: /usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QUrl \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurlquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		crolatepoint.h
+	/usr/local/Qt-5.3.2-static/bin/moc $(DEFINES) -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I/home/cloud_teminal -I/home/cloud_teminal -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I/usr/include/c++/4.8 -I/usr/include/arm-linux-gnueabihf/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include crolatepoint.h -o moc_crolatepoint.cpp
+
+moc_ctoolbox.cpp: /usr/local/Qt-5.3.2-static/include/QtWidgets/QApplication \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventloop.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qdesktopwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpalette.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcolor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrgb.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbrush.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpolygon.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qregion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qline.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtransform.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainterpath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimage.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qsizepolicy.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qkeysequence.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurlquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfiledevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector2d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtouchdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qguiapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qinputmethod.h \
+		feedbackwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIcon \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qicon.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QMouseEvent \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTime \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatetime.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QCoreApplication \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QThread \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthread.h \
+		/usr/local/Qt-5.3.2-static/include/QtNetwork/qnetworkcookie.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSharedDataPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMetaType \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QObject \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSettings \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QUrl \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGui \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGuiDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCore \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCoreDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qparallelanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpauseanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpropertyanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariantanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeasingcurve.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsequentialanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextcodec.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qendian.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibraryinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdiriterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileselector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QStringList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfilesystemwatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlockfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qloggingcategory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocess.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresource.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsavefile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstandardpaths.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporarydir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QScopedPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporaryfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractitemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qidentityproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qitemselectionmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsortfilterproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlistmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonvalue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsondocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracteventdispatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractnativeeventfilter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmath.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetaobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectcleanuphandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedmemory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignalmapper.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsocketnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtranslator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwineventnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimetype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfactoryinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibrary.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpluginloader.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/quuid.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracttransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventtransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfinalstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhistorystate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignaltransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstatemachine.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qexception.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuture.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfutureinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrunnable.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresultstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturesynchronizer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturewatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qreadwritelock.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadpool.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadstorage.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwaitcondition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydataops.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydatapointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbitarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearraymatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcollator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineparser.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcryptographichash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qelapsedtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlinkedlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmessageauthenticationcode.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qqueue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregularexpression.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedvaluerollback.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstack.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextboundaryfinder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimeline.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimezone.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qxmlstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtcoreversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessible.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessiblebridge.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbitmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengineplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimageiohandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagereader.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagewriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmovie.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpicture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpictureformatplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmapcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstandarditemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qclipboard.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdrag.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericpluginfactory.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qoffscreensurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurfaceformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglcontext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QSurfaceFormat \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qt_windows.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengles2ext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglversionfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qscreen.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSize \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSizeF \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QTransform \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsessionmanager.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstylehints.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindow.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMargins \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix4x4.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector3d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector4d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qquaternion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengldebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglframebufferobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpixeltransferoptions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglshaderprogram.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltexture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltimerquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglvertexarrayobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbackingstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagedpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagelayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagesize.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpen.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpdfwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qabstracttextdocumentlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qglyphrun.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrawfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontdatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstatictext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsyntaxhighlighter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentfragment.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtexttable.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdesktopservices.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtguiversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextCodec \
+		zc_message_box.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		mylabel.h \
+		cusercard.h \
+		clabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		cuserpicpanel.h \
+		crolatepoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		cesulabel.h \
+		ctoolbox.h
+	/usr/local/Qt-5.3.2-static/bin/moc $(DEFINES) -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I/home/cloud_teminal -I/home/cloud_teminal -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I/usr/include/c++/4.8 -I/usr/include/arm-linux-gnueabihf/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ctoolbox.h -o moc_ctoolbox.cpp
 
 moc_cusercard.cpp: clabel.h \
 		/usr/local/Qt-5.3.2-static/include/QtGui/QMouseEvent \
@@ -2138,6 +2587,17 @@ moc_fbl_message_box.cpp: /usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
 		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
 		/usr/local/Qt-5.3.2-static/include/QtCore/qfile.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/qfiledevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QDebug \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
 		mylabel.h \
 		fbl_message_box.h
 	/usr/local/Qt-5.3.2-static/bin/moc $(DEFINES) -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I/home/cloud_teminal -I/home/cloud_teminal -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I/usr/include/c++/4.8 -I/usr/include/arm-linux-gnueabihf/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include fbl_message_box.h -o moc_fbl_message_box.cpp
@@ -2521,6 +2981,14 @@ moc_feedbackwidget.cpp: /usr/local/Qt-5.3.2-static/include/QtGui/QIcon \
 		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
 		/usr/local/Qt-5.3.2-static/include/QtGui/qtguiversion.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/QTextCodec \
+		zc_message_box.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		mylabel.h \
+		cusercard.h \
+		clabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		cuserpicpanel.h \
 		feedbackwidget.h
 	/usr/local/Qt-5.3.2-static/bin/moc $(DEFINES) -I/usr/local/Qt-5.3.2-static/mkspecs/linux-g++ -I/home/cloud_teminal -I/home/cloud_teminal -I/usr/local/Qt-5.3.2-static/include -I/usr/local/Qt-5.3.2-static/include/QtGui -I/usr/local/Qt-5.3.2-static/include/QtCore -I/usr/include/c++/4.8 -I/usr/include/arm-linux-gnueabihf/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/4.8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include feedbackwidget.h -o moc_feedbackwidget.cpp
 
@@ -3877,6 +4345,9 @@ compiler_clean: compiler_rcc_clean compiler_moc_header_clean
 cdiagnoseitem.o: cdiagnoseitem.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cdiagnoseitem.o cdiagnoseitem.cpp
 
+cesulabel.o: cesulabel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cesulabel.o cesulabel.cpp
+
 cfblbutton.o: cfblbutton.cpp cfblbutton.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
 		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
@@ -4838,11 +5309,11 @@ cmailboxwidget.o: cmailboxwidget.cpp /usr/local/Qt-5.3.2-static/include/QtCore/Q
 		cdiagnoseitem.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cmailboxwidget.o cmailboxwidget.cpp
 
-cmaildelwidget.o: cmaildelwidget.cpp cmaildelwidget.h \
-		cmailboxwidget.h \
+cmaildelwidget.o: cmaildelwidget.cpp cmailboxwidget.h \
 		cmailitemwidget.h \
 		mylabel.h \
 		cmailsearch.h \
+		cmaildelwidget.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
 		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
@@ -5451,7 +5922,10 @@ cnetdiswidget.o: cnetdiswidget.cpp mainwindow.h \
 		qrectevent.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
 		cnetdiswidget.h \
-		cdiagnoseitem.h
+		cdiagnoseitem.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QCoreApplication \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventloop.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cnetdiswidget.o cnetdiswidget.cpp
 
 common_operater.o: common_operater.cpp common_operater.h \
@@ -5528,6 +6002,655 @@ common_operater.o: common_operater.cpp common_operater.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o common_operater.o common_operater.cpp
+
+crolatepoint.o: crolatepoint.cpp crolatepoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QUrl \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurlquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcolor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrgb.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimage.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtransform.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpolygon.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qregion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qline.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainterpath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpen.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbrush.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QDateTime \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatetime.h \
+		ctoolbox.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/QApplication \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventloop.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qdesktopwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpalette.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qsizepolicy.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qkeysequence.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfiledevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector2d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtouchdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qguiapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qinputmethod.h \
+		feedbackwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIcon \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qicon.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QMouseEvent \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTime \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QCoreApplication \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QThread \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthread.h \
+		/usr/local/Qt-5.3.2-static/include/QtNetwork/qnetworkcookie.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSharedDataPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMetaType \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QObject \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSettings \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGui \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGuiDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCore \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCoreDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qparallelanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpauseanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpropertyanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariantanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeasingcurve.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsequentialanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextcodec.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qendian.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibraryinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdiriterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileselector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QStringList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfilesystemwatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlockfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qloggingcategory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocess.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresource.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsavefile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstandardpaths.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporarydir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QScopedPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporaryfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractitemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qidentityproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qitemselectionmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsortfilterproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlistmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonvalue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsondocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracteventdispatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractnativeeventfilter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmath.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetaobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectcleanuphandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedmemory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignalmapper.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsocketnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtranslator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwineventnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimetype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfactoryinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibrary.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpluginloader.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/quuid.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracttransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventtransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfinalstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhistorystate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignaltransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstatemachine.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qexception.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuture.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfutureinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrunnable.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresultstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturesynchronizer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturewatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qreadwritelock.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadpool.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadstorage.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwaitcondition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydataops.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydatapointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbitarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearraymatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcollator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineparser.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcryptographichash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qelapsedtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlinkedlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmessageauthenticationcode.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qqueue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregularexpression.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedvaluerollback.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstack.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextboundaryfinder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimeline.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimezone.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qxmlstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtcoreversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessible.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessiblebridge.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbitmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengineplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimageiohandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagereader.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagewriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmovie.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpicture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpictureformatplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmapcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstandarditemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qclipboard.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdrag.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericpluginfactory.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qoffscreensurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurfaceformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglcontext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QSurfaceFormat \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qt_windows.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengles2ext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglversionfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qscreen.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSize \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSizeF \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QTransform \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsessionmanager.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstylehints.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindow.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMargins \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix4x4.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector3d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector4d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qquaternion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengldebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglframebufferobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpixeltransferoptions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglshaderprogram.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltexture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltimerquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglvertexarrayobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbackingstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagedpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagelayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagesize.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpdfwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qabstracttextdocumentlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qglyphrun.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrawfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontdatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstatictext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsyntaxhighlighter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentfragment.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtexttable.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdesktopservices.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtguiversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextCodec \
+		zc_message_box.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		mylabel.h \
+		cusercard.h \
+		clabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		cuserpicpanel.h \
+		cesulabel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o crolatepoint.o crolatepoint.cpp
+
+ctoolbox.o: ctoolbox.cpp ctoolbox.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/QApplication \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventloop.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qdesktopwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpalette.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcolor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrgb.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbrush.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpolygon.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qregion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qline.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtransform.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainterpath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimage.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qsizepolicy.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qkeysequence.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurlquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfiledevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector2d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtouchdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qguiapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qinputmethod.h \
+		feedbackwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIcon \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qicon.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QMouseEvent \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTime \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatetime.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QCoreApplication \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QThread \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthread.h \
+		/usr/local/Qt-5.3.2-static/include/QtNetwork/qnetworkcookie.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSharedDataPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMetaType \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QObject \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSettings \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QUrl \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGui \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGuiDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCore \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCoreDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qparallelanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpauseanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpropertyanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariantanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeasingcurve.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsequentialanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextcodec.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qendian.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibraryinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdiriterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileselector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QStringList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfilesystemwatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlockfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qloggingcategory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocess.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresource.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsavefile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstandardpaths.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporarydir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QScopedPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporaryfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractitemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qidentityproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qitemselectionmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsortfilterproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlistmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonvalue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsondocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracteventdispatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractnativeeventfilter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmath.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetaobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectcleanuphandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedmemory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignalmapper.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsocketnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtranslator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwineventnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimetype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfactoryinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibrary.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpluginloader.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/quuid.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracttransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventtransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfinalstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhistorystate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignaltransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstatemachine.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qexception.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuture.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfutureinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrunnable.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresultstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturesynchronizer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturewatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qreadwritelock.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadpool.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadstorage.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwaitcondition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydataops.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydatapointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbitarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearraymatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcollator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineparser.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcryptographichash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qelapsedtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlinkedlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmessageauthenticationcode.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qqueue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregularexpression.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedvaluerollback.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstack.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextboundaryfinder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimeline.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimezone.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qxmlstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtcoreversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessible.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessiblebridge.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbitmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengineplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimageiohandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagereader.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagewriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmovie.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpicture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpictureformatplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmapcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstandarditemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qclipboard.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdrag.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericpluginfactory.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qoffscreensurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurfaceformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglcontext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QSurfaceFormat \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qt_windows.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengles2ext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglversionfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qscreen.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSize \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSizeF \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QTransform \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsessionmanager.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstylehints.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindow.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMargins \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix4x4.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector3d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector4d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qquaternion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengldebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglframebufferobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpixeltransferoptions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglshaderprogram.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltexture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltimerquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglvertexarrayobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbackingstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagedpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagelayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagesize.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpen.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpdfwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qabstracttextdocumentlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qglyphrun.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrawfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontdatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstatictext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsyntaxhighlighter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentfragment.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtexttable.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdesktopservices.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtguiversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextCodec \
+		zc_message_box.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		mylabel.h \
+		cusercard.h \
+		clabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		cuserpicpanel.h \
+		crolatepoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		cesulabel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ctoolbox.o ctoolbox.cpp
 
 cusercard.o: cusercard.cpp cusercard.h \
 		clabel.h \
@@ -5949,7 +7072,12 @@ fblsetwidget.o: fblsetwidget.cpp /usr/local/Qt-5.3.2-static/include/QtGui/QMouse
 		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
 		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
 		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
-		mylabel.h
+		/usr/local/Qt-5.3.2-static/include/QtCore/QDebug \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		mylabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextStream
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fblsetwidget.o fblsetwidget.cpp
 
 feedbackwidget.o: feedbackwidget.cpp feedbackwidget.h \
@@ -6261,43 +7389,18 @@ feedbackwidget.o: feedbackwidget.cpp feedbackwidget.h \
 		/usr/local/Qt-5.3.2-static/include/QtGui/qdesktopservices.h \
 		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
 		/usr/local/Qt-5.3.2-static/include/QtGui/qtguiversion.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/QTextCodec
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextCodec \
+		zc_message_box.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		mylabel.h \
+		cusercard.h \
+		clabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		cuserpicpanel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o feedbackwidget.o feedbackwidget.cpp
 
-getway.o: getway.cpp getway.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/QList \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
-		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h
+getway.o: getway.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o getway.o getway.cpp
 
 log.o: log.cpp log.h \
@@ -6701,3 +7804,1864 @@ mainwindow.o: mainwindow.cpp /usr/local/Qt-5.3.2-static/include/QtCore/QJsonObje
 		/usr/local/Qt-5.3.2-static/include/QtCore/qtextcodec.h \
 		clabel.h \
 		/usr/local/Qt-5.3.2-static/include/QtGui/QMouseEvent \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpen.h \
+		util.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSettings \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QFontMetrics \
+		cusercard.h \
+		mylabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		cuserpicpanel.h \
+		cleftarrawpwdedit.h \
+		cmenuwidget.h \
+		mainwindow.h \
+		fblsetwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QDebug \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QVector \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPixmap \
+		mytextedit.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		zc_message_box.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
+		log.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextStream \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMutex \
+		singleton.h \
+		common.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QWaitCondition \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwaitcondition.h \
+		togglebutton.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QStaticText \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstatictext.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QPoint \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIntValidator \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregularexpression.h \
+		cnetaboutspilter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QByteArray \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QProcess \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocess.h \
+		cloading.h \
+		getway.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QList \
+		chostlist.h \
+		ringlist.h \
+		SpiceMulViewer.h \
+		common_operater.h \
+		../packet/include/win32_spice_interface_types.h \
+		../packet/include/win32_spice_interface.h \
+		cmythread.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QThread \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthread.h \
+		qrectevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
+		cnetdiswidget.h \
+		cdiagnoseitem.h \
+		cmailboxwidget.h \
+		cmailitemwidget.h \
+		cmailsearch.h \
+		cmaildelwidget.h \
+		feedbackwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIcon \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qicon.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTime \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatetime.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QCoreApplication \
+		/usr/local/Qt-5.3.2-static/include/QtNetwork/qnetworkcookie.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSharedDataPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMetaType \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QObject \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QUrl \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGui \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGuiDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCore \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCoreDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qparallelanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpauseanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpropertyanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariantanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeasingcurve.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsequentialanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qendian.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibraryinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdiriterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileselector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QStringList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfilesystemwatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlockfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qloggingcategory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresource.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsavefile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstandardpaths.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporarydir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QScopedPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporaryfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractitemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qidentityproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qitemselectionmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsortfilterproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlistmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracteventdispatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractnativeeventfilter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetaobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectcleanuphandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedmemory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignalmapper.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsocketnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtranslator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwineventnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimetype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfactoryinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibrary.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpluginloader.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/quuid.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracttransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventtransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfinalstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhistorystate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignaltransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstatemachine.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qexception.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuture.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfutureinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrunnable.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresultstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturesynchronizer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturewatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qreadwritelock.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadpool.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadstorage.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydataops.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydatapointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbitarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearraymatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcollator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineparser.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcryptographichash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qelapsedtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlinkedlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmessageauthenticationcode.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qqueue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedvaluerollback.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstack.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextboundaryfinder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimeline.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimezone.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qxmlstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtcoreversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessible.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessiblebridge.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbitmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengineplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimageiohandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagereader.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagewriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmovie.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpicture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpictureformatplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmapcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstandarditemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qclipboard.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdrag.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericpluginfactory.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qoffscreensurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurfaceformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglcontext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QSurfaceFormat \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qt_windows.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengles2ext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglversionfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qscreen.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSize \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSizeF \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QTransform \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsessionmanager.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstylehints.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindow.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMargins \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix4x4.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector3d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector4d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qquaternion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengldebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglframebufferobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpixeltransferoptions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglshaderprogram.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltexture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltimerquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglvertexarrayobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbackingstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagedpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagelayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagesize.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpdfwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qabstracttextdocumentlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qglyphrun.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrawfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontdatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsyntaxhighlighter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentfragment.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtexttable.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdesktopservices.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtguiversion.h \
+		ctoolbox.h \
+		crolatepoint.h \
+		cesulabel.h \
+		UpdateWidget.h \
+		myclicklabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtGlobal
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
+
+menu_box.o: menu_box.cpp cuserpicpanel.h \
+		mylabel.h \
+		cusercard.h \
+		clabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QMouseEvent \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qregion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qkeysequence.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurlquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfiledevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector2d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtouchdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcolor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrgb.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimage.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtransform.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpolygon.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qline.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainterpath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpen.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbrush.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		mainwindow.h \
+		fblsetwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QDebug \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QVector \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPixmap \
+		mytextedit.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpalette.h \
+		zc_message_box.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
+		log.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextStream \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMutex \
+		singleton.h \
+		common.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QWaitCondition \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwaitcondition.h \
+		togglebutton.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QStaticText \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstatictext.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QPoint \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIntValidator \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregularexpression.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSettings \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h \
+		cnetaboutspilter.h \
+		cleftarrawpwdedit.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QByteArray \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QProcess \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocess.h \
+		cloading.h \
+		getway.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QList \
+		chostlist.h \
+		ringlist.h \
+		SpiceMulViewer.h \
+		common_operater.h \
+		../packet/include/win32_spice_interface_types.h \
+		../packet/include/win32_spice_interface.h \
+		cmythread.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QThread \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthread.h \
+		qrectevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
+		cnetdiswidget.h \
+		cdiagnoseitem.h \
+		menu_box.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menu_box.o menu_box.cpp
+
+myclicklabel.o: myclicklabel.cpp myclicklabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGui \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGuiDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCore \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCoreDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qparallelanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpauseanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpropertyanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariantanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeasingcurve.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsequentialanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextcodec.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qendian.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibraryinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatetime.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfiledevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdiriterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileselector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QObject \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QStringList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfilesystemwatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlockfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qloggingcategory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocess.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresource.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsavefile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstandardpaths.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporarydir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QScopedPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporaryfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurlquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractitemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qidentityproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qitemselectionmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsortfilterproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlistmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonvalue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsondocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracteventdispatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventloop.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractnativeeventfilter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmath.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetaobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectcleanuphandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedmemory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignalmapper.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsocketnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtranslator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwineventnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimetype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfactoryinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibrary.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpluginloader.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/quuid.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracttransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventtransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfinalstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhistorystate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignaltransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstatemachine.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qexception.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuture.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfutureinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrunnable.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresultstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturesynchronizer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturewatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qreadwritelock.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthread.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadpool.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadstorage.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwaitcondition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydataops.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydatapointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbitarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearraymatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcollator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineparser.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcryptographichash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qelapsedtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qline.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlinkedlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmessageauthenticationcode.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qqueue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregularexpression.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedvaluerollback.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstack.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextboundaryfinder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimeline.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimezone.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qxmlstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtcoreversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessible.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcolor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrgb.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qregion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qkeysequence.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector2d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtouchdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessiblebridge.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbitmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimage.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtransform.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpolygon.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainterpath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qicon.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengineplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimageiohandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagereader.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagewriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmovie.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpicture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpictureformatplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmapcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstandarditemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbrush.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qclipboard.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdrag.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericpluginfactory.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qguiapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qinputmethod.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qoffscreensurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurfaceformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglcontext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QSurfaceFormat \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qt_windows.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengles2ext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglversionfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpalette.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qscreen.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSize \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSizeF \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QTransform \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsessionmanager.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstylehints.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindow.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMargins \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix4x4.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector3d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector4d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qquaternion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengldebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglframebufferobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpixeltransferoptions.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSharedDataPointer \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglshaderprogram.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltexture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltimerquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglvertexarrayobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbackingstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagedpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagelayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagesize.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpen.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpdfwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qabstracttextdocumentlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qglyphrun.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrawfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontdatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstatictext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsyntaxhighlighter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentfragment.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtexttable.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdesktopservices.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtguiversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtGlobal \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QMouseEvent
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o myclicklabel.o myclicklabel.cpp
+
+mylabel.o: mylabel.cpp mylabel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mylabel.o mylabel.cpp
+
+mylog.o: mylog.cpp mylog.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QDateTime \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatetime.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mylog.o mylog.cpp
+
+mytextedit.o: mytextedit.cpp mytextedit.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPixmap \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcolor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrgb.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimage.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtransform.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpolygon.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qregion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qline.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainterpath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpalette.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbrush.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mytextedit.o mytextedit.cpp
+
+qrectevent.o: qrectevent.cpp qrectevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrectevent.o qrectevent.cpp
+
+ringlist.o: ringlist.cpp ringlist.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ringlist.o ringlist.cpp
+
+SpiceMulViewer.o: SpiceMulViewer.cpp /usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcolor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrgb.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimage.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtransform.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpolygon.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qregion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qline.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainterpath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpen.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbrush.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QImage \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QDebug \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		common_operater.h \
+		SpiceMulViewer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QWaitCondition \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwaitcondition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QPoint \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMutex \
+		mainwindow.h \
+		cusercard.h \
+		clabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QMouseEvent \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qkeysequence.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurlquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfiledevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector2d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtouchdevice.h \
+		mylabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		cuserpicpanel.h \
+		fblsetwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QVector \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPixmap \
+		mytextedit.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpalette.h \
+		zc_message_box.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
+		log.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextStream \
+		singleton.h \
+		common.h \
+		togglebutton.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QStaticText \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstatictext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIntValidator \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregularexpression.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSettings \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h \
+		cnetaboutspilter.h \
+		cleftarrawpwdedit.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QByteArray \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QProcess \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocess.h \
+		cloading.h \
+		getway.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QList \
+		chostlist.h \
+		ringlist.h \
+		cnetdiswidget.h \
+		cdiagnoseitem.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QThread \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthread.h \
+		../packet/include/win32_spice_interface_types.h \
+		../packet/include/win32_spice_interface.h \
+		cmythread.h \
+		qrectevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
+		cmenuwidget.h \
+		cmailboxwidget.h \
+		cmailitemwidget.h \
+		cmailsearch.h \
+		cmaildelwidget.h \
+		feedbackwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIcon \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qicon.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTime \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatetime.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QCoreApplication \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventloop.h \
+		/usr/local/Qt-5.3.2-static/include/QtNetwork/qnetworkcookie.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSharedDataPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMetaType \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QObject \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/QApplication \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qdesktopwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtWidgets/qsizepolicy.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qguiapplication.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qinputmethod.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QUrl \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGui \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QtGuiDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCore \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QtCoreDepends \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qparallelanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpauseanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpropertyanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariantanimation.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeasingcurve.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsequentialanimationgroup.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextcodec.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qendian.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibraryinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdiriterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfileselector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QStringList \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfilesystemwatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlockfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qloggingcategory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresource.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsavefile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstandardpaths.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporarydir.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QScopedPointer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtemporaryfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractitemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qidentityproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qitemselectionmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsortfilterproxymodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlistmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonvalue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsondocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracteventdispatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractnativeeventfilter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetaobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectcleanuphandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedmemory.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignalmapper.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsocketnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtranslator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwineventnotifier.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimedatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmimetype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfactoryinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlibrary.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpluginloader.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/quuid.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstractstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qabstracttransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qeventtransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfinalstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhistorystate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsignaltransition.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstate.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstatemachine.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qexception.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuture.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfutureinterface.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrunnable.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qresultstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturesynchronizer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfuturewatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qreadwritelock.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsemaphore.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadpool.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthreadstorage.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydataops.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydatapointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbitarray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearraymatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcollator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcommandlineparser.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcryptographichash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qelapsedtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlinkedlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmessageauthenticationcode.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qqueue.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedvaluerollback.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstack.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextboundaryfinder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimeline.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimezone.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qxmlstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtcoreversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessible.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessiblebridge.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qaccessibleplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbitmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qiconengineplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimageiohandler.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagereader.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimagewriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmovie.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpicture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpictureformatplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmapcache.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstandarditemmodel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qclipboard.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdrag.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericpluginfactory.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qoffscreensurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurface.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsurfaceformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglcontext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QSurfaceFormat \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qt_windows.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengles2ext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglext.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglversionfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qscreen.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSize \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSizeF \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QTransform \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsessionmanager.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstylehints.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindow.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMargins \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qgenericmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix4x4.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector3d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector4d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qquaternion.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglbuffer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengldebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglframebufferobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglfunctions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglpixeltransferoptions.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglshaderprogram.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltexture.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopengltimerquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qopenglvertexarrayobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbackingstore.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagedpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagelayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpagesize.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintengine.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpdfwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qabstracttextdocumentlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlayout.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextformat.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qglyphrun.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrawfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontdatabase.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextcursor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocument.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qsyntaxhighlighter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentfragment.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextdocumentwriter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtexttable.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qdesktopservices.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtguiversion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextCodec \
+		ctoolbox.h \
+		crolatepoint.h \
+		cesulabel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o SpiceMulViewer.o SpiceMulViewer.cpp
+
+togglebutton.o: togglebutton.cpp togglebutton.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainter.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcolor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrgb.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimage.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtransform.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpolygon.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qregion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qline.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainterpath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpen.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbrush.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QStaticText \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstatictext.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QPoint \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIntValidator \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregularexpression.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSettings \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o togglebutton.o togglebutton.cpp
+
+UpdateWidget.o: UpdateWidget.cpp log.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfiledevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextStream \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMutex \
+		singleton.h \
+		common.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QWaitCondition \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwaitcondition.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o UpdateWidget.o UpdateWidget.cpp
+
+util.o: util.cpp util.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSettings \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QFontMetrics \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o util.o util.cpp
+
+zc_message_box.o: zc_message_box.cpp cuserpicpanel.h \
+		mylabel.h \
+		cusercard.h \
+		clabel.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QMouseEvent \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qregion.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrect.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmargins.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsize.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpoint.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdatastream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiodevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qkeysequence.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvariant.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qdebug.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtextstream.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlocale.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvector.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qset.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregexp.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qurlquery.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfile.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfiledevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvector2d.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtouchdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPainter \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainter.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpixmap.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qcolor.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qrgb.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qimage.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtransform.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qmatrix.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpolygon.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qline.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpainterpath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qtextoption.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpen.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qbrush.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfont.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QString \
+		mainwindow.h \
+		fblsetwidget.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QDebug \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QVector \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTimer \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasictimer.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPixmap \
+		mytextedit.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QPalette \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qpalette.h \
+		zc_message_box.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QRect \
+		log.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QFile \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QTextStream \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QMutex \
+		singleton.h \
+		common.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QWaitCondition \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qwaitcondition.h \
+		togglebutton.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmath.h \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QStaticText \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qstatictext.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QPoint \
+		/usr/local/Qt-5.3.2-static/include/QtGui/QIntValidator \
+		/usr/local/Qt-5.3.2-static/include/QtGui/qvalidator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qregularexpression.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QSettings \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsettings.h \
+		cnetaboutspilter.h \
+		cleftarrawpwdedit.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QByteArray \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QProcess \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocess.h \
+		cloading.h \
+		getway.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QList \
+		chostlist.h \
+		ringlist.h \
+		SpiceMulViewer.h \
+		common_operater.h \
+		../packet/include/win32_spice_interface_types.h \
+		../packet/include/win32_spice_interface.h \
+		cmythread.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QThread \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qthread.h \
+		qrectevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/QEvent \
+		cnetdiswidget.h \
+		cdiagnoseitem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o zc_message_box.o zc_message_box.cpp
+
+cloud_teminal_plugin_import.o: cloud_teminal_plugin_import.cpp /usr/local/Qt-5.3.2-static/include/QtCore/QtPlugin \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qplugin.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnamespace.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobal.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qconfig.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qfeatures.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qtypetraits.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsysinfo.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlogging.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qflags.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv7.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv6.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_armv5.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_ia64.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_mips.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_x86.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_gcc.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qatomic_unix.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmutex.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qnumeric.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstring.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qchar.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qbytearray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qrefcount.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qarraydata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qlist.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qalgorithms.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qiterator.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcoreevent.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qmetatype.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qisenum.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qobject_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qshareddata.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qhash.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qpair.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonobject.h \
+		/usr/local/Qt-5.3.2-static/include/QtCore/qjsonvalue.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cloud_teminal_plugin_import.o cloud_teminal_plugin_import.cpp
+
+qrc_cloud_terminal.o: qrc_cloud_terminal.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_cloud_terminal.o qrc_cloud_terminal.cpp
+
+moc_cdiagnoseitem.o: moc_cdiagnoseitem.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cdiagnoseitem.o moc_cdiagnoseitem.cpp
+
+moc_cesulabel.o: moc_cesulabel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cesulabel.o moc_cesulabel.cpp
+
+moc_cfblbutton.o: moc_cfblbutton.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cfblbutton.o moc_cfblbutton.cpp
+
+moc_chostlist.o: moc_chostlist.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_chostlist.o moc_chostlist.cpp
+
+moc_clabel.o: moc_clabel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_clabel.o moc_clabel.cpp
+
+moc_cleftarrawpwdedit.o: moc_cleftarrawpwdedit.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cleftarrawpwdedit.o moc_cleftarrawpwdedit.cpp
+
+moc_cloading.o: moc_cloading.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cloading.o moc_cloading.cpp
+
+moc_clogthred.o: moc_clogthred.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_clogthred.o moc_clogthred.cpp
+
+moc_cloud_terminal.o: moc_cloud_terminal.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cloud_terminal.o moc_cloud_terminal.cpp
+
+moc_cmailboxwidget.o: moc_cmailboxwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cmailboxwidget.o moc_cmailboxwidget.cpp
+
+moc_cmaildelwidget.o: moc_cmaildelwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cmaildelwidget.o moc_cmaildelwidget.cpp
+
+moc_cmailitemwidget.o: moc_cmailitemwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cmailitemwidget.o moc_cmailitemwidget.cpp
+
+moc_cmailsearch.o: moc_cmailsearch.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cmailsearch.o moc_cmailsearch.cpp
+
+moc_cmenuwidget.o: moc_cmenuwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cmenuwidget.o moc_cmenuwidget.cpp
+
+moc_cmythread.o: moc_cmythread.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cmythread.o moc_cmythread.cpp
+
+moc_cnetaboutspilter.o: moc_cnetaboutspilter.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cnetaboutspilter.o moc_cnetaboutspilter.cpp
+
+moc_cnetdiswidget.o: moc_cnetdiswidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cnetdiswidget.o moc_cnetdiswidget.cpp
+
+moc_crolatepoint.o: moc_crolatepoint.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_crolatepoint.o moc_crolatepoint.cpp
+
+moc_ctoolbox.o: moc_ctoolbox.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_ctoolbox.o moc_ctoolbox.cpp
+
+moc_cusercard.o: moc_cusercard.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cusercard.o moc_cusercard.cpp
+
+moc_cuserpicpanel.o: moc_cuserpicpanel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cuserpicpanel.o moc_cuserpicpanel.cpp
+
+moc_fbl_message_box.o: moc_fbl_message_box.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_fbl_message_box.o moc_fbl_message_box.cpp
+
+moc_fblsetwidget.o: moc_fblsetwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_fblsetwidget.o moc_fblsetwidget.cpp
+
+moc_feedbackwidget.o: moc_feedbackwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_feedbackwidget.o moc_feedbackwidget.cpp
+
+moc_mainwindow.o: moc_mainwindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_menu_box.o: moc_menu_box.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_menu_box.o moc_menu_box.cpp
+
+moc_myclicklabel.o: moc_myclicklabel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_myclicklabel.o moc_myclicklabel.cpp
+
+moc_mylabel.o: moc_mylabel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mylabel.o moc_mylabel.cpp
+
+moc_mytextedit.o: moc_mytextedit.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mytextedit.o moc_mytextedit.cpp
+
+moc_SpiceMulViewer.o: moc_SpiceMulViewer.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_SpiceMulViewer.o moc_SpiceMulViewer.cpp
+
+moc_togglebutton.o: moc_togglebutton.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_togglebutton.o moc_togglebutton.cpp
+
+moc_UpdateWidget.o: moc_UpdateWidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_UpdateWidget.o moc_UpdateWidget.cpp
+
+moc_zc_message_box.o: moc_zc_message_box.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_zc_message_box.o moc_zc_message_box.cpp
+
+####### Install
+
+install:   FORCE
+
+uninstall:   FORCE
+
+FORCE:
+

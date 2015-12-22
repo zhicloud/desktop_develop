@@ -58,7 +58,6 @@ public:
 
 private:
 	QScrollArea* m_ScrollA;
-	CSpiceMultVEx* m_SpiceViewer;
 	int isFreshLocalArea;
 //	QPushButton *m_FullScrBtn;
 	int x;
@@ -67,6 +66,8 @@ private:
 	int m_height;
 	bool m_isGetInitpos;
 	CMenuWidget* m_menu;
+public:
+	CSpiceMultVEx* m_SpiceViewer;
 public slots:
 	void BtnClick();
 };
@@ -83,7 +84,7 @@ public:
 	void SetScrollA(QScrollArea* pScollA);
 	void SetFullScreen(bool isFull);
 	bool isFullScreen(){ return m_isFullScr; };
-	void setMenu(CMenuWidget* menu) { m_menu = menu; }
+	void setMenu(CMenuWidget* menu);
 	static bool Spice_Init();
 	static bool Spice_Uninit();
 	static bool Spice_IsInit(){ return m_isInit; }

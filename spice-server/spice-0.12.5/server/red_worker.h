@@ -44,6 +44,7 @@ enum {
     RED_WORKER_MESSAGE_SET_COMPRESSION,
     RED_WORKER_MESSAGE_SET_STREAMING_VIDEO,
     RED_WORKER_MESSAGE_SET_STREAMING_VIDEO_COMPRESSION,
+    RED_WORKER_MESSAGE_SET_STREAMING_VIDEO_INFO,
     RED_WORKER_MESSAGE_SET_MOUSE_MODE,
     RED_WORKER_MESSAGE_ADD_MEMSLOT,
     RED_WORKER_MESSAGE_DEL_MEMSLOT,
@@ -100,6 +101,9 @@ typedef struct WorkerInitData {
     //add by lcx for h264
     //int streaming_h264_video;
     int streaming_video_compression;
+    int stream_video_h264_all_fps;
+    int stream_video_h264_all_bit_rate;
+
     uint32_t num_memslots;
     uint32_t num_memslots_groups;
     uint8_t memslot_gen_bits;

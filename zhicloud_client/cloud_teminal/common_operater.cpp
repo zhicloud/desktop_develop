@@ -127,13 +127,16 @@ void InitKeyCode(UINT16 keyCode[])
   keyCode[0xff7f] = 0x45;     /* 65407 (XK_Num_Lock) => 69 via 69 (KEY_NUMLOCK) */
   keyCode[0xff8d] = 0x11c;    /* 65421 (XK_KP_Enter) => 284 via 96 (KEY_KPENTER) */
   keyCode[0xff9c] = 0x14f;     /* 65457 (XK_KP_1) => 79 via 79 (KEY_KP1) */
+  keyCode[0xffaa] = 0x37;
   keyCode[0xffab] = 0x4e;     /* 65451 (XK_KP_Add) => 78 via 78 (KEY_KPPLUS) */
   keyCode[0xffac] = 0x5c;     /* 65452 (XK_KP_Separator) => 92 via 95 (KEY_KPJPCOMMA) */
   keyCode[0xffad] = 0x4a;     /* 65453 (XK_KP_Subtract) => 74 via 74 (KEY_KPMINUS) */
   //keyCode[0xfae] = 0x53;     /* 65454 (XK_KP_Decimal) => 83 via 83 (KEY_KPDOT) */
-  keyCode[0xffae] = keyCode[0x2e];     /* 65454 (XK_KP_Decimal) => 83 via 83 (KEY_KPDOT) */
+  //keyCode[0xffae] = keyCode[0x2e];     /* 65454 (XK_KP_Decimal) => 83 via 83 (KEY_KPDOT) */
+  keyCode[0xffae] = 0x53;     /* 65454 (XK_KP_Decimal) => 83 via 83 (KEY_KPDOT) */
   keyCode[0xffaf] = 0x135;    /* 65455 (XK_KP_Divide) => 309 via 98 (KEY_KPSLASH) */
-  keyCode[0xff9f] = 0x153;
+  //keyCode[0xff9f] = 0x153;
+  keyCode[0xff9f] = 0x53;
   //keyCode[0xffb0] = 0x52;     /* 65456 (XK_KP_0) => 82 via 82 (KEY_KP0) */
   keyCode[0xffb0] = keyCode[0x30];     /* 65456 (XK_KP_0) => 82 via 82 (KEY_KP0) */
   //keyCode[0xffb1] = 0x4f;     /* 65457 (XK_KP_1) => 79 via 79 (KEY_KP1) */

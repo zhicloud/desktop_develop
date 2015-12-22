@@ -115,6 +115,7 @@ static long *lock_count;
 uint32_t streaming_video = STREAM_VIDEO_FILTER;
 //add by lcx for h264
 uint32_t streaming_video_compression = SPICE_STREAM_VIDEO_COMPRESSION_MJPEG;
+int stream_video_h264_all_fps = 30, stream_video_h264_all_bit_rate = 1048576;
 
 
 spice_image_compression_t image_compression = SPICE_IMAGE_COMPRESS_AUTO_GLZ;
@@ -3596,10 +3597,21 @@ SPICE_GNUC_VISIBLE int spice_server_set_streaming_compression(SpiceServer *s, in
     spice_printerr("i come to spice_server_set_streaming_video_compression = %d",value);
     spice_assert(reds == s);
     if (value != SPICE_STREAM_VIDEO_COMPRESSION_MJPEG &&
-        value != SPICE_STREAM_VIDEO_COMPRESSION_H264)
+        value != SPICE_STREAM_VIDEO_COMPRESSION_H264 &&
+        value != SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL)
         return -1;
     streaming_video_compression = value;
     red_dispatcher_on_svc_change();
+    return 0;
+}
+
+SPICE_GNUC_VISIBLE int spice_server_set_streaming_h264_info(SpiceServer *s, int vfps,int vbit_rate)
+{
+    spice_printerr("i come to vfps= %d  vbit_rate = %d" ,vfps,vbit_rate);
+    spice_assert(reds == s);
+    stream_video_h264_all_fps = vfps;
+    stream_video_h264_all_bit_rate = vbit_rate;
+    red_dispatcher_on_stinfo_change();
     return 0;
 }
 
@@ -3608,7 +3620,8 @@ SPICE_GNUC_VISIBLE int spice_server_set_streaming_video(SpiceServer *s, int valu
     spice_assert(reds == s);
     if (value != SPICE_STREAM_VIDEO_OFF &&
         value != SPICE_STREAM_VIDEO_ALL &&
-        value != SPICE_STREAM_VIDEO_FILTER)
+        value != SPICE_STREAM_VIDEO_FILTER &&
+        value != SPICE_STREAM_VIDEO_H264_ALL)
         return -1;
     streaming_video = value;
     red_dispatcher_on_sv_change();

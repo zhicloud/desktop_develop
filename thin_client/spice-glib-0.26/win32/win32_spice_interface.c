@@ -112,6 +112,9 @@ int SpiceOpenMain(IN_OUT SPICE_HANDLE sh)
         
     }while(0);
     g_rec_mutex_unlock(&wsgi->rec_mutex_loop);
+#ifdef SPICE_DEBUG
+    spice_util_set_debug(TRUE);
+#endif
     return ret;
 }
 
@@ -158,7 +161,7 @@ static gpointer  main_loop_run_thread(gpointer data)
     SPICE_LOG("?????????????????????????????????\n");
     if(mainloop)
     {
-    SPICE_LOG("################################################\n");
+        SPICE_LOG("################################################\n");
     
         g_main_loop_run(mainloop);
     }
@@ -393,7 +396,7 @@ void SpiceEnableAutoUSBRedirectBefore(IN_OUT SPICE_HANDLE sh,IN int hspice,IN in
 int SpiceClose(IN_OUT SPICE_HANDLE sh,IN int hspice)
 {
     SPICE_LOG("hspice = %d\n",hspice);
-//    printf("2222222222222222==================22222222222222222222222\n");
+    //printf("2222222222222222==================22222222222222222222222\n");
     struct Win32SpiceGloabInfo * wsgi = (struct Win32SpiceGloabInfo *)sh;  
     assert(wsgi);
     assert(hspice >= 0 && hspice < MAX_SPICE_CONNECT);
@@ -436,7 +439,7 @@ static gboolean  SpiceConnect_thread(gpointer data)
     g_rec_mutex_lock(&wsgi->rec_mutex_conn);
 
     SPICE_LOG("args->hspice = %d\n",args->hspice);
-    wsgi->SpiceConnList[args->hspice]->conn = connection_new();//important port 1
+    wsgi->SpiceConnList[args->hspice]->conn = connection_new();
     wsgi->SpiceConnList[args->hspice]->conn->callback = wsgi->SpiceConnList[args->hspice]->callbacks;
 
     g_debug("SpiceConnect_thread============================== %s ==============2",wsgi->SpiceConnList[args->hspice]->default_usb_on_connect);
@@ -449,7 +452,7 @@ static gboolean  SpiceConnect_thread(gpointer data)
     if(!strcmp(args->vvFileName,""))
     {
         spiceClientConnect (wsgi->SpiceConnList[args->hspice]->conn,args->host, args->port, args->tp,args->pw,args->cf,
-                NULL,args->cs, args->sound);//important port 2
+                NULL,args->cs, args->sound);
     }
     else
     {
@@ -615,7 +618,7 @@ static gboolean disconnect(gpointer user_data) {
 void SpiceDisconnect(IN_OUT SPICE_HANDLE sh,IN int hspice)
 {
     SPICE_LOG("hspice ==== %d\n",hspice);
- //   printf("11111111111111==================111111111111111111111111\n");
+    //printf("11111111111111==================111111111111111111111111\n");
     assert(sh);
     assert(hspice >= 0 && hspice < MAX_SPICE_CONNECT);
     struct Win32SpiceGloabInfo * wsgi = (struct Win32SpiceGloabInfo *)sh;  
@@ -696,12 +699,6 @@ void SpiceRequestResolution(IN_OUT SPICE_HANDLE sh,IN int hspice,IN int x, IN in
 void SpiceKeyEvent(IN_OUT SPICE_HANDLE sh,IN int hspice,IN bool down, IN int hardware_keycode)
 {
     SPICE_LOG("\n");
-    
-//    printf("[File:%s] [Line:%d] [Function:%s] msg = \"%s\"\n"
-//            , __FILE__
-//            , __LINE__
-//            , __FUNCTION__
-//            , "The function has been invoked!");
 
     struct Win32SpiceGloabInfo * wsgi = (struct Win32SpiceGloabInfo *)sh;  
 
@@ -728,6 +725,7 @@ void SpiceKeyEvent(IN_OUT SPICE_HANDLE sh,IN int hspice,IN bool down, IN int har
     int scancode;            
 
     SPICE_DEBUG("%s %s: keycode: %d", __FUNCTION__, "Key", hardware_keycode);
+    //printf("%s %s: keycode: %d", __FUNCTION__, "Key", hardware_keycode);
 
     if (!d->inputs)          
         return;                

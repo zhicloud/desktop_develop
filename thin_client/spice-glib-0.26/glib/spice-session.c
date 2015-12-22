@@ -233,7 +233,7 @@ spice_session_dispose(GObject *gobject)
 static void
 spice_session_finalize(GObject *gobject)
 {
-//    printf("[file :%s][fun : %s][line : %d]  spice_session_finalize(GObject *gobject) begin \n",__FILE__,__FUNCTION__,__LINE__);
+    //printf("[file :%s][fun : %s][line : %d]  spice_session_finalize(GObject *gobject) begin \n",__FILE__,__FUNCTION__,__LINE__);
     SpiceSession *session = SPICE_SESSION(gobject);
     SpiceSessionPrivate *s = session->priv;
 
@@ -683,7 +683,7 @@ static void spice_session_class_init(SpiceSessionClass *klass)
 #endif
 
 
-//    printf("[file :%s][fun : %s][line : %d] =====================begin \n",__FILE__,__FUNCTION__,__LINE__);
+    //printf("[file :%s][fun : %s][line : %d] =====================begin \n",__FILE__,__FUNCTION__,__LINE__);
     gobject_class->dispose      = spice_session_dispose;
     gobject_class->finalize     = spice_session_finalize;
     gobject_class->get_property = spice_session_get_property;
@@ -1678,44 +1678,7 @@ void spice_session_disconnect(SpiceSession *session)
         next = ring_next(&s->channels, ring);
         item = SPICE_CONTAINEROF(ring, struct channel, link);
         
-        if (SPICE_IS_MAIN_CHANNEL(item->channel)) {
-//            printf("[file :%s][fun : %s][line : %d] SPICE_IS_MAIN_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
-        }
-
-        if (SPICE_IS_DISPLAY_CHANNEL(item->channel)) {
-//            printf("[file :%s][fun : %s][line : %d] SPICE_IS_DISPLAY_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
-        }
-
-        if (SPICE_IS_PLAYBACK_CHANNEL(item->channel)) {
-//	        printf("[file :%s][fun : %s][line : %d] SPICE_IS_PLAYBACK_CHANNEL \n",__FILE__,__FUNCTION__,__LINE__);
-        }
-
-        if(SPICE_IS_INPUTS_CHANNEL(item->channel)) {
-//            printf("[file :%s][fun : %s][line : %d] SPICE_IS_INPUTS_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
-        }
-        if(SPICE_IS_RECORD_CHANNEL(item->channel)) {
- //           printf("[file :%s][fun : %s][line : %d] SPICE_IS_RECORD_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
-        }
-
-        if(SPICE_IS_PORT_CHANNEL(item->channel)) {
- //           printf("[file :%s][fun : %s][line : %d] SPICE_IS_PORT_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
-        }
-
-        if(SPICE_IS_SMARTCARD_CHANNEL(item->channel)) {
- //           printf("[file :%s][fun : %s][line : %d] SPICE_IS_SMARTCARD_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
-        }
-
-        if(SPICE_IS_USBREDIR_CHANNEL(item->channel)) {
-//            printf("[file :%s][fun : %s][line : %d] SPICE_IS_USBREDIR_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
-        }
-
-        if(SPICE_IS_WEBDAV_CHANNEL(item->channel)) {
- //           printf("[file :%s][fun : %s][line : %d] SPICE_IS_USBREDIR_CHANNEL\n",__FILE__,__FUNCTION__,__LINE__);
-        }
-        spice_channel_destroy(item->channel); /* /!\ item and channel are destroy() after this call */
-
-
-
+         spice_channel_destroy(item->channel); /* /!\ item and channel are destroy() after this call */
     }
 
     s->connection_id = 0;
@@ -2119,6 +2082,7 @@ void spice_session_set_mm_time(SpiceSession *session, guint32 time)
         SPICE_DEBUG("%s: mm-time-reset, old %u, new %u", __FUNCTION__, old_time, s->mm_time);
         g_coroutine_signal_emit(session, signals[SPICE_SESSION_MM_TIME_RESET], 0);
     }
+    SPICE_DEBUG("set mm time: %u ==== end", spice_session_get_mm_time(session));
 }
 
 G_GNUC_INTERNAL

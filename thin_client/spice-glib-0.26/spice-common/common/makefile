@@ -23,7 +23,7 @@ OBJS=generated_server_marshallers.o   mem.o backtrace.o generated_server_demarsh
 #OBJS+=$(patsubst ./spice-common/common/%.c,./spice-common/common/%.o,$(wildcard ./spice-common/common/*.c))
 #OBJS+=$(patsubst ./glib/%.c,./win32/%.o,$(wildcard ./win32/*.c))
 
-CFLAGS = -std=c99  
+CFLAGS = -std=c99 
 LIBADD=-L/usr/local/lib -lcelt051 -lm
 LDFLAGS=-shared -fpic
 CC=gcc

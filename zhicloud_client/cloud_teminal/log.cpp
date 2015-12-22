@@ -44,7 +44,7 @@ void ZCLog::InitLog()
 		if (c == 10)
 			lines++;
 	}
-	printf("log file has %d lines\n", lines);
+	//printf("log file has %d lines\n", lines);
 	if (lines > 100)
 	{
 		fclose(m_logoFile);
@@ -127,16 +127,24 @@ void ZCLog::log(const LOG_LEVEL type, const char* format, const va_list& varArgs
 //写入日志信息
 void ZCLog::WriteToLog(const LOG_LEVEL level, char *msg)
 {
+#ifdef LXLLOG
 	if (msg == "" || msg == NULL) return;
 	char tmp[1024] = { 0 };
 	strcpy(tmp, msg);
 	strcat(tmp, "\n");
 	log(level, tmp);
+#else
+	return;
+#endif;
 }
 
 void ZCLog::WriteToLog(const LOG_LEVEL level, QString msg)
 {
+#ifdef LXLLOG
 	if (msg == "" || msg == NULL) return;
 	msg += "\n";
 	log(level, msg.toUtf8().data());
+#else
+	return;
+#endif
 }

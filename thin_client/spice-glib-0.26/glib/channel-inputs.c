@@ -244,8 +244,13 @@ static void sync_key_modifiers(SpiceChannel *channel, gpointer data)
         modifiers |= SPICE_INPUTS_NUM_LOCK;
     }
 
+    if(x.led_mask & 4)
+    {
+        modifiers |= SPICE_INPUTS_SCROLL_LOCK; 
+    }
     spice_inputs_set_key_locks(SPICE_INPUTS_CHANNEL(channel), modifiers);
 }
+
 
 /* coroutine context */
 static void inputs_handle_init(SpiceChannel *channel, SpiceMsgIn *in)
@@ -256,8 +261,6 @@ static void inputs_handle_init(SpiceChannel *channel, SpiceMsgIn *in)
     c->modifiers = init->keyboard_modifiers;
     g_coroutine_signal_emit(channel, signals[SPICE_INPUTS_MODIFIERS], 0);
     sync_key_modifiers(channel, channel);
-    spice_g_signal_connect_object(channel, "state-changed", \
-        G_CALLBACK(sync_key_modifiers), channel, 0);
 }
 
 /* coroutine context */
@@ -310,7 +313,7 @@ static void channel_set_handlers(SpiceChannelClass *klass)
  * Change mouse position (used in SPICE_MOUSE_MODE_CLIENT).
  **/
 void spice_inputs_motion(SpiceInputsChannel *channel, gint dx, gint dy,
-                         gint button_state)
+        gint button_state)
 {
     SpiceInputsChannelPrivate *c;
 

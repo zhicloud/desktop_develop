@@ -40,7 +40,7 @@ private:
 	void write(const char* format, ...);
 
 	void log(const LOG_LEVEL type, const char* message);
-	void log(const LOG_LEVEL type, const char* format, const va_list& varArgs);
+	void log(const LOG_LEVEL type, const char* format, va_list& varArgs);
 };
 
 typedef Singleton<ZCLog> MyZCLog;

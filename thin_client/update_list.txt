@@ -1,12 +1,11 @@
 ******************************************************
-版本号：TC1.0.2#20151113-1
+版本号：TC1.0.4#20151224
 修改时间：2015/11/24
 修改人：温佐宜
 修改文件：
-h264_decoder.h
-h264_decoder.c
-h264_type.h
-spice-display-h264.c
+glib/makefile
+win32/makefile
+example/makfile
 
 新增文件：
 无
@@ -15,7 +14,7 @@ spice-display-h264.c
 无
 
 主要变更：
-增加H264解码功能
+整理makefile
 
 兼容性说明：
 无

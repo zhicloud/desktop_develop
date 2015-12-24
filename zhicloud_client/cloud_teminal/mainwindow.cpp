@@ -1960,8 +1960,8 @@ void CMainWindow::readDns(QString &dns)
 
 void CMainWindow::readMac(QString &mac)
 {
-    system("ifconfig eth0 > /home/mac.txt");
-   QFile file("/home/mac.txt");
+    system("ifconfig eth0 > $HOME/.mac");
+   QFile file("$HOME/.mac");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
     while (!file.atEnd()) 
@@ -2155,7 +2155,7 @@ void CMainWindow::saveFbl()
    system(para.data());
 
    msgbox->show();
-#ifdef LINUX
+#ifdef __linux
    sleep(2);
 #else
    Sleep(2000);

@@ -1,7 +1,26 @@
 ******************************************************
-版本号：TC1.0.2#20151113-1
+版本号：TC1.0.4#20151224
 
 主要变更：
-增加H264解码功能:
+   1.修改.Pro文件
+   2.整理文件结构
+
+环境搭建说明:
+   Arm:
+      1.tar xzvf qt-everywhere-opensource-src-5.3.2.tar.gz
+      2.cd qt-everywhere-opensource-src-5.3.2
+      3.make -j4
+      5.cd cloud_terminal
+      6.qmake
+      7.make -j4
+
+   X86:
+      1 ./qt-opensource-linux-x64-5.5.0-2.run 
+      2 vim /etc/profile
+      3 export PATH=$HOME/Qt5.5.0/5.5/gcc_64/bin:$PATH
+      4 cd cloud_terminal
+      6 qmake
+      7 make -j4
+
 兼容性说明：
-无
+   无

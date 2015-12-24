@@ -1,7 +1,7 @@
 #include "log.h"
 #include "common.h"
 #include <ctime>
-
+#include <stdarg.h>
 ZCLog::ZCLog()
 {
 	m_logoFile = NULL;
@@ -117,7 +117,7 @@ void ZCLog::log(const LOG_LEVEL type, const char* message)
 
 	write("%s [%s] - %s", buffer, TypeToString(type), message);
 }
-void ZCLog::log(const LOG_LEVEL type, const char* format, const va_list& varArgs)
+void ZCLog::log(const LOG_LEVEL type, const char* format, va_list& varArgs)
 {
 	char buffer[10240] = { 0 };
 	vsnprintf(buffer, sizeof(buffer), format, varArgs);

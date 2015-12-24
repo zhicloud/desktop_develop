@@ -50,14 +50,14 @@ endif
 
 clean :
 	    for n in $(SUBDIRS); do $(MAKE) -C $$n clean; done
-		 rm -rf ../packet/
+		 rm -rf ../../zhicloud_client/packet/
 
 install:
-	mkdir -p ../packet
-	mkdir -p ../packet/lib
-	mkdir -p ../packet/bin
-	mkdir -p ../packet/include
-	cp -rf ./README ../packet/
+	mkdir -p ../../zhicloud_client/packet
+	mkdir -p ../../zhicloud_client/packet/lib
+	mkdir -p ../../zhicloud_client/packet/bin
+	mkdir -p ../../zhicloud_client/packet/include
+	cp -rf ./README ../../zhicloud_client/packet/
 ifeq ($(WINDOWS), y)
 	cp -rf ./spice-common/common/libspice-common-client.dll ./packet/lib/
 	cp -rf ./spice-common/common/libspice-common-client.def ./packet/lib/
@@ -72,13 +72,13 @@ ifeq ($(WINDOWS), y)
 	cp -rf ./win32/win32_spice_interface.h ./packet/include/
 	cp -rf ./win32/win32_spice_interface_types.h ./packet/include/
 else
-	cp -rf ./spice-common/common/libspice-common-client.a ../packet/lib/
-	cp -rf ./glib/libspice_without_gtk.a ../packet/lib/
-	cp -rf ./win32/libspice_glib.a ../packet/lib
-	cp -rf ./examples/test_bmp ../packet/bin/
-	cp -rf ./win32/win32_spice_interface.h ../packet/include/
-	cp -rf ./win32/win32_spice_interface_types.h ../packet/include/
-	cp -rf ./README ../packet/
+	cp -rf ./spice-common/common/libspice-common-client.a ../../zhicloud_client/packet/lib/
+	cp -rf ./glib/libspice_without_gtk.a ../../zhicloud_client/packet/lib/
+	cp -rf ./win32/libspice_glib.a ../../zhicloud_client/packet/lib
+	cp -rf ./examples/test_bmp ../../zhicloud_client/packet/bin/
+	cp -rf ./win32/win32_spice_interface.h ../../zhicloud_client/packet/include/
+	cp -rf ./win32/win32_spice_interface_types.h ../../zhicloud_client/packet/include/
+	cp -rf ./README ../../zhicloud_client/packet/
 endif
 
 

@@ -28,7 +28,7 @@ INC_PATH=-I../glib \
 			-I/usr/include/glib-2.0/ \
 			-I/usr/lib/i386-linux-gnu/glib-2.0/include/ \
 			-I/usr/include/libxml2/ \
-			-I/usr/lib/arm-linux-gnueabihf/glib-2.0/include/
+			-I/usr/lib/x86_64-linux-gnu/glib-2.0/include/
 
 SRC=win32-spicy.c win32-spicy.h win32-spice-widget.h win32-spice-widget.c win32-spice-widget-priv.h config.h \
 	 spice-gtk-session.h spice-common.h spice-cmdline.c spice-cmdline.h spice-widget-enums.c spice-widget-enums.h \

@@ -19,13 +19,11 @@ INC_PATH= -I../ \
 			 -I../spice-common/spice-protocol/ \
 			 -I/usr/include/gstreamer-0.10/gst \
 			 -I/usr/include/gstreamer-0.10/ \
-			 -I/usr/include/glib-2.0/\
 			 -I/usr/include/pixman-1/ \
 			 -I/usr/include/soprano/ \
 			 -I/usr/include/libxml2/ \
 			 -I/usr/include/libusb-1.0/ \
-			 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include/ \
-			 -I/home/zhicloud/Proj/ffmpeg/include 
+			 `pkg-config --cflags gobject-2.0`
 
 DEFS = -DHAVE_CONFIG_H -DUSB_IDS=\""$(USB_IDS)"\"
 USB_IDS = /var/lib/usbutils/usb.ids

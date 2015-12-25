@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DZS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I. -I../packet -I../../../../Qt5.5.0/5.5/gcc_64/include -I../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets -I../../../../Qt5.5.0/5.5/gcc_64/include/QtGui -I../../../../Qt5.5.0/5.5/gcc_64/include/QtNetwork -I../../../../Qt5.5.0/5.5/gcc_64/include/QtCore -I. -I. -I../../../../Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++
+INCPATH       = -I. -I. -I../../../../Qt5.5.0/5.5/gcc_64/include -I../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets -I../../../../Qt5.5.0/5.5/gcc_64/include/QtGui -I../../../../Qt5.5.0/5.5/gcc_64/include/QtNetwork -I../../../../Qt5.5.0/5.5/gcc_64/include/QtCore -I. -I. -I../../../../Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = cloud_terminal1.0.0
 DISTDIR = /home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal/.tmp/cloud_terminal1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/zhicloud/Qt5.5.0/5.5/gcc_64 -Wl,-rpath,/home/zhicloud/Qt5.5.0/5.5/gcc_64/lib
-LIBS          = $(SUBLIBS) -L../packet/lib -L/home/zhicloud/Proj/ffmpeg/lib -lspice_glib -lspice_without_gtk -lspice-common-client -lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lgthread-2.0 -lusb-1.0 -lusbredirhost -lusbredirparser -lxml2 -lssl -lcelt051 -lm -ljpeg -lz -lpixman-1 -lcrypto -lpulse-mainloop-glib -lpulse -lsasl2 -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 -lavformat -lavcodec -lswresample -lswscale -lavutil -lX11 -L/home/zhicloud/Qt5.5.0/5.5/gcc_64/lib -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L../packet/lib -L/usr/lib -lspice_glib -lspice_without_gtk -lspice-common-client -lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lgthread-2.0 -lusb-1.0 -lusbredirhost -lusbredirparser -lxml2 -lssl -lcelt051 -lm -ljpeg -lz -lpixman-1 -lcrypto -lpulse-mainloop-glib -lpulse -lsasl2 -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 -lavformat -lavcodec -lswresample -lswscale -lavutil -lX11 -L/home/zhicloud/Qt5.5.0/5.5/gcc_64/lib -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -367,12 +367,11 @@ DIST          = ../../../../Qt5.5.0/5.5/gcc_64/mkspecs/features/spec_pre.prf \
 		singleton.h \
 		SpiceMulViewer.h \
 		togglebutton.h \
-		ui_cloud_terminal.h \
 		UpdateWidget.h \
 		util.h \
 		zc_message_box.h \
-		win32_spice_interface_types.h \
-		win32_spice_interface.h cdiagnoseitem.cpp \
+		../packet/include/win32_spice_interface_types.h \
+		../packet/include/win32_spice_interface.h cdiagnoseitem.cpp \
 		cesulabel.cpp \
 		cfblbutton.cpp \
 		chostlist.cpp \
@@ -731,7 +730,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents cloud_terminal.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents cdiagnoseitem.h cesulabel.h cfblbutton.h chostlist.h clabel.h cleftarrawpwdedit.h cloading.h clogthred.h cloud_terminal.h cmailboxwidget.h cmaildelwidget.h cmailitemwidget.h cmailsearch.h cmenuwidget.h cmythread.h cnetaboutspilter.h cnetdiswidget.h common.h common_operater.h crolatepoint.h ctoolbox.h cusercard.h cuserpicpanel.h fbl_message_box.h fblsetwidget.h feedbackwidget.h getway.h log.h mainwindow.h menu_box.h myclicklabel.h mylabel.h mylog.h mytextedit.h qrectevent.h resource.h ringlist.h singleton.h SpiceMulViewer.h togglebutton.h ui_cloud_terminal.h UpdateWidget.h util.h zc_message_box.h win32_spice_interface_types.h win32_spice_interface.h $(DISTDIR)/
+	$(COPY_FILE) --parents cdiagnoseitem.h cesulabel.h cfblbutton.h chostlist.h clabel.h cleftarrawpwdedit.h cloading.h clogthred.h cloud_terminal.h cmailboxwidget.h cmaildelwidget.h cmailitemwidget.h cmailsearch.h cmenuwidget.h cmythread.h cnetaboutspilter.h cnetdiswidget.h common.h common_operater.h crolatepoint.h ctoolbox.h cusercard.h cuserpicpanel.h fbl_message_box.h fblsetwidget.h feedbackwidget.h getway.h log.h mainwindow.h menu_box.h myclicklabel.h mylabel.h mylog.h mytextedit.h qrectevent.h resource.h ringlist.h singleton.h SpiceMulViewer.h togglebutton.h UpdateWidget.h util.h zc_message_box.h ../packet/include/win32_spice_interface_types.h ../packet/include/win32_spice_interface.h $(DISTDIR)/
 	$(COPY_FILE) --parents cdiagnoseitem.cpp cesulabel.cpp cfblbutton.cpp chostlist.cpp clabel.cpp cleftarrawpwdedit.cpp cloading.cpp clogthred.cpp cloud_terminal.cpp cmailboxwidget.cpp cmaildelwidget.cpp cmailitemwidget.cpp cmailsearch.cpp cmenuwidget.cpp cmythread.cpp cnetaboutspilter.cpp cnetdiswidget.cpp common_operater.cpp crolatepoint.cpp ctoolbox.cpp cusercard.cpp cuserpicpanel.cpp fbl_message_box.cpp fblsetwidget.cpp feedbackwidget.cpp getway.cpp log.cpp main.cpp mainwindow.cpp menu_box.cpp myclicklabel.cpp mylabel.cpp mylog.cpp mytextedit.cpp qrectevent.cpp ringlist.cpp SpiceMulViewer.cpp togglebutton.cpp UpdateWidget.cpp util.cpp zc_message_box.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents cloud_terminal.ui $(DISTDIR)/
 	$(COPY_FILE) --parents cloud_terminal_zh.ts $(DISTDIR)/
@@ -1126,7 +1125,7 @@ moc_cdiagnoseitem.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QHBoxLay
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qlabel.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qframe.h \
 		cdiagnoseitem.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cdiagnoseitem.h -o moc_cdiagnoseitem.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cdiagnoseitem.h -o moc_cdiagnoseitem.cpp
 
 moc_cesulabel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -1234,7 +1233,7 @@ moc_cesulabel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qlabel.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qframe.h \
 		cesulabel.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cesulabel.h -o moc_cesulabel.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cesulabel.h -o moc_cesulabel.cpp
 
 moc_cfblbutton.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QPushButton \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qpushbutton.h \
@@ -1342,7 +1341,7 @@ moc_cfblbutton.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QPushButton
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qvector2d.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qtouchdevice.h \
 		cfblbutton.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cfblbutton.h -o moc_cfblbutton.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cfblbutton.h -o moc_cfblbutton.cpp
 
 moc_chostlist.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -1454,7 +1453,7 @@ moc_chostlist.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QDialog \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qdialog.h \
 		chostlist.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore chostlist.h -o moc_chostlist.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore chostlist.h -o moc_chostlist.cpp
 
 moc_clabel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -1572,7 +1571,7 @@ moc_clabel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qtextoption.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qpen.h \
 		clabel.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore clabel.h -o moc_clabel.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore clabel.h -o moc_clabel.cpp
 
 moc_cleftarrawpwdedit.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -1684,7 +1683,7 @@ moc_cleftarrawpwdedit.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWid
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qpen.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qtextoption.h \
 		cleftarrawpwdedit.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cleftarrawpwdedit.h -o moc_cleftarrawpwdedit.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cleftarrawpwdedit.h -o moc_cleftarrawpwdedit.cpp
 
 moc_cloading.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QPushButton \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qpushbutton.h \
@@ -1803,7 +1802,7 @@ moc_cloading.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QPushButton \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qgridlayout.h \
 		cloading.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cloading.h -o moc_cloading.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cloading.h -o moc_cloading.cpp
 
 moc_clogthred.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QThread \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/qthread.h \
@@ -2049,7 +2048,7 @@ moc_clogthred.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QThread \
 		cnetdiswidget.h \
 		cdiagnoseitem.h \
 		clogthred.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore clogthred.h -o moc_clogthred.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore clogthred.h -o moc_clogthred.cpp
 
 moc_cloud_terminal.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QMainWindow \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -2158,7 +2157,7 @@ moc_cloud_terminal.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QMainWi
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qicon.h \
 		ui_cloud_terminal.h \
 		cloud_terminal.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cloud_terminal.h -o moc_cloud_terminal.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cloud_terminal.h -o moc_cloud_terminal.cpp
 
 moc_cmailboxwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -2287,7 +2286,7 @@ moc_cmailboxwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qstackedlayout.h \
 		cmaildelwidget.h \
 		cmailboxwidget.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmailboxwidget.h -o moc_cmailboxwidget.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmailboxwidget.h -o moc_cmailboxwidget.cpp
 
 moc_cmaildelwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -2392,7 +2391,7 @@ moc_cmaildelwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qvector2d.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qtouchdevice.h \
 		cmaildelwidget.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmaildelwidget.h -o moc_cmaildelwidget.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmaildelwidget.h -o moc_cmaildelwidget.cpp
 
 moc_cmailitemwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -2506,7 +2505,7 @@ moc_cmailitemwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidge
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qgridlayout.h \
 		mylabel.h \
 		cmailitemwidget.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmailitemwidget.h -o moc_cmailitemwidget.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmailitemwidget.h -o moc_cmailitemwidget.cpp
 
 moc_cmailsearch.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -2623,7 +2622,7 @@ moc_cmailsearch.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qgridlayout.h \
 		cmailsearch.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmailsearch.h -o moc_cmailsearch.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmailsearch.h -o moc_cmailsearch.cpp
 
 moc_cmenuwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -3093,7 +3092,7 @@ moc_cmenuwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtNetwork/qtnetworkversion.h \
 		cesulabel.h \
 		cmenuwidget.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmenuwidget.h -o moc_cmenuwidget.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmenuwidget.h -o moc_cmenuwidget.cpp
 
 moc_cmythread.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QThread \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/qthread.h \
@@ -3152,7 +3151,7 @@ moc_cmythread.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QThread \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QWaitCondition \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/qwaitcondition.h \
 		cmythread.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmythread.h -o moc_cmythread.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cmythread.h -o moc_cmythread.cpp
 
 moc_cnetaboutspilter.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -3260,7 +3259,7 @@ moc_cnetaboutspilter.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidg
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qlabel.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qframe.h \
 		cnetaboutspilter.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cnetaboutspilter.h -o moc_cnetaboutspilter.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cnetaboutspilter.h -o moc_cnetaboutspilter.cpp
 
 moc_cnetdiswidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -3371,7 +3370,7 @@ moc_cnetdiswidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget 
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/qtimer.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/qbasictimer.h \
 		cnetdiswidget.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cnetdiswidget.h -o moc_cnetdiswidget.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cnetdiswidget.h -o moc_cnetdiswidget.cpp
 
 moc_crolatepoint.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -3638,7 +3637,7 @@ moc_crolatepoint.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtNetwork/qtnetworkversion.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtNetwork/QNetworkReply \
 		crolatepoint.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore crolatepoint.h -o moc_crolatepoint.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore crolatepoint.h -o moc_crolatepoint.cpp
 
 moc_ctoolbox.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -4058,7 +4057,7 @@ moc_ctoolbox.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtNetwork/qtnetworkversion.h \
 		cesulabel.h \
 		ctoolbox.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore ctoolbox.h -o moc_ctoolbox.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore ctoolbox.h -o moc_ctoolbox.cpp
 
 moc_cusercard.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -4184,7 +4183,7 @@ moc_cusercard.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QString \
 		cuserpicpanel.h \
 		cusercard.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cusercard.h -o moc_cusercard.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cusercard.h -o moc_cusercard.cpp
 
 moc_cuserpicpanel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -4293,7 +4292,7 @@ moc_cuserpicpanel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget 
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qlabel.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qframe.h \
 		cuserpicpanel.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cuserpicpanel.h -o moc_cuserpicpanel.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore cuserpicpanel.h -o moc_cuserpicpanel.cpp
 
 moc_fbl_message_box.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -4417,7 +4416,7 @@ moc_fbl_message_box.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidge
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/qbasictimer.h \
 		mylabel.h \
 		fbl_message_box.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore fbl_message_box.h -o moc_fbl_message_box.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore fbl_message_box.h -o moc_fbl_message_box.cpp
 
 moc_fblsetwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -4539,7 +4538,7 @@ moc_fblsetwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QStackedLayout \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qstackedlayout.h \
 		fblsetwidget.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore fblsetwidget.h -o moc_fblsetwidget.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore fblsetwidget.h -o moc_fblsetwidget.cpp
 
 moc_feedbackwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QDialog \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qdialog.h \
@@ -4929,7 +4928,7 @@ moc_feedbackwidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QDialog
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/QPainter \
 		cuserpicpanel.h \
 		feedbackwidget.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore feedbackwidget.h -o moc_feedbackwidget.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore feedbackwidget.h -o moc_feedbackwidget.cpp
 
 moc_mainwindow.cpp: cusercard.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
@@ -5175,7 +5174,7 @@ moc_mainwindow.cpp: cusercard.h \
 		qrectevent.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QEvent \
 		mainwindow.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore mainwindow.h -o moc_mainwindow.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore mainwindow.h -o moc_mainwindow.cpp
 
 moc_menu_box.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -5308,7 +5307,7 @@ moc_menu_box.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QDialog \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qdialog.h \
 		menu_box.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore menu_box.h -o moc_menu_box.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore menu_box.h -o moc_menu_box.cpp
 
 moc_myclicklabel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qlabel.h \
@@ -5622,7 +5621,7 @@ moc_myclicklabel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QtGlobal \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QString \
 		myclicklabel.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore myclicklabel.h -o moc_myclicklabel.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore myclicklabel.h -o moc_myclicklabel.cpp
 
 moc_mylabel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qlabel.h \
@@ -5729,7 +5728,7 @@ moc_mylabel.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QLabel \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qvector2d.h \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtGui/qtouchdevice.h \
 		mylabel.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore mylabel.h -o moc_mylabel.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore mylabel.h -o moc_mylabel.cpp
 
 moc_mytextedit.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -5855,7 +5854,7 @@ moc_mytextedit.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QLineEdit \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qlineedit.h \
 		mytextedit.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore mytextedit.h -o moc_mytextedit.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore mytextedit.h -o moc_mytextedit.cpp
 
 moc_SpiceMulViewer.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -6101,7 +6100,7 @@ moc_SpiceMulViewer.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget
 		cnetdiswidget.h \
 		cdiagnoseitem.h \
 		SpiceMulViewer.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore SpiceMulViewer.h -o moc_SpiceMulViewer.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore SpiceMulViewer.h -o moc_SpiceMulViewer.cpp
 
 moc_togglebutton.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QPushButton \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qpushbutton.h \
@@ -6228,7 +6227,7 @@ moc_togglebutton.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QPushButt
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QSettings \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/qsettings.h \
 		togglebutton.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore togglebutton.h -o moc_togglebutton.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore togglebutton.h -o moc_togglebutton.cpp
 
 moc_UpdateWidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QDialog \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qdialog.h \
@@ -6623,7 +6622,7 @@ moc_UpdateWidget.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QDialog \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QStackedLayout \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qstackedlayout.h \
 		UpdateWidget.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore UpdateWidget.h -o moc_UpdateWidget.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore UpdateWidget.h -o moc_UpdateWidget.cpp
 
 moc_zc_message_box.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/qwidget.h \
@@ -6756,7 +6755,7 @@ moc_zc_message_box.cpp: ../../../../Qt5.5.0/5.5/gcc_64/include/QtWidgets/QWidget
 		../../../../Qt5.5.0/5.5/gcc_64/include/QtCore/QString \
 		cuserpicpanel.h \
 		zc_message_box.h
-	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/packet -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore zc_message_box.h -o moc_zc_message_box.cpp
+	/home/zhicloud/Qt5.5.0/5.5/gcc_64/bin/moc $(DEFINES) -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/mkspecs/linux-g++ -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Proj/desktop_develop/zhicloud_client/cloud_teminal -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtWidgets -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtGui -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtNetwork -I/home/zhicloud/Qt5.5.0/5.5/gcc_64/include/QtCore zc_message_box.h -o moc_zc_message_box.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:

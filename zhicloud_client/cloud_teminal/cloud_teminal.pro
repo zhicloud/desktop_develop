@@ -50,7 +50,7 @@ HEADERS += cdiagnoseitem.h \
            singleton.h \
            SpiceMulViewer.h \
            togglebutton.h \
-           ui_cloud_terminal.h \
+#           ui_cloud_terminal.h \
            UpdateWidget.h \
            util.h \
            zc_message_box.h
@@ -102,12 +102,11 @@ TRANSLATIONS += cloud_terminal_zh.ts
 
 unix
 {
-    INCLUDEPATH += ../packet/
-    HEADERS += win32_spice_interface_types.h \
-            win32_spice_interface.h
+    HEADERS += ../packet/include/win32_spice_interface_types.h \
+            ../packet/include/win32_spice_interface.h
 
     LIBS += -L../packet/lib \
-       -L/home/zhicloud/Proj/ffmpeg/lib
+       -L/usr/lib
     LIBS += -lspice_glib -lspice_without_gtk -lspice-common-client \
        -lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lgthread-2.0 \
        -lusb-1.0 -lusbredirhost -lusbredirparser \

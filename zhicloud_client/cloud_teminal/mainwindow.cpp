@@ -2425,7 +2425,6 @@ void CMainWindow::checkurl()
 
 void CMainWindow::clicklogin()
 {
-
    /*/
    //test
    //printf("aaaaaaaaaaaaaaa\n");

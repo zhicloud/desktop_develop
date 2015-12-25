@@ -444,6 +444,7 @@ void fblSetWidget::chooseFbl()
 	}
 	fbl_message_box * msg_box = new fbl_message_box(QStringLiteral("应用分辨率%1并重启？").arg(str_Fbl));
 	msg_box->setFontColor(FBLMSGFONTWHITE);
+   msg_box->setCmd(str_Tmp);
 	msg_box->show();
 #endif
 }

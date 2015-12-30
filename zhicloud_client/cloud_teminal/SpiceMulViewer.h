@@ -182,7 +182,7 @@ private:
 	
 
 public:
-#ifdef LINUX
+#ifdef __linux
 	UINT16			keymap_win322xtkbd[65536];
 #else
 	UINT16			keymap_win322xtkbd[256];

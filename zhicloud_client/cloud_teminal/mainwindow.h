@@ -38,7 +38,7 @@
 #include "cnetdiswidget.h"
 #include "cdiagnoseitem.h"
 #include <QThread>
-#ifdef LINUX
+#ifdef __linux
 #include <unistd.h>
 #else
 #endif

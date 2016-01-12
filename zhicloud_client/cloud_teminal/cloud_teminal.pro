@@ -105,10 +105,9 @@ unix
     HEADERS += ../packet/include/win32_spice_interface_types.h \
             ../packet/include/win32_spice_interface.h
 
-    DEFINES += LINUX 
     LIBS += -L../packet/lib \
-       -L/usr/lib\
-       -L/home/lichenxiang/opt/lib
+            -L/usr/lib
+ 
     LIBS += -lspice_glib -lspice_without_gtk -lspice-common-client \
        -lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lgthread-2.0 \
        -lusb-1.0 -lusbredirhost -lusbredirparser \

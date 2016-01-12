@@ -9,7 +9,7 @@
 void InitKeyCode(UINT16 keyCode[])
 {
 	//const UINT16 keymap_win322xtkbd[256] = { 0 };
-#ifdef LINUX
+#ifdef __linux
  
   keyCode[0x20] = 0x39;       /* 32 (XK_space) => 57 via 57 (KEY_SPACE) */
   keyCode[0x27] = 0x28;       /* 39 (XK_apostrophe) => 40 via 40 (KEY_APOSTROPHE) */

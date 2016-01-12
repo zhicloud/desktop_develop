@@ -1,24 +1,37 @@
 #ifndef SPICEMULVIEWER_H
 #define SPICEMULVIEWER_H
 
+#include <vector>          
+#include <list>
+using namespace std;
+
+#include <QPainter>        
+#include <QImage>          
+#include <QDebug>          
+#include <QPushButton>     
+#include <QEvent>          
+#include <QTimer>          
+#include <QMutexLocker>    
+#include <QThread>         
+#include <QDesktopWidget>  
+#include <QApplication>    
 #include <QWidget>
 #include <QScrollArea>
 #include <QWaitCondition>
 #include <QPushButton>
 #include <QPoint>
 #include <QMutex>
+
+#include "common_operater.h"
+#include "cmenuwidget.h"   
+#include "cmythread.h"     
+#include "zc_message_box.h"
 #include "mainwindow.h"
 #include "common_operater.h"
 #include "../packet/include/win32_spice_interface_types.h"
 #include "../packet/include/win32_spice_interface.h"
 #include "cmythread.h"
-#include <list>
 #include "qrectevent.h"
-using namespace std;
-
-#pragma comment(lib,"libspice_glib")
-#pragma comment(lib,"libspice_without_gtk")
-#pragma comment(lib,"libspice-common-client")
 
 #define  MAX_OP_COUNT 10
 
@@ -180,7 +193,7 @@ private:
 	
 
 public:
-#ifdef LINUX
+#ifdef __linux
 	UINT16			keymap_win322xtkbd[65536];
 #else
 	UINT16			keymap_win322xtkbd[256];

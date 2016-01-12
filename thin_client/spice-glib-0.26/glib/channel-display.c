@@ -1931,8 +1931,15 @@ static void spice_display_decoding(display_stream* st, SpiceMsgIn* in)
         if (st->surface->primary)
            g_signal_emit(st->channel, signals[SPICE_DISPLAY_INVALIDATE_H264], 0,
                         0, 0, width, height,
-                        data); 
-      }	
+                        data);
+        st->out_frame = NULL;
+      }
+      else      
+      {
+        g_free(st->out_frame);
+        st->out_frame = NULL;
+      }
+      
 	}
 	
 	st->msg_data = NULL;

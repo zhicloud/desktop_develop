@@ -8,8 +8,6 @@
 
 #define DEFAULT_MAX_FRAME_SIZE 1920 * 1080 * 4
 
-static int h264_file_index = 0;
-
 void stream_h264_init(display_stream* st)
 {
     int ret = 0;
@@ -38,16 +36,6 @@ void stream_h264_init(display_stream* st)
         printf("init decoder failed!\n");
         return;
     } 
-
-//   char h264_file_name[64] = {0};
-//   sprintf(h264_file_name, "./de_dir/channel%d.h264", h264_file_index++);
-//
-//   st->h264_log_file = fopen(h264_file_name, "wb+");
-//   if(st->h264_log_file == NULL)
-//   {
-//      printf("open h264 file lost!\n");
-//      return;
-//   }
 }
 
 void stream_h264_data(display_stream* st, SpiceRect* rc)
@@ -63,20 +51,15 @@ void stream_h264_data(display_stream* st, SpiceRect* rc)
     char* h264_frame = NULL;
     int* h264_frame_size = NULL;
 
-   if(st->msg_data->psize <= 0)
-   {
-      printf("msg_data' s psize <= 0\n");
-      return;   
-   }
+    if(st->msg_data->psize <= 0)
+    {
+       printf("msg_data' s psize <= 0\n");
+       return;   
+    }
 
     h264_frame = (char*)(st->msg_data->data + 12);
     h264_frame_size =(int*)(st->msg_data->data + 8);   
 
-//    if(st->h264_log_file != NULL)
-//    {
-//         fwrite(h264_frame, 1, *h264_frame_size, st->h264_log_file);
-//         fflush(st->h264_log_file);
-//    }
 
     rgb_frame = (char*)g_malloc0(DEFAULT_MAX_FRAME_SIZE);
     ret = h264_decode(st->h264_decoder, rgb_frame, &rgb_frame_size, h264_frame, *h264_frame_size, &width, &height, &hpp);
@@ -100,16 +83,4 @@ void stream_h264_cleanup(display_stream* st)
       free(st->h264_info);
       st->h264_info = NULL;
    }
-   
-//   if(st->out_frame != NULL)
-//   {
-//      g_free(st->out_frame);                                                                                                                         
-//      st->out_frame = NULL;
-//   }
-
-//   if(st->h264_log_file != NULL)
-//   {
-//      fclose(st->h264_log_file);
-//      st->h264_log_file = NULL;
-//   }
 }

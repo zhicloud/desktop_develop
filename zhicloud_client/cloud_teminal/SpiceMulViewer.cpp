@@ -1,21 +1,4 @@
-#include <vector>
-
-#include <QPainter>
-#include <QImage>
-#include <QDebug>
-#include <QPushButton>
-#include <QEvent>
-#include <QTimer>
-#include <QMutexLocker>
-#include <QThread>
-#include <QDesktopWidget>
-#include <QApplication>
-
-#include "common_operater.h"
 #include "SpiceMulViewer.h"
-#include "cmenuwidget.h"
-#include "cmythread.h"
-#include "zc_message_box.h"
 
 SPICE_HANDLE CSpiceMultVEx::m_hContext = NULL;
 int CSpiceMultVEx::m_hmain = 0;

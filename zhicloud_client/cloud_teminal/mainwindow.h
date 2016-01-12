@@ -38,7 +38,7 @@
 #include "cnetdiswidget.h"
 #include "cdiagnoseitem.h"
 #include <QThread>
-#ifdef __linux
+#ifdef LINUX
 #include <unistd.h>
 #else
 #endif
@@ -55,9 +55,9 @@ class SpiceMulViewer;
 
 typedef struct MyStruct
 {
-	QString* username;
-	QString* logopath;
-	QString* nickname;
+   QString* username;
+   QString* logopath;
+   QString* nickname;
 }USERCARDINFO;
 
 
@@ -71,339 +71,340 @@ typedef struct MyStruct
 
 class QNetDiagoseEvent : public QEvent
 {
-public:
-	QNetDiagoseEvent(Type type)
-	:QEvent(type)
-	{
+   public:
+      QNetDiagoseEvent(Type type)
+         :QEvent(type)
+      {
 
-	}
-	~QNetDiagoseEvent()
-	{
+      }
+      ~QNetDiagoseEvent()
+      {
 
-	}
-	void SetBoolean(bool torf)
-	{
-		trueorfalse = torf;
-	}
-	bool GetBoolean(){ return trueorfalse; }
-private:
-	bool  trueorfalse;
+      }
+      void SetBoolean(bool torf)
+      {
+         trueorfalse = torf;
+      }
+      bool GetBoolean(){ return trueorfalse; }
+   private:
+      bool  trueorfalse;
 };
 
 
 class CMainWindow : public QMainWindow
 {
-	Q_OBJECT
+   Q_OBJECT
 
-public:
-	CMainWindow(QWidget *parent=0);
-	~CMainWindow();
+   public:
+      CMainWindow(QWidget *parent=0);
+      ~CMainWindow();
 
-public:
-	void createsetsvrurlWidget();
-	void createFirstLoginWidget();
-	void createSecondLoginWidget();
-	//
-	void createMoreThan3Widget();
-	void create3UserWdiget();
-	void create2UserWidget();
-	void create1UserWidget();
-	void create0userWidget();
-	int GetUsers();
-	//
+   public:
+      void createsetsvrurlWidget();
+      void createFirstLoginWidget();
+      void createSecondLoginWidget();
+      //
+      void createMoreThan3Widget();
+      void create3UserWdiget();
+      void create2UserWidget();
+      void create1UserWidget();
+      void create0userWidget();
+      int GetUsers();
+      //
 
-	int netcardstat();
-	int ping(QString ip);
+      int netcardstat();
+      int ping(QString ip);
 
-	void createChangePassWidget();
-	void createCloudHostSelectWidget();
-	void createChangeUserWidget();
-	void createAbout_NetSettingWidget();
-public:
+      void createChangePassWidget();
+      void createCloudHostSelectWidget();
+      void createChangeUserWidget();
+      void createAbout_NetSettingWidget();
+   public:
 
-	void netdiagose();
-	void dhcpmode(QString& ipaddr, QString& mask, QString& gateway,QString &mac);
-	void usersetmode(const QString& ipaddr, const QString& mask, const QString& gateway);
+      void netdiagose();
+      void dhcpmode(QString& ipaddr, QString& mask, QString& gateway,QString &mac);
+      void usersetmode(const QString& ipaddr, const QString& mask, const QString& gateway);
 
-	bool CheckNeedUpgrade();
+      bool CheckNeedUpgrade();
 
-	void setScrollSheet(QScrollArea* scroll);
+      void setScrollSheet(QScrollArea* scroll);
 
-	void someItemOnWidget(QWidget* widget);
-	void createAboutWidget();
-	void createNetSettingWidget();
-	void createNetDiagnoseWidget();
-	void createSysSettingWidget();
+      void someItemOnWidget(QWidget* widget);
+      void createAboutWidget();
+      void createNetSettingWidget();
+      void createNetDiagnoseWidget();
+      void createSysSettingWidget();
 
-	void changeWidgetTo(QWidget* witch);
+      void changeWidgetTo(QWidget* witch);
 
-	void doHttpGet(int cmd, QString strUrl);
-	void savelastusser();
-	bool parseResult(ZcCommandType type, QByteArray data);
-	bool parseConnectRet(QByteArray data);
-	bool parseGetVersion(QByteArray data);
-	bool parseHeartBRet(QByteArray data);
-	bool parseOperateRet(QByteArray data);
-	bool parseLoginRet(QByteArray data);
-	void deletecard(CUserCard* card);
-	void setChangeUserPic(QWidget* widget);
-	void adduser();
-	void saveuserpictofile();
-	int spicelogin(QString ip = "172.16.6.1", QString port = "5926", QString uname = "", QString pwd = "");
+      void doHttpGet(int cmd, QString strUrl);
+      void savelastusser();
+      bool parseResult(ZcCommandType type, QByteArray data);
+      bool parseConnectRet(QByteArray data);
+      bool parseGetVersion(QByteArray data);
+      bool parseHeartBRet(QByteArray data);
+      bool parseOperateRet(QByteArray data);
+      bool parseLoginRet(QByteArray data);
+      void deletecard(CUserCard* card);
+      void setChangeUserPic(QWidget* widget);
+      void adduser();
+      void saveuserpictofile();
+      int spicelogin(QString ip = "172.16.6.1", QString port = "5926", QString uname = "", QString pwd = "");
 
-	void menuexit();
-	void menureboot();
-	void menushutdown();
-	void menustarthost();
-	bool checkComplete(int & filesize);
-	void readDns(QString &dns);
-	void readMac(QString &mac);
-public:
+      void menuexit();
+      void menureboot();
+      void menushutdown();
+      void menustarthost();
+      bool checkComplete(int & filesize);
+      void readDns(QString &dns);
+      void readMac(QString &mac);
+   public:
 
-	enum 
-	{
-		NETCARDSTAT = 0,
-		NETKOUSTAT = 1,
-		DHCPSTAT = 2,
-		WWWSTAT = 3,
-		CLOUDDESTSTAT = 4,
-	};
+      enum 
+      {
+         NETCARDSTAT = 0,
+         NETKOUSTAT = 1,
+         DHCPSTAT = 2,
+         WWWSTAT = 3,
+         CLOUDDESTSTAT = 4,
+      };
 
-	//netdiagnoseitem
-	QLabel* box2route;
-	QLabel* route2www;
-	QLabel* www2svr;
-	QLabel* www2web;
-	CDiagnoseItem* itemarr[5];
-	QLabel* staticon;
-	QLabel* txt;
-	QLabel* m_mac;
-	QString errorstr;
+      //netdiagnoseitem
+      QLabel* box2route;
+      QLabel* route2www;
+      QLabel* www2svr;
+      QLabel* www2web;
+      CDiagnoseItem* itemarr[5];
+      QLabel* staticon;
+      QLabel* txt;
+      QLabel* m_mac;
+      QString errorstr;
 
-	CLoading* diagnoseload;
+      CLoading* diagnoseload;
 
-	QString spiceip;	
-	QString spiceport;
-	QString spicepwd;
+      QString spiceip;	
+      QString spiceport;
+      QString spicepwd;
 
-	cnetdiswidget* netdicwidget;
+      cnetdiswidget* netdicwidget;
 
-	QPushButton* neterror;
+      QPushButton* neterror;
 
-	int islogining;
-	QString download_id;
-	QString update_info;
-	QString version;
+      int islogining;
+      QString download_id;
+      QString update_info;
+      QString version;
 
-	CMyTextEdit* ipaddredit;
-	CMyTextEdit* maskedit;
-	CMyTextEdit* gatewayedit;
+      CMyTextEdit* ipaddredit;
+      CMyTextEdit* maskedit;
+      CMyTextEdit* gatewayedit;
 
-	QPushButton* dhcpbutton;
-	QPushButton* usersetbtn;
-	//LXL add for DNS
-	QPushButton* moresetBtn;
-	CMyTextEdit* dnsedit;
-	bool isMoresetSelect;
-	QLabel* svrurl;
-	QLabel* svrport;
-	//LXL add for DNS
-	QNetworkAccessManager* m_manager;
-	QNetworkAccessManager m_downloadmgr;
-	//QJson::Parser parser;
-	QNetworkReply	*_reply;
+      QPushButton* dhcpbutton;
+      QPushButton* usersetbtn;
+      //LXL add for DNS
+      QPushButton* moresetBtn;
+      CMyTextEdit* dnsedit;
+      bool isMoresetSelect;
+      QLabel* svrurl;
+      QLabel* svrport;
+      //LXL add for DNS
+      QNetworkAccessManager* m_manager;
+      QNetworkAccessManager m_downloadmgr;
+      //QJson::Parser parser;
+      QNetworkReply	*_reply;
 
-	QWidget				*morethan3Widget;
-	QWidget				*User0Widget;
-	QWidget				*User1Widget;
-	QWidget				*User2Widget;
-	QWidget				*User3Widget;
-	QWidget				*secondLoginWidget;
-private:
-	QWidget				*setsvrurlWidget;
-	QWidget				*firstLoginWidget;
-	QWidget				*changePswdWidget;
-	QWidget				*chostselectWdiget;
-	QWidget				*changeuserwidget;
-	QWidget				*about_netsetwidget;
-	QStackedLayout		*mainLayout;
-	QStackedLayout		*hpiclayout;
-	fblSetWidget		*syssetwidget;
-	QWidget* dddd;
-	QVector<QPushButton *> fblBtn_Vec;
-	int					currentScreenWidth;
-	int					currentScreenHeight;
-	bool                ismultihost;
-	bool 				m_isAppComplete;
-	bool				isfblBtnShow;
-   //add by lcx
-   bool           isUpgradeCheckd;
-	double				widthRatio;
-	double				heightRatio;
-	QString				_savePackagePath;
-	QFile				*_file;
-	CMyTextEdit			*userTextEdit;
-	CMyTextEdit			*passwordTextEdit;
-	QWidget				*main_widget;
-	QWidget				*center_widget;
-	QWidget				*netwidget;
-	QWidget				*aboutwidget;
-	QWidget				*netdiagnosewidget;
-	QLabel* netset_ipaddr;
-	QLabel* netset_mask;
-	QLabel* netset_gateway;
-	QLabel* netset_dnslable;
-protected:
-	virtual void customEvent(QEvent *event);
-public slots:
-	bool eventFilter(QObject *, QEvent *);
-	void netdiaglclickfunc();
-	void sysclickfunc();
-	void netlclickfunc();
-	void aboutlclickfunc();
-	void netdiagnosefunc();
-	void changesetting();
-	void changeuser();
-	void changesetret();
-	void changesetsave();
-	void changepwd();
-	void changepwdret();
-	void changepwdsure();
-	void netsetreadonly(bool isreadonly);
-	void checkurl();
-	void clicklogin();
-	void logintohost();
-	void hostret();
-	void turnleft();
-	void changeToPrewidget();
-	void saveFbl();
-	void turnright();
-	void replyFinished(QNetworkReply* reply);
-	void dologintohost(K_yType val); 
-	void dhcpclickfunc();
-	void usersetclickfunc();
-	void isdhcpclicktimerout();
-	void timeabort();	
-	void setResolution(int index);
-	void adduserret();
-	//void maintimerout(); 
-	void netcheckfunc();
-	void reconnectfunc();
-	void fblBtn1Clicked();
-	void fblBtn2Clicked();
-	void fblBtn3Clicked();
-	void fblBtn4Clicked();
-	void fblBtn5Clicked();
-	void moresetclickfunc(); //LXL add for DNS
-public:
-	int reconnecting;
-	int isadduser;
-	int ishasmail;
-	QTimer* reconnecttimer;
-	QTimer* netchecktimer;
+      QWidget				*morethan3Widget;
+      QWidget				*User0Widget;
+      QWidget				*User1Widget;
+      QWidget				*User2Widget;
+      QWidget				*User3Widget;
+      QWidget				*secondLoginWidget;
+   private:
+      int 				isKillNetMgr;
+      QWidget				*setsvrurlWidget;
+      QWidget				*firstLoginWidget;
+      QWidget				*changePswdWidget;
+      QWidget				*chostselectWdiget;
+      QWidget				*changeuserwidget;
+      QWidget				*about_netsetwidget;
+      QStackedLayout		*mainLayout;
+      QStackedLayout		*hpiclayout;
+      fblSetWidget		*syssetwidget;
+      QWidget* dddd;
+      QVector<QPushButton *> fblBtn_Vec;
+      int					currentScreenWidth;
+      int					currentScreenHeight;
+      bool                ismultihost;
+      bool 				m_isAppComplete;
+      bool				isfblBtnShow;
+      //add by lcx
+      bool           isUpgradeCheckd;
+      double				widthRatio;
+      double				heightRatio;
+      QString				_savePackagePath;
+      QFile				*_file;
+      CMyTextEdit			*userTextEdit;
+      CMyTextEdit			*passwordTextEdit;
+      QWidget				*main_widget;
+      QWidget				*center_widget;
+      QWidget				*netwidget;
+      QWidget				*aboutwidget;
+      QWidget				*netdiagnosewidget;
+      QLabel* netset_ipaddr;
+      QLabel* netset_mask;
+      QLabel* netset_gateway;
+      QLabel* netset_dnslable;
+   protected:
+      virtual void customEvent(QEvent *event);
+      public slots:
+         bool eventFilter(QObject *, QEvent *);
+      void netdiaglclickfunc();
+      void sysclickfunc();
+      void netlclickfunc();
+      void aboutlclickfunc();
+      void netdiagnosefunc();
+      void changesetting();
+      void changeuser();
+      void changesetret();
+      void changesetsave();
+      void changepwd();
+      void changepwdret();
+      void changepwdsure();
+      void netsetreadonly(bool isreadonly);
+      void checkurl();
+      void clicklogin();
+      void logintohost();
+      void hostret();
+      void turnleft();
+      void changeToPrewidget();
+      void saveFbl();
+      void turnright();
+      void replyFinished(QNetworkReply* reply);
+      void dologintohost(K_yType val); 
+      void dhcpclickfunc();
+      void usersetclickfunc();
+      void isdhcpclicktimerout();
+      void timeabort();	
+      void setResolution(int index);
+      void adduserret();
+      //void maintimerout(); 
+      void netcheckfunc();
+      void reconnectfunc();
+      void fblBtn1Clicked();
+      void fblBtn2Clicked();
+      void fblBtn3Clicked();
+      void fblBtn4Clicked();
+      void fblBtn5Clicked();
+      void moresetclickfunc(); //LXL add for DNS
+   public:
+      int reconnecting;
+      int isadduser;
+      int ishasmail;
+      QTimer* reconnecttimer;
+      QTimer* netchecktimer;
 
-	QTimer dohttptimer;
-	QNetworkReply* m_reply;	
+      QTimer dohttptimer;
+      QNetworkReply* m_reply;	
 
-	CMyTextEdit* uuuurledit;
-	CMyTextEdit* pppportedit;
-	bool isadduserretshow;
-	QPushButton *adduserretbtn;
-	QPushButton *changesetretbtn;
-	QPushButton *cs_btn;
-	QPushButton *userchangeBtn;
-	QPushButton *changsetBtn;
-	QStackedLayout* netrightglayout;
-	CNetAboutSpilter* spilter;
-	QWidget* prewdiget;
-	QWidget* adduserretwid;
-	CMyTextEdit* urledit;
-	ZcCommandType m_cmd;
-	QString jsonmsg;
-	QString m_url;
-	QString m_uuid;
-	QString m_hostisusb;
-	map<QString, K_yType> m_hostinfo;
-	CHostList * hostlistwd;
-	QString uname;
-	QString passwd;
-	QString currenthostname;
-	QString upic;
-	QString m_strnickname;
-	QString lastsucuname;
-	QString lastsucupwd;
-	QString newwsvrurl;
-	CUserCard* photoLabel;
-	vector<QString>m_user;
+      CMyTextEdit* uuuurledit;
+      CMyTextEdit* pppportedit;
+      bool isadduserretshow;
+      QPushButton *adduserretbtn;
+      QPushButton *changesetretbtn;
+      QPushButton *cs_btn;
+      QPushButton *userchangeBtn;
+      QPushButton *changsetBtn;
+      QStackedLayout* netrightglayout;
+      CNetAboutSpilter* spilter;
+      QWidget* prewdiget;
+      QWidget* adduserretwid;
+      CMyTextEdit* urledit;
+      ZcCommandType m_cmd;
+      QString jsonmsg;
+      QString m_url;
+      QString m_uuid;
+      QString m_hostisusb;
+      map<QString, K_yType> m_hostinfo;
+      CHostList * hostlistwd;
+      QString uname;
+      QString passwd;
+      QString currenthostname;
+      QString upic;
+      QString m_strnickname;
+      QString lastsucuname;
+      QString lastsucupwd;
+      QString newwsvrurl;
+      CUserCard* photoLabel;
+      vector<QString>m_user;
 
-	dulinklist userlist;
-	CUserCard*    cardarray[9];
+      dulinklist userlist;
+      CUserCard*    cardarray[9];
 
-	struct dulnode* cur;
-	CLeftArrawPWDEdit* edit;
+      struct dulnode* cur;
+      CLeftArrawPWDEdit* edit;
 
-	SpiceMulViewer* viewer;
-	CMenuWidget* menu;
-	QString picpath;
+      SpiceMulViewer* viewer;
+      CMenuWidget* menu;
+      QString picpath;
 
-	CUserCard* secondwuserpic;
+      CUserCard* secondwuserpic;
 
-	//loading
-	CLoading* floading;
-	CLoading* sloading;
-	CLoading* hloading;
-	
-	int isviewshow;
-	volatile int isdhcpclick;
-	QTimer *isdhcpclicktimer;
+      //loading
+      CLoading* floading;
+      CLoading* sloading;
+      CLoading* hloading;
 
-	QPushButton* retbtn;
-	QPushButton* savebtn;
+      int isviewshow;
+      volatile int isdhcpclick;
+      QTimer *isdhcpclicktimer;
 
-	QLabel* cpwdusername;
-	QLabel* cpwdusericon;
-	CMyTextEdit* pwdeidt;
-	CMyTextEdit* newpwdeidt;
-	CMyTextEdit* surenewpwdeidt;
+      QPushButton* retbtn;
+      QPushButton* savebtn;
 
-	bool okButtonIsRet;
-	bool isstarthost;
-	bool hasonceclick;
-	bool ismacright;
-	int fblIndex;
-	QPushButton *m_okBtn;
-	ZCMessageBox *msgbox;
-	QPushButton *firstLoginBtn;
+      QLabel* cpwdusername;
+      QLabel* cpwdusericon;
+      CMyTextEdit* pwdeidt;
+      CMyTextEdit* newpwdeidt;
+      CMyTextEdit* surenewpwdeidt;
 
-	QPushButton * secondLoginBtn;
-	QPushButton * tmpBtn;
-	QPushButton * fblBtn;
+      bool okButtonIsRet;
+      bool isstarthost;
+      bool hasonceclick;
+      bool ismacright;
+      int fblIndex;
+      QPushButton *m_okBtn;
+      ZCMessageBox *msgbox;
+      QPushButton *firstLoginBtn;
+
+      QPushButton * secondLoginBtn;
+      QPushButton * tmpBtn;
+      QPushButton * fblBtn;
 signals:
-	void spicelogsignal(K_yType val);
+      void spicelogsignal(K_yType val);
 };
 
 extern CMenuWidget* g_menu_ptr;
 
 class NetDiagnoseThread : public QThread
 {
-	Q_OBJECT
+   Q_OBJECT
 
-public:
-	NetDiagnoseThread(QWidget *parent = NULL)
-	{
-		mainw = (CMainWindow*)parent;
-	}
-	~NetDiagnoseThread()
-	{
+   public:
+      NetDiagnoseThread(QWidget *parent = NULL)
+      {
+         mainw = (CMainWindow*)parent;
+      }
+      ~NetDiagnoseThread()
+      {
 
-	}
-public:
-	virtual void run()
-	{
-		mainw->netdiagose();
-	}
-private:
-	CMainWindow* mainw;
+      }
+   public:
+      virtual void run()
+      {
+         mainw->netdiagose();
+      }
+   private:
+      CMainWindow* mainw;
 };
 
 

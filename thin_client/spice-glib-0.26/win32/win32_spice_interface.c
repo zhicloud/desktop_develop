@@ -112,9 +112,7 @@ int SpiceOpenMain(IN_OUT SPICE_HANDLE sh)
         
     }while(0);
     g_rec_mutex_unlock(&wsgi->rec_mutex_loop);
-#ifdef SPICE_DEBUG
-    spice_util_set_debug(TRUE);
-#endif
+//    spice_util_set_debug(TRUE);
     return ret;
 }
 
@@ -696,7 +694,7 @@ void SpiceRequestResolution(IN_OUT SPICE_HANDLE sh,IN int hspice,IN int x, IN in
     SpiceRequestResolution_io(x,y,display);
 }
 
-void SpiceKeyEvent(IN_OUT SPICE_HANDLE sh,IN int hspice,IN bool down, IN int hardware_keycode)
+void SpiceKeyEvent(IN_OUT SPICE_HANDLE sh,IN int hspice,IN bool down, IN int hardware_keycode, IN int immediately_finish)
 {
     SPICE_LOG("\n");
 
@@ -725,7 +723,6 @@ void SpiceKeyEvent(IN_OUT SPICE_HANDLE sh,IN int hspice,IN bool down, IN int har
     int scancode;            
 
     SPICE_DEBUG("%s %s: keycode: %d", __FUNCTION__, "Key", hardware_keycode);
-    //printf("%s %s: keycode: %d", __FUNCTION__, "Key", hardware_keycode);
 
     if (!d->inputs)          
         return;                
@@ -733,9 +730,9 @@ void SpiceKeyEvent(IN_OUT SPICE_HANDLE sh,IN int hspice,IN bool down, IN int har
     scancode = win32key2spice(hardware_keycode);
     scancode = hardware_keycode;                                                                                                                                    
     if (down) {
-        send_key(display, hardware_keycode, 1);
+        send_key(display, hardware_keycode, 1, immediately_finish);
     } else {
-        send_key(display, hardware_keycode, 0);
+        send_key(display, hardware_keycode, 0, immediately_finish);
     }
     return ;
 

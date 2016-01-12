@@ -1,11 +1,13 @@
 ******************************************************
-版本号：TC1.0.4#20151224
-修改时间：2015/11/24
+版本号：TC1.0.5#20160112
+修改时间：2016/01/12
 修改人：温佐宜
 修改文件：
-glib/makefile
-win32/makefile
-example/makfile
+channel-display.c
+channel-display-h264.c
+win32-spice-widget.c
+win32_io.c 
+win32_io.h 
 
 新增文件：
 无
@@ -14,7 +16,7 @@ example/makfile
 无
 
 主要变更：
-整理makefile
+reduce memcopy-time
 
 兼容性说明：
 无

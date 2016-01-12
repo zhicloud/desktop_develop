@@ -78,7 +78,6 @@ else
 	cp -rf ./examples/test_bmp ../../zhicloud_client/packet/bin/
 	cp -rf ./win32/win32_spice_interface.h ../../zhicloud_client/packet/include/
 	cp -rf ./win32/win32_spice_interface_types.h ../../zhicloud_client/packet/include/
-	cp -rf ./README ../../zhicloud_client/packet/
 endif
 
 

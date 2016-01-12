@@ -103,7 +103,32 @@ void free_bitmap(void* p)
     free(p);
 }
 
-void uiCallbackInvalidate (SpiceDisplay *display, gint x, gint y, gint w, gint h)
+
+void H264_Invalidate_Callback(SpiceDisplay *display, gpointer frame, gint x, gint y, gint w, gint h)
+{
+    g_rec_mutex_lock(&global_wsgi->rec_mutex_conn);                
+    
+    struct spice_connection* tmp_conn = NULL;
+    if(display2conn(&tmp_conn,display))
+    {     
+        if(tmp_conn->callback)  
+        {                       
+            SPICE_Invalidate pic = {x,y,w,h,frame,free_bitmap};
+            
+            tmp_conn->callback[CB_INVALIDATE].lcb._ud = &pic;
+            if(tmp_conn->callback[CB_INVALIDATE].lcb._cb)
+            {
+                tmp_conn->callback[CB_INVALIDATE].lcb._cb(
+                    tmp_conn->callback[CB_INVALIDATE].lcb._ctx,
+                    tmp_conn->callback[CB_INVALIDATE].lcb._ud);
+            }
+        }    
+    }     
+    
+    g_rec_mutex_unlock(&global_wsgi->rec_mutex_conn);
+}
+
+void MJPG_Invalidate_Callback(SpiceDisplay *display, gint x, gint y, gint w, gint h)
 {
 	g_rec_mutex_lock(&global_wsgi->rec_mutex_conn);
 	int i = 0;
@@ -116,14 +141,12 @@ void uiCallbackInvalidate (SpiceDisplay *display, gint x, gint y, gint w, gint h
 
 		if(tmp_conn->callback)
 		{
-			//UpdateBitmap(display,d->screem.bitmap,x,y,w,h);
-			//SPICE_Invalidate pic = {x,y,w,h,d->screem.bitmap};
-			//SPICE_Invalidate pic = {x,y,w,h,d->data};
-                        char * tmp = (char*)malloc(w * h * 4);
-                        memset(tmp,0,w * h * 4);
-                        smallUpdateBitmap(display,tmp,x,y,w,h);
-                        SPICE_Invalidate pic = {x,y,w,h,tmp,free_bitmap};
-			tmp_conn->callback[CB_INVALIDATE].lcb._ud = &pic;
+         char * tmp = (char*)malloc(w * h * 4);
+         memset(tmp,0,w * h * 4);
+         smallUpdateBitmap(display,tmp,x,y,w,h);
+         SPICE_Invalidate pic = {x,y,w,h,tmp,free_bitmap};
+	
+         tmp_conn->callback[CB_INVALIDATE].lcb._ud = &pic;
 			if(tmp_conn->callback[CB_INVALIDATE].lcb._cb)
 			{
 				tmp_conn->callback[CB_INVALIDATE].lcb._cb(
@@ -132,10 +155,8 @@ void uiCallbackInvalidate (SpiceDisplay *display, gint x, gint y, gint w, gint h
 			}
          else
          {
-            printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! memory leak   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1\n");
             free(tmp);
          }
-			//free(tmp);
 		}
 	}
 	g_rec_mutex_unlock(&global_wsgi->rec_mutex_conn);

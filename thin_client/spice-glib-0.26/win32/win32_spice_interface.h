@@ -327,7 +327,7 @@ void SpiceRequestResolution(IN_OUT SPICE_HANDLE sh,IN int hspice,IN int x, IN in
  *
  */
 
-void SpiceKeyEvent(IN_OUT SPICE_HANDLE sh,IN int hspice,IN bool down, IN int hardware_keycode);
+void SpiceKeyEvent(IN_OUT SPICE_HANDLE sh,IN int hspice,IN bool down, IN int hardware_keycode, IN int immediately_finish);
 
 /*
  * 函数名：SpiceButtonEvent

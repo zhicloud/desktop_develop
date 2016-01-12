@@ -81,46 +81,9 @@ void stream_h264_data(display_stream* st, SpiceRect* rc)
     rgb_frame = (char*)g_malloc0(DEFAULT_MAX_FRAME_SIZE);
     ret = h264_decode(st->h264_decoder, rgb_frame, &rgb_frame_size, h264_frame, *h264_frame_size, &width, &height, &hpp);
     if(ret == 0)
-    {    
-         if(NULL != st->out_frame)
-              g_free(st->out_frame);
-
-
-//        	int ack_width = abs(rc->right - rc->left);
-//        	int ack_height = abs(rc->top - rc->bottom);
-//
-//        	if(ack_width % 2 == 1)
-//        	{
-//        		printf("[FILE:%s] [LINE:%d] [FUNCTION:%s] msg = \"ack_width = %d, ack_height = %d, width=%d, height=%d\"\n"
-//                    , __FILE__
-//                    , __LINE__
-//                    , __FUNCTION__ 
-//                    , ack_width
-//                    , ack_height 
-//                    , width                     
-//                    , height);
-            
-//            int ack_row = 4 * ack_width;
-//        		int row = 4 * width;
-//        
-//        		char* tmp_pic = (char*)g_malloc0(ack_row * ack_height);
-//        		for(auto i = 0;i < ack_height; i++)
-//        		{
-//        			memcpy(tmp_pic + i * ack_row, rgb_frame + i * row, ack_row);
-//        		}
-//        
-//        		st->out_frame = tmp_pic;
-//        		g_free(rgb_frame);        
-//        	}
-//        	else
-//        	{
-        		 st->out_frame = (uint8_t*)rgb_frame;
-//         }
-     } 
-     else
-     {
-         g_free(rgb_frame);
-     }
+        st->out_frame = (uint8_t*)rgb_frame;
+    else
+        g_free(rgb_frame);
 }
 
 void stream_h264_cleanup(display_stream* st)
@@ -138,11 +101,11 @@ void stream_h264_cleanup(display_stream* st)
       st->h264_info = NULL;
    }
    
-   if(st->out_frame != NULL)
-   {
-      g_free(st->out_frame);                                                                                                                         
-      st->out_frame = NULL;
-   }
+//   if(st->out_frame != NULL)
+//   {
+//      g_free(st->out_frame);                                                                                                                         
+//      st->out_frame = NULL;
+//   }
 
 //   if(st->h264_log_file != NULL)
 //   {

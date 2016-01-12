@@ -4,7 +4,8 @@ LIB_PATH=-L../glib \
 			-L../spice-common/common \
 			-L../win32 \
 			-L/usr/local/lib \
-			-L/usr/lib
+			-L/usr/lib\
+                        -L/home/lichenxiang/opt/lib
 
 CFLAGS = -std=gnu99
 

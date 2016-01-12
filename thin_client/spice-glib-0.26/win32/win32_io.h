@@ -13,7 +13,8 @@ extern "C"
 
 typedef unsigned char uchar;
 
-void uiCallbackInvalidate (SpiceDisplay *d, gint x, gint y, gint w, gint h);
+void H264_Invalidate_Callback(SpiceDisplay *display, gpointer frame, gint x, gint y, gint w, gint h);
+void MJPG_Invalidate_Callback(SpiceDisplay *display, gint x, gint y, gint w, gint h);
 void uiCallbackSettingsChanged (SpiceDisplay *display,gint instance, gint width, gint height, gint bpp);
 void SpiceRequestResolution_io(gint x, gint y,SpiceDisplay* display);
 gint get_display_id(SpiceDisplay *display);

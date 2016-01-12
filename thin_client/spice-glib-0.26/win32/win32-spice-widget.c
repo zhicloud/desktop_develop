@@ -223,7 +223,7 @@ static gboolean do_color_convert(SpiceDisplay *display,
 
 /* ---------------------------------------------------------------- */
 
-void send_key(SpiceDisplay *display, int scancode, int down)
+void send_key(SpiceDisplay *display, int scancode, int down, int immediately_finish)
 {
     SPICE_LOG(" \n");
 	SpiceDisplayPrivate *d = SPICE_DISPLAY_GET_PRIVATE(display);
@@ -237,14 +237,27 @@ void send_key(SpiceDisplay *display, int scancode, int down)
     m = (1 << b);
     g_return_if_fail(i < SPICE_N_ELEMENTS(d->key_state));
 
+		if(1 == immediately_finish){
+			}
     if (down) {
-        spice_inputs_key_press(d->inputs, scancode);
+        if( 1 == immediately_finish){
+        	spice_inputs_key_press_and_release(d->inputs, scancode);
+        	//TRACE_TIMESTAMP("send key pressed && released, code %d", scancode);
+        }
+        else{
+        	spice_inputs_key_press(d->inputs, scancode);
+        	//TRACE_TIMESTAMP("send key pressed, code %d", scancode);
+        }
         d->key_state[i] |= m;
     } else {
         if (!(d->key_state[i] & m)) {
             return;
         }
-        spice_inputs_key_release(d->inputs, scancode);
+        if(0 == immediately_finish){
+        	//process when release
+        	spice_inputs_key_release(d->inputs, scancode);
+        	//TRACE_TIMESTAMP("send key released, code %d", scancode);
+        }
         d->key_state[i] &= ~m;
     }
 }
@@ -301,20 +314,23 @@ static void primary_destroy(SpiceChannel *channel, gpointer data) {
     d->data_origin = 0;
 }
 
-static void invalidate(SpiceChannel *channel,
-                       gint x, gint y, gint w, gint h, gpointer data) {
-    //SPICE_LOG("\n");
-    SpiceDisplay *display = data;
+static void invalidate_h264(SpiceChannel *channel, gint x, gint y, gint w, gint h,gpointer frame, gpointer data)
+{
+	SpiceDisplay *display = data;
+   SpiceDisplayPrivate *d = SPICE_DISPLAY_GET_PRIVATE(display);
+	if (w == d->width && h == d->height) 
+	    H264_Invalidate_Callback (display, frame, x, y, w, h);
+}
 
-    if (!do_color_convert(display, x, y, w, h))
-        return;
+static void invalidate_mjpg(SpiceChannel *channel, int x, gint y, gint w, gint h, gpointer data) 
+{
+   SpiceDisplay *display = data;
+   if (!do_color_convert(display, x, y, w, h))
+       return;
 
-    SpiceDisplayPrivate *d = SPICE_DISPLAY_GET_PRIVATE(display);
-
-	if (x + w > d->width || y + h > d->height) {
-	} else {
-	    uiCallbackInvalidate (display, x, y, w, h);
-	}
+   SpiceDisplayPrivate *d = SPICE_DISPLAY_GET_PRIVATE(display);
+	if (x + w <= d->width && y + h <= d->height)
+	    MJPG_Invalidate_Callback (display, x, y, w, h);
 }
 
 static void mark(SpiceChannel *channel, gint mark, gpointer data) {
@@ -353,7 +369,9 @@ static void disconnect_display(SpiceDisplay *display)
                                          display);
     g_signal_handlers_disconnect_by_func(d->display, G_CALLBACK(primary_destroy),
                                          display);
-    g_signal_handlers_disconnect_by_func(d->display, G_CALLBACK(invalidate),
+    g_signal_handlers_disconnect_by_func(d->display, G_CALLBACK(invalidate_mjpg),
+                                         display);
+     g_signal_handlers_disconnect_by_func(d->display, G_CALLBACK(invalidate_h264),
                                          display);
     g_signal_handlers_disconnect_by_func(d->display, G_CALLBACK(disable_secondary_displays),
                                          display);
@@ -532,8 +550,10 @@ static void channel_new(SpiceSession *s, SpiceChannel *channel, gpointer data)
                 G_CALLBACK(primary_create), display);
         g_signal_connect(channel, "display-primary-destroy",
                 G_CALLBACK(primary_destroy), display);
-        g_signal_connect(channel, "display-invalidate",
-                G_CALLBACK(invalidate), display);
+        g_signal_connect(channel, "display-invalidate-mjpg",
+                G_CALLBACK(invalidate_mjpg), display);
+        g_signal_connect(channel, "display-invalidate-h264",
+                G_CALLBACK(invalidate_h264), display);
         g_signal_connect(channel, "display-mark",
                 G_CALLBACK(mark), display);
         spice_channel_connect(channel);

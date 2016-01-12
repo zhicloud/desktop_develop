@@ -205,7 +205,6 @@ typedef struct SPICE_SettringChange
  * 描述：
  *       界面重绘
  */
-
 typedef struct SPICE_Invalidate
 {
    int x;

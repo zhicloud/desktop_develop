@@ -45,6 +45,9 @@
 #include "channel-display-priv.h"
 #include "decode.h"
 
+static double last_frame_timestamp = 0.0f;
+
+
 /**
  * SECTION:channel-display
  * @short_description: remote display area
@@ -105,9 +108,9 @@ enum {
 enum {
     SPICE_DISPLAY_PRIMARY_CREATE,
     SPICE_DISPLAY_PRIMARY_DESTROY,
-    SPICE_DISPLAY_INVALIDATE,
+    SPICE_DISPLAY_INVALIDATE_MJPG,
+    SPICE_DISPLAY_INVALIDATE_H264,
     SPICE_DISPLAY_MARK,
-
     SPICE_DISPLAY_LAST_SIGNAL,
 };
 
@@ -347,7 +350,7 @@ static void spice_display_channel_class_init(SpiceDisplayChannelClass *klass)
                      0);
 
     /**
-     * SpiceDisplayChannel::display-invalidate:
+     * SpiceDisplayChannel::display-invalidate-mjpg:
      * @display: the #SpiceDisplayChannel that emitted the signal
      * @x: x position
      * @y: y position
@@ -358,8 +361,8 @@ static void spice_display_channel_class_init(SpiceDisplayChannelClass *klass)
      * when the rectangular region x/y/w/h of the primary buffer is
      * updated.
      **/
-    signals[SPICE_DISPLAY_INVALIDATE] =
-        g_signal_new("display-invalidate",
+    signals[SPICE_DISPLAY_INVALIDATE_MJPG] =
+        g_signal_new("display-invalidate-mjpg",
                      G_OBJECT_CLASS_TYPE(gobject_class),
                      G_SIGNAL_RUN_FIRST,
                      G_STRUCT_OFFSET(SpiceDisplayChannelClass,
@@ -369,6 +372,30 @@ static void spice_display_channel_class_init(SpiceDisplayChannelClass *klass)
                      G_TYPE_NONE,
                      4,
                      G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT);
+
+    /**
+     * SpiceDisplayChannel::display-invalidate-h264:
+     * @display: the #SpiceDisplayChannel that emitted the signal
+     * @x: x position
+     * @y: y position
+     * @width: width
+     * @height: height
+     *
+     * The #SpiceDisplayChannel::display-invalidate signal is emitted
+     * when the rectangular region x/y/w/h of the primary buffer is
+     * updated.
+     **/
+    signals[SPICE_DISPLAY_INVALIDATE_H264] =
+                     g_signal_new("display-invalidate-h264",
+                     G_OBJECT_CLASS_TYPE(gobject_class),
+                     G_SIGNAL_RUN_FIRST,
+                     0,                                                                                                                   
+                     NULL, NULL,                     
+                     g_cclosure_user_marshal_VOID__INT_INT_INT_INT_POINTER,
+                     G_TYPE_NONE,
+                     5,
+                     G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_POINTER);  
+
 
     /**
      * SpiceDisplayChannel::display-mark:
@@ -782,7 +809,7 @@ static void clear_surfaces(SpiceChannel *channel, gboolean keep_primary)
 /* coroutine context */
 static void emit_invalidate(SpiceChannel *channel, SpiceRect *bbox)
 {
-    g_coroutine_signal_emit(channel, signals[SPICE_DISPLAY_INVALIDATE], 0,
+    g_coroutine_signal_emit(channel, signals[SPICE_DISPLAY_INVALIDATE_MJPG], 0,
                             bbox->left, bbox->top,
                             bbox->right - bbox->left,
                             bbox->bottom - bbox->top);
@@ -1406,6 +1433,14 @@ static void display_handle_stream_data(SpiceChannel *channel, SpiceMsgIn *in)
     if (spice_msg_in_type(in) == SPICE_MSG_DISPLAY_STREAM_DATA_SIZED) {
         CHANNEL_DEBUG(channel, "stream %d contains sized data", op->id);
     }
+   
+
+//    struct timeval now;
+//    gettimeofday(&now, NULL);
+//    double _timestamp_now = now.tv_sec * 1000 + (double)now.tv_usec / 1000.0f;
+//    printf("=================%f===============   %d.%d\n", _timestamp_now - last_frame_timestamp,now.tv_sec,now.tv_usec );
+//    last_frame_timestamp = _timestamp_now;
+
  
  //   time_t t = time(0);
  //   char tmp[256];
@@ -1880,25 +1915,24 @@ static void spice_display_decoding(display_stream* st, SpiceMsgIn* in)
 	
       if(st->codec == SPICE_VIDEO_CODEC_TYPE_MJPEG)
       {
-//    		st->surface->canvas->ops->put_image(st->surface->canvas,
-//	 I 									dest, data,
-//		          						width, height, stride,
-//					     					st->have_region ? &st->region : NULL);
+    		st->surface->canvas->ops->put_image(st->surface->canvas,
+	  									dest, data,
+	          						width, height, stride,
+				     					st->have_region ? &st->region : NULL);
+
+       if (st->surface->primary)
+           g_signal_emit(st->channel, signals[SPICE_DISPLAY_INVALIDATE_MJPG], 0,
+		      				dest->left, dest->top,
+				        		dest->right - dest->left,
+						      dest->bottom - dest->top);      
       }
       else if(st->codec == SPICE_VIDEO_CODEC_TYPE_H264)
       {
-        st->surface->width = width;
-        st->surface->height = height;
-        st->surface->stride = stride;
-        st->surface->size = stride * height;
-        memcpy(st->surface->data, data, st->surface->size);
-      }
-
-	   if (st->surface->primary)
-	     	g_signal_emit(st->channel, signals[SPICE_DISPLAY_INVALIDATE], 0,
-		      				dest->left, dest->top,
-				        		dest->right - dest->left,
-						      dest->bottom - dest->top);
+        if (st->surface->primary)
+           g_signal_emit(st->channel, signals[SPICE_DISPLAY_INVALIDATE_H264], 0,
+                        0, 0, width, height,
+                        data); 
+      }	
 	}
 	
 	st->msg_data = NULL;
@@ -1911,7 +1945,7 @@ static gpointer gthread_decoding_cb(gpointer arg)
 	SpiceMsgIn* in = NULL;
 
     struct timeval tpstart, tpend;
-    float timeuse;
+    double timeuse;
 
 	while(!st->g_thread_exit)
 	{
@@ -1930,13 +1964,12 @@ static gpointer gthread_decoding_cb(gpointer arg)
 			in = g_queue_pop_head(st->g_queue_msg);
 			g_rec_mutex_unlock(&st->g_queue_rec_mutex);
 			
-//         gettimeofday(&tpstart, NULL);
+         gettimeofday(&tpstart, NULL);
 			spice_display_decoding(st, in);
-//         gettimeofday(&tpend, NULL);
+         gettimeofday(&tpend, NULL);
 
-//         timeuse = 1000000 * (tpend.tv_sec - tpstart.tv_sec) + (tpend.tv_usec - tpstart.tv_usec);
-//         timeuse /= 1000000;
-//         printf("Decoder use time:%f sec\n", timeuse);
+         timeuse = tpend.tv_sec - tpstart.tv_sec + (double)(tpend.tv_usec - tpstart.tv_usec) / 1000.0f / 1000.0f;
+         //printf("Decoder use time:%f sec\n", timeuse);
 		}while(1);	
 	}
 

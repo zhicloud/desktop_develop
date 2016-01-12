@@ -33,6 +33,7 @@
    CMainWindow::CMainWindow(QWidget *parent)
 : QMainWindow(parent)
 {
+   isKillNetMgr = 0;
    reconnecting = 0;
    adduserretwid = NULL;
    changesetretbtn = NULL;
@@ -164,14 +165,14 @@
    zylogoLabel->setFixedSize(172, 58);
    QPixmap *zylogoPixmap = new QPixmap(":/first_login_res/zylogo");
    zylogoLabel->setPixmap(*zylogoPixmap);
-   
+
    QLabel *zslogoLabel = new QLabel;
    zslogoLabel->setFixedSize(108, 58);
    QPixmap *zslogoPixmap = new QPixmap(":/first_login_res/zslogo");
    zslogoLabel->setPixmap(*zslogoPixmap);
 
    logo_widget->setGeometry((currentScreenWidth - 340) / 2, currentScreenHeight - 108, 340, 70);
-   
+
    QHBoxLayout* logolayout = new QHBoxLayout;
    logolayout->addStretch(1);
    logolayout->addWidget(zslogoLabel);
@@ -180,19 +181,19 @@
    logolayout->addStretch(1);
    logo_widget->setLayout(logolayout);
 
-//    QHBoxLayout* logwd_layout = new QHBoxLayout;
-//    logwd_layout->setAlignment(Qt::AlignCenter);
-//    logwd_layout->addWidget(logo_widget);
+   //    QHBoxLayout* logwd_layout = new QHBoxLayout;
+   //    logwd_layout->setAlignment(Qt::AlignCenter);
+   //    logwd_layout->addWidget(logo_widget);
 
 #else
-	QLabel *logoLabel = new QLabel;
-	logoLabel->setFixedSize(185, 64);
-	QPixmap *logoPixmap = new QPixmap(":/first_login_res/zylogo");
-	logoLabel->setPixmap(*logoPixmap);
-	logoLabel->setGeometry(currentScreenWidth/2-185/2, currentScreenHeight - 108, 48, 44);
-	QHBoxLayout* logolayout = new QHBoxLayout;
-	logolayout->setAlignment(Qt::AlignCenter);
-	logolayout->addWidget(logoLabel);
+   QLabel *logoLabel = new QLabel;
+   logoLabel->setFixedSize(185, 64);
+   QPixmap *logoPixmap = new QPixmap(":/first_login_res/zylogo");
+   logoLabel->setPixmap(*logoPixmap);
+   logoLabel->setGeometry(currentScreenWidth/2-185/2, currentScreenHeight - 108, 48, 44);
+   QHBoxLayout* logolayout = new QHBoxLayout;
+   logolayout->setAlignment(Qt::AlignCenter);
+   logolayout->addWidget(logoLabel);
 #endif
 
 
@@ -980,10 +981,10 @@ void CMainWindow::someItemOnWidget(QWidget* widget)
 
    if (widget == about_netsetwidget)
    {
-   	  if(isadduserretshow)
-   	  {
-   	  	 adduserretbtn->hide();
-   	  }
+      if(isadduserretshow)
+      {
+         adduserretbtn->hide();
+      }
       QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
       QString strsvrurl;
       if (settings)
@@ -1045,11 +1046,11 @@ void CMainWindow::someItemOnWidget(QWidget* widget)
          connect(cs_btn, SIGNAL(clicked()), this, SLOT(changesetting()));
       }
       cs_btn->show();
-	  
-	  if(isadduserretshow)
-   	  {
-   	  	 adduserretbtn->show();
-   	  }
+
+      if(isadduserretshow)
+      {
+         adduserretbtn->show();
+      }
 
       if (isadduser)
       {
@@ -1069,22 +1070,22 @@ void CMainWindow::someItemOnWidget(QWidget* widget)
 
             }
             adduserretbtn->show();
-			isadduserretshow = true;
-            	if (!adduserretwid)
-            		{
-            			adduserretwid = prewdiget;
-            		}
+            isadduserretshow = true;
+            if (!adduserretwid)
+            {
+               adduserretwid = prewdiget;
+            }
 
          }
-		 else
-		 {
-			if(adduserretbtn)
-			{
-		 		adduserretbtn->hide();
-				isadduserretshow = false;
-			}
-		 }
-	
+         else
+         {
+            if(adduserretbtn)
+            {
+               adduserretbtn->hide();
+               isadduserretshow = false;
+            }
+         }
+
       }
 
    }
@@ -1219,7 +1220,7 @@ void CMainWindow::createAbout_NetSettingWidget()
 
 void CMainWindow::dhcpmode(QString& ipaddr, QString& mask, QString& gateway,QString& mac)
 {
-
+   system("service network-manager start");	
    getmaskAddress(ipaddr, mask,mac);
    char buff[256], ifName[12];
    bzero(buff, sizeof(buff));
@@ -1232,6 +1233,8 @@ void CMainWindow::dhcpmode(QString& ipaddr, QString& mask, QString& gateway,QStr
 void CMainWindow::usersetmode(const QString& ipaddr, const QString& mask, const QString& gateway)
 {
    //set ip
+   system("service network-manager start");
+
    QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
    if (settings)
    {
@@ -1243,6 +1246,8 @@ void CMainWindow::usersetmode(const QString& ipaddr, const QString& mask, const 
       settings->sync();
    }
    QProcess::startDetached(QString("/home/network"), QStringList());
+
+
 }
 
 void CMainWindow::dhcpclickfunc()
@@ -1288,7 +1293,9 @@ void CMainWindow::dhcpclickfunc()
             "QPushButton#retbtn{border-image: url(:/net_about/retclick);}");
       savebtn->setStyleSheet(
             "QPushButton#savebtn{border-image: url(:/net_about/sureclick);}");
-      isdhcpclicktimer->start(15000);
+		
+   	  isdhcpclicktimer->start(3000);
+      
 
       QProcess::startDetached(QString("/home/dhcpnetwork"), QStringList());
       system("resolvconf -u");
@@ -1305,6 +1312,16 @@ void CMainWindow::dhcpclickfunc()
 
 void CMainWindow::isdhcpclicktimerout()
 {
+   int i = get_netlink_status("eth0");
+   if(i = 0) 
+   {  
+      printf("***********************************if(i = 0)*********************************\n");
+      return;
+   }
+   QString ip, mask, gateway,mac,dns;
+   dhcpmode(ip, mask, gateway,mac);
+   if(ip.isEmpty() || mask.isEmpty() || gateway.isEmpty() || mac.isEmpty()) return;
+   isdhcpclicktimer->stop();
    MyZCLog::Instance().WriteToLog(ZCINFO, QString("isdhcpclicktimerout"));
    isdhcpclicktimer->stop();
    isdhcpclick = 0;
@@ -1316,8 +1333,6 @@ void CMainWindow::isdhcpclicktimerout()
    savebtn->setStyleSheet("QPushButton#savebtn{border-image: url(:/setsvrurl/nomal);}"
          "QPushButton#savebtn:hover{border-image: url(:/setsvrurl/hover);}"
          "QPushButton#savebtn:pressed{border-image: url(:/net_about/sureclick);}");
-   QString ip, mask, gateway,mac,dns;
-   dhcpmode(ip, mask, gateway,mac);
    readDns(dns);
    ipaddredit->GetEdit()->setText(ip);
    maskedit->GetEdit()->setText(mask);
@@ -1907,30 +1922,30 @@ void CMainWindow::createNetSettingWidget()
 
 void CMainWindow::netsetreadonly(bool isreadonly)
 {
-	if(isreadonly)
-	{
-		ipaddredit->setReadOnly(true);
-   		maskedit->setReadOnly(true);
-   		gatewayedit->setReadOnly(true);
-   		dnsedit->setReadOnly(true);
-		netset_ipaddr->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
-		netset_mask->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
-		netset_gateway->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
-		netset_dnslable->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
-	}
-	else
-	{
-		ipaddredit->setReadOnly(false);
-   		maskedit->setReadOnly(false);
-   		gatewayedit->setReadOnly(false);
-   		dnsedit->setReadOnly(false);
-		netset_ipaddr->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-		netset_mask->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-		netset_gateway->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-		netset_dnslable->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-	}
+   if(isreadonly)
+   {
+      ipaddredit->setReadOnly(true);
+      maskedit->setReadOnly(true);
+      gatewayedit->setReadOnly(true);
+      dnsedit->setReadOnly(true);
+      netset_ipaddr->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
+      netset_mask->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
+      netset_gateway->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
+      netset_dnslable->setStyleSheet("background-color:transparent;color:rgb(102,108,112);font-size:12px;border:0px;");
+   }
+   else
+   {
+      ipaddredit->setReadOnly(false);
+      maskedit->setReadOnly(false);
+      gatewayedit->setReadOnly(false);
+      dnsedit->setReadOnly(false);
+      netset_ipaddr->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+      netset_mask->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+      netset_gateway->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+      netset_dnslable->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+   }
 }
-	
+
 
 void CMainWindow::readDns(QString &dns)
 {
@@ -1960,36 +1975,38 @@ void CMainWindow::readDns(QString &dns)
 
 void CMainWindow::readMac(QString &mac)
 {
-    system("ifconfig eth0 > $HOME/.mac");
-   QFile file("$HOME/.mac");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    while (!file.atEnd()) 
-		{
-        QByteArray line = file.readLine();
-		QString str = QString(line.data());
-		if(!str.contains(QString("HWaddr")))
-		{
-			continue;
-		}
-      	else
-      	{
-         	mac = str;
-			break;
-      	}
-        
-    }
-	//qDebug() << mac << endl;
-	QStringList list1 = mac.split(" ");
-	for(int i = 0; i < list1.size(); i ++)
-	{
-		if(list1[i] == "HWaddr")
-		{
-			mac = list1[i+1];
-			//qDebug() << mac << endl;
-			break;
-		}
-	}
+   system("ifconfig eth0 > ~/.mac.txt");
+   QFile file("~/.mac.txt");
+   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+   {
+      return;
+   }
+   while (!file.atEnd()) 
+   {
+      QByteArray line = file.readLine();
+      QString str = QString(line.data());
+      if(!str.contains(QString("HWaddr")))
+      {
+         continue;
+      }
+      else
+      {
+         mac = str;
+         break;
+      }
+
+   }
+   qDebug() << "mac is :" << mac << endl;
+   QStringList list1 = mac.split(" ");
+   for(int i = 0; i < list1.size(); i ++)
+   {
+      if(list1[i] == "HWaddr")
+      {
+         mac = list1[i+1];
+         qDebug() << "last mac is:" << mac << endl;
+         break;
+      }
+   }
 }
 
 
@@ -2041,14 +2058,14 @@ void CMainWindow::createAboutWidget()
    }
    if(version.size() != 0)
    {
-   		softwareversion->setText(QStringLiteral("软件版本: ") + version);
+      softwareversion->setText(QStringLiteral("软件版本: ") + version);
    }
-	else
-	{
-		version = "1.0.1";
-		softwareversion->setText(QStringLiteral("软件版本: ") + version);
-		settings->setValue(("version/ver"),version);
-	}
+   else
+   {
+      version = "1.0.1";
+      softwareversion->setText(QStringLiteral("软件版本: ") + version);
+      settings->setValue(("version/ver"),version);
+   }
    QLabel* uuidd = new QLabel;
    uuidd->setFixedSize(300, 30);
    uuidd->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
@@ -2260,6 +2277,8 @@ void CMainWindow::changesetting()
    {
       usersetbtn->setIcon(QIcon(QString(":/net_about/select")));
       dhcpbutton->setIcon(QIcon(QString(":/net_about/unselect")));
+      QProcess::startDetached(QString("/home/network"), QStringList());
+      system("/etc/init.d/network-manager stop"); 
       netsetreadonly(false);
    }
    else/* if (QString("x") == isdhcp)*/
@@ -2510,7 +2529,7 @@ void CMainWindow::clicklogin()
       md.addData(ba);
       bb = md.result();
       md5.append(bb.toHex());
-	  passwd = md5;
+      passwd = md5;
 
 
       QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
@@ -2531,13 +2550,13 @@ void CMainWindow::clicklogin()
       }
       time = lasttime;
 
-      dhcpmode(ip,subnet_mask,gateway,mac);
+     // dhcpmode(ip,subnet_mask,gateway,mac);
 
-      QString strfmt("login?user_name=%1&password=%2&ip=%3&mac=%4&subnet_mask=%5&gateway=%6&software_version=%7&hardware_version=%8&time=%9");//++++new				
-      QString url = strfmt.arg(uname).arg(md5).arg(ip).arg(mac).arg(subnet_mask).arg(gateway).arg(softweare_ver).arg(hardware_version).arg(time);
+      //QString strfmt("login?user_name=%1&password=%2&ip=%3&mac=%4&subnet_mask=%5&gateway=%6&software_version=%7&hardware_version=%8&time=%9");//++++new				
+      //QString url = strfmt.arg(uname).arg(md5).arg(ip).arg(mac).arg(subnet_mask).arg(gateway).arg(softweare_ver).arg(hardware_version).arg(time);
 
-      //QString strfmt("login?user_name=%1&password=%2");
-      //QString url = strfmt.arg(uname).arg(md5);
+      QString strfmt("login?user_name=%1&password=%2");
+      QString url = strfmt.arg(uname).arg(md5);
       svrurl.replace("connect", url);
       m_cmd = Login;
       doHttpGet(m_cmd, svrurl);
@@ -2591,8 +2610,8 @@ void CMainWindow::doHttpGet(int cmd, QString strUrl)
 
    QString ip,mac,mask;
    getmaskAddress(ip,mask,mac);
-    MyZCLog::Instance().WriteToLog(ZCERROR, QString("doHttpGet strUrl=") + QString("%1,").arg(strUrl) + QString(" ip:") + QString("%1").arg(ip) + QString("mac:%1").arg(mac));
-	
+   MyZCLog::Instance().WriteToLog(ZCERROR, QString("doHttpGet strUrl=") + QString("%1,").arg(strUrl) + QString(" ip:") + QString("%1").arg(ip) + QString("mac:%1").arg(mac));
+
    QNetworkRequest request;
    request.setUrl(QUrl(strUrl));
    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -2691,7 +2710,7 @@ void CMainWindow::replyFinished(QNetworkReply* reply)
       {
          isUpgradeCheckd = false;
       }
-      	
+
 
       MyZCLog::Instance().WriteToLog(ZCERROR, QString("QNetworkReply::Error cmd=") + QString("%1,").arg(m_cmd) + QString(" errorcode=") + QString("%1").arg(reply->error()) + QString("ip:")+ QString("%1").arg(ip)+QString("mac:")+QString("%1").arg(mac));
    }
@@ -2736,12 +2755,16 @@ bool CMainWindow::parseResult(ZcCommandType type, QByteArray data)
                   {
                      msgbox = new ZCMessageBox(QStringLiteral("配置成功"), this, NULL);
                   }
-
+                  if(isKillNetMgr)
+                  {
+                     system("/etc/init.d/network-manager stop");
+                     isKillNetMgr = 0;
+                  } 
                   msgbox->exec();
                   isadduser = false;
-				  changesetretbtn->hide();
+                  changesetretbtn->hide();
                   changeWidgetTo(prewdiget);
-				  prewdiget = NULL;
+                  prewdiget = NULL;
                   return true;
                }
 
@@ -2822,8 +2845,8 @@ bool CMainWindow::parseResult(ZcCommandType type, QByteArray data)
                      m_hostisusb = (it->second)["usb"];
                      QString str = (it->second)["running_status"];
                      currenthostname = (it->second)["name"];
-//                     if ((it->second)["running_status"] = QString("%1").arg(1))
-					 if(1)
+                     //                     if ((it->second)["running_status"] = QString("%1").arg(1))
+                     if(1)
                      {
                         ismultihost = false;
                         isstarthost = true;
@@ -2843,7 +2866,7 @@ bool CMainWindow::parseResult(ZcCommandType type, QByteArray data)
                }
 
                lastsucuname = uname;
-			   lastsucupwd = passwd;
+               lastsucupwd = passwd;
                savelastusser();
                saveuserpictofile();
             }
@@ -2922,7 +2945,7 @@ bool CMainWindow::parseResult(ZcCommandType type, QByteArray data)
       case UpdateHostInfo:
          {
             ret =   parseGetVersion(data);
-			MyZCLog::Instance().WriteToLog(ZCERROR, QString("UpdateHostInfo data =%1").arg(data.data()));
+            MyZCLog::Instance().WriteToLog(ZCERROR, QString("UpdateHostInfo data =%1").arg(data.data()));
             if (ret)
             {
                QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
@@ -3877,7 +3900,7 @@ void CMainWindow::changepwdsure()
    svrurl.replace("connect", url);
    m_cmd = ChangePWD;
    doHttpGet(ChangePWD, svrurl);
-   
+
    MyZCLog::Instance().WriteToLog(ZCERROR, QString("ChangePWD url=%1").arg(svrurl));
 
 }
@@ -3887,9 +3910,9 @@ void CMainWindow::menuexit()
    if (reconnecting)
    {
       reconnecting = 0;
-	  QString ip,mac,mask;
-   	  getmaskAddress(ip,mask,mac);
-	  
+      QString ip,mac,mask;
+      getmaskAddress(ip,mask,mac);
+
       MyZCLog::Instance().WriteToLog(ZCERROR, QString("menuexit reconnecting, set reconnecting to be 0,ip=%1,mac=%2;").arg(ip).arg(mac));
    }
 
@@ -3943,7 +3966,7 @@ void CMainWindow::menureboot()
    svrurl.replace("connect", url);
    m_cmd = RestartHost;
    doHttpGet(RestartHost, svrurl);
-	MyZCLog::Instance().WriteToLog(ZCERROR, QString("menureboot RestartHost url = %1").arg(svrurl));
+   MyZCLog::Instance().WriteToLog(ZCERROR, QString("menureboot RestartHost url = %1").arg(svrurl));
    // 	QString url = strfmt.arg(m_uuid).arg(1);
    // 	svrurl.replace("connect", url);
    // 	m_cmd = StartHost;
@@ -3966,7 +3989,7 @@ void CMainWindow::menushutdown()
    svrurl.replace("connect", url);
    m_cmd = StopHost;
    doHttpGet(StopHost, svrurl);
-   
+
    MyZCLog::Instance().WriteToLog(ZCERROR, QString("menushutdown StopHost url = %1").arg(svrurl));
 }
 
@@ -3988,8 +4011,8 @@ void CMainWindow::menustarthost()
    //qDebug() << svrurl;
    doHttpGet(StartHost, svrurl);
    //qDebug() << svrurl;
-   
-    MyZCLog::Instance().WriteToLog(ZCERROR, QString("menustarthost StartHost url = %1").arg(svrurl));
+
+   MyZCLog::Instance().WriteToLog(ZCERROR, QString("menustarthost StartHost url = %1").arg(svrurl));
 }
 
 //************************************
@@ -4115,10 +4138,10 @@ void CMainWindow::customEvent(QEvent *event)
                reconnecting = 0;
                netdicwidget->whide();
                //qDebug() << "reconnect suc,timer stop,dis widget hide";
-			   QString ip,mac,mask;
-   			   getmaskAddress(ip,mask,mac);
-			   
-			   MyZCLog::Instance().WriteToLog(ZCERROR, QString("reconnect suc,timer stop,dis widget hide,ip=%1,mac=%2").arg(ip).arg(mac));
+               QString ip,mac,mask;
+               getmaskAddress(ip,mask,mac);
+
+               MyZCLog::Instance().WriteToLog(ZCERROR, QString("reconnect suc,timer stop,dis widget hide,ip=%1,mac=%2").arg(ip).arg(mac));
                break;
 
             }
@@ -4135,8 +4158,8 @@ void CMainWindow::customEvent(QEvent *event)
                }
 
             }
-			QString ip,mac,mask;
-   			getmaskAddress(ip,mask,mac);
+            QString ip,mac,mask;
+            getmaskAddress(ip,mask,mac);
             MyZCLog::Instance().WriteToLog(ZCERROR, QString("ORI_DIS_EVENT viewer show now ip=%1,mac=%2").arg(ip).arg(mac));
             if (!viewer)
             {
@@ -4163,14 +4186,14 @@ void CMainWindow::customEvent(QEvent *event)
             if (reconnecting)
             {
                //qDebug() << "reconnect channel error break";
-			   QString ip,mac,mask;
-  			   getmaskAddress(ip,mask,mac);
-			   MyZCLog::Instance().WriteToLog(ZCERROR, QString("SPICE_CHANNEL_ERROR_LINK  reconnecting = 1 break go on,ip=%1,mac=%2").arg(ip).arg(mac));
+               QString ip,mac,mask;
+               getmaskAddress(ip,mask,mac);
+               MyZCLog::Instance().WriteToLog(ZCERROR, QString("SPICE_CHANNEL_ERROR_LINK  reconnecting = 1 break go on,ip=%1,mac=%2").arg(ip).arg(mac));
                break;
             }
             //qDebug() << "reconnecting is not 1";
-			QString ip,mac,mask;
-  			getmaskAddress(ip,mask,mac);
+            QString ip,mac,mask;
+            getmaskAddress(ip,mask,mac);
             MyZCLog::Instance().WriteToLog(ZCERROR, QString("SPICE_CHANNEL_ERROR_LINK spice channel error link,ip=%1,mac=%2").arg(ip).arg(mac));
             if (NULL != msgbox)
             {
@@ -4191,8 +4214,8 @@ void CMainWindow::customEvent(QEvent *event)
          }
       case SPICE_CHANNEL_CLOSED:
          {
-		    QString ip,mac,mask;
-  		    getmaskAddress(ip,mask,mac);
+            QString ip,mac,mask;
+            getmaskAddress(ip,mask,mac);
             MyZCLog::Instance().WriteToLog(ZCERROR, QString("SPICE_CHANNEL_CLOSED spice channel close link change to secondlogin,ip=%1,mac=%2").arg(ip).arg(mac));
             if (NULL != viewer)
             {
@@ -4216,8 +4239,8 @@ void CMainWindow::customEvent(QEvent *event)
                viewer = NULL;
                isviewshow = 0;
             }
-			QString ip,mac,mask;
-  			getmaskAddress(ip,mask,mac);
+            QString ip,mac,mask;
+            getmaskAddress(ip,mask,mac);
             MyZCLog::Instance().WriteToLog(ZCERROR, QString("SPICE_CHANNEL_ERROR_AUTH spice channel error auth acc or pwd error,ip=%1,mac=%2").arg(ip).arg(mac));
             if (NULL != msgbox)
             {
@@ -4232,35 +4255,35 @@ void CMainWindow::customEvent(QEvent *event)
       case SPICE_RECONNECT:
          {
             //qDebug() << "SPICE_RECONNECT+++++++++++++++++++++++++++++++++++++++++++++++++++++";	
-			QString ip,mac,mask;
-  			getmaskAddress(ip,mask,mac);
-			MyZCLog::Instance().WriteToLog(ZCERROR, QString("SPICE_RECONNECT!!!!!!!!++++++++++++++++++++,ip=%1,mac=%2").arg(ip).arg(mac));
+            QString ip,mac,mask;
+            getmaskAddress(ip,mask,mac);
+            MyZCLog::Instance().WriteToLog(ZCERROR, QString("SPICE_RECONNECT!!!!!!!!++++++++++++++++++++,ip=%1,mac=%2").arg(ip).arg(mac));
             reconnectfunc();
             break;
          }
       case ERROR_IO_SHOW_WIDGET:
          {
-	    if(!isviewshow)
-	    {
-		QString ip,mac,mask;
-                getmaskAddress(ip,mask,mac);
-                MyZCLog::Instance().WriteToLog(ZCERROR, QString("case :ERROR_IO_SHOW_WIDGET  but isviewshow=0 viewer not show!!!!!!!!!!!!!!,ip=%1,mac=%2").arg(ip).arg(mac));
+            if(!isviewshow)
+            {
+               QString ip,mac,mask;
+               getmaskAddress(ip,mask,mac);
+               MyZCLog::Instance().WriteToLog(ZCERROR, QString("case :ERROR_IO_SHOW_WIDGET  but isviewshow=0 viewer not show!!!!!!!!!!!!!!,ip=%1,mac=%2").arg(ip).arg(mac));
 
-		break;
-	    }
+               break;
+            }
             if(!reconnecting)
             {
                reconnecting = 1;
                netdicwidget->wshow();
                //qDebug() << "disconwidget show +++++++++++++++++++++++++++++++++++++++++++++++";
-			   QString ip,mac,mask;
-  			   getmaskAddress(ip,mask,mac);
-			   MyZCLog::Instance().WriteToLog(ZCERROR, QString("ERROR_IO_SHOW_WIDGET  start reconect!!!!!!!!!!!!!!,ip=%1,mac=%2").arg(ip).arg(mac));
+               QString ip,mac,mask;
+               getmaskAddress(ip,mask,mac);
+               MyZCLog::Instance().WriteToLog(ZCERROR, QString("ERROR_IO_SHOW_WIDGET  start reconect!!!!!!!!!!!!!!,ip=%1,mac=%2").arg(ip).arg(mac));
                break;
             }
-			QString ip,mac,mask;
-  			getmaskAddress(ip,mask,mac);
-			MyZCLog::Instance().WriteToLog(ZCERROR, QString("reconecting not reconnect again!!!!!!!!!!!!!!,ip=%1,mac=%2").arg(ip).arg(mac));
+            QString ip,mac,mask;
+            getmaskAddress(ip,mask,mac);
+            MyZCLog::Instance().WriteToLog(ZCERROR, QString("reconecting not reconnect again!!!!!!!!!!!!!!,ip=%1,mac=%2").arg(ip).arg(mac));
          }
 
       default:
@@ -4340,6 +4363,7 @@ void CMainWindow::changesetsave()
    QString gateway = gatewayedit->GetEdit()->text();
    if (!ipaddredit->GetEdit()->isReadOnly())
    {
+      isKillNetMgr = 1;
       usersetmode(sip, mask, gateway);
       QString cmd_tmp = "echo nameserver %1 > /etc/resolv.conf";
       QString dns = dnsedit->GetEdit()->text();
@@ -4373,9 +4397,9 @@ void CMainWindow::changesetsave()
    m_cmd = Auth;
    doHttpGet(m_cmd, newwsvrurl);  
    {
-   QString ip,mask,mac;
-   getmaskAddress(ip,mask,mac);
-   MyZCLog::Instance().WriteToLog(ZCERROR, QString("changesetsave Auth   newwsvrurl = %1!!!!!!!!!!!!!!ip=%2,mac=%3").arg(newwsvrurl).arg(ip).arg(mac));
+      QString ip,mask,mac;
+      getmaskAddress(ip,mask,mac);
+      MyZCLog::Instance().WriteToLog(ZCERROR, QString("changesetsave Auth   newwsvrurl = %1!!!!!!!!!!!!!!ip=%2,mac=%3").arg(newwsvrurl).arg(ip).arg(mac));
    }
 
 }
@@ -4410,8 +4434,8 @@ bool CMainWindow::CheckNeedUpgrade()
    //qDebug() << svrurl;
    doHttpGet(m_cmd, svrurl);
    QString ip,mac,mask;
-  	getmaskAddress(ip,mask,mac);
-    MyZCLog::Instance().WriteToLog(ZCERROR, QString("CheckNeedUpgrade   svrurl = %1!!!!!!!!!!!!!!ip=%2,mac=%3").arg(svrurl).arg(ip).arg(mac));
+   getmaskAddress(ip,mask,mac);
+   MyZCLog::Instance().WriteToLog(ZCERROR, QString("CheckNeedUpgrade   svrurl = %1!!!!!!!!!!!!!!ip=%2,mac=%3").arg(svrurl).arg(ip).arg(mac));
    return true;
 }
 
@@ -4544,13 +4568,13 @@ void CMainWindow::netcheckfunc()
    }
    if (i == 1)
    {
-   		if(!ismacright)
-   		{
-   			QString str_Mac;
-			readMac(str_Mac);
-   			m_mac->setText(QStringLiteral("MAC: ") + str_Mac);
-			ismacright = true;
-   		}
+      if(!ismacright)
+      {
+         QString str_Mac;
+         readMac(str_Mac);
+         m_mac->setText(QStringLiteral("MAC: ") + str_Mac);
+         ismacright = true;
+      }
       //c
       /*(if (viewer)
         {
@@ -4663,10 +4687,10 @@ bool CMainWindow::parseHeartBRet(QByteArray data)
 
 void CMainWindow::adduserret()
 {
-//    changeWidgetTo(adduserretwid);
-	changeuser();
-	adduserretbtn->hide();
-	isadduser = 0;
+   //    changeWidgetTo(adduserretwid);
+   changeuser();
+   adduserretbtn->hide();
+   isadduser = 0;
 }
 
 void CMainWindow::setResolution(int index)
@@ -4688,9 +4712,9 @@ void CMainWindow::reconnectfunc()
       QByteArray bapwd = spicepwd.toLatin1();
       password = bapwd.data();
       viewer->OpenSpice(cip, cport, NULL, password);
-	  
-	  QString ip,mac,mask;
-  	 getmaskAddress(ip,mask,mac);
-	MyZCLog::Instance().WriteToLog(ZCERROR, QString("reconnectfunc OpenSpice ip= %1,port = %2,pwd=%3!!!!!!!!!!!!!!local ip = %4,mac=%5").arg(cip).arg(cport).arg(password).arg(ip).arg(mac));
+
+      QString ip,mac,mask;
+      getmaskAddress(ip,mask,mac);
+      MyZCLog::Instance().WriteToLog(ZCERROR, QString("reconnectfunc OpenSpice ip= %1,port = %2,pwd=%3!!!!!!!!!!!!!!local ip = %4,mac=%5").arg(cip).arg(cport).arg(password).arg(ip).arg(mac));
    }
 }

@@ -23,7 +23,8 @@ INC_PATH= -I../ \
 			 -I/usr/include/soprano/ \
 			 -I/usr/include/libxml2/ \
 			 -I/usr/include/libusb-1.0/ \
-			 `pkg-config --cflags gobject-2.0`
+			 `pkg-config --cflags gobject-2.0`\
+			 -I/home/lichenxiang/opt/include
 
 DEFS = -DHAVE_CONFIG_H -DUSB_IDS=\""$(USB_IDS)"\"
 USB_IDS = /var/lib/usbutils/usb.ids

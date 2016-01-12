@@ -74,7 +74,7 @@ GType spice_display_get_type(void);
 SpiceDisplay* spice_display_new(SpiceSession *session, int id);
 void spice_display_send_keys(SpiceDisplay *display, const guint *keyvals,
 int nkeyvals, SpiceDisplayKeyEvent kind);
-void send_key(SpiceDisplay *display, int scancode, int down);
+void send_key(SpiceDisplay *display, int scancode, int down, int immediately_finish);
 gint get_display_id(SpiceDisplay *display);
 
 G_END_DECLS

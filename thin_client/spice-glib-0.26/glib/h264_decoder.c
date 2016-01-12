@@ -1,6 +1,6 @@
 #include "h264_decoder.h"
 
-#define DECODING_CORE_NUM 16
+#define DECODING_CORE_NUM 4
 
 void  h264_decoder_env_init()
 {
@@ -47,6 +47,8 @@ int h264_decoder_init(H264Decoder * decoder, H264StreamInfo * info)
         decoder->codec_context->flags |= CODEC_FLAG_TRUNCATED;
 
     //decoder->codec_context->thread_count = DECODING_CORE_NUM;
+    av_opt_set(decoder->codec_context->priv_data, "preset", "superfast", 0);
+    av_opt_set(decoder->codec_context->priv_data, "tune", "zerolatency", 0);
 
     if (avcodec_open2(decoder->codec_context, codec, NULL) < 0) 
     {

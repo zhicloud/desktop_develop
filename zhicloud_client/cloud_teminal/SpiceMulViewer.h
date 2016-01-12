@@ -23,7 +23,6 @@ using namespace std;
 #define  MAX_OP_COUNT 10
 
 
-
 class CMainWindow;
 
 enum OpEnum
@@ -110,7 +109,6 @@ public:
 	static void* cursorReset(void* ctx, void *ud);
 	void Update();
 
-	void find_max_range(list<char*> img_list, int &x, int &y, int &w, int &h);
 	void imageCombined(char* bitmap, int x, int y, int width, int height);
 	void logout();
 
@@ -131,7 +129,7 @@ public:
 
 	int isfresharea;
 
-	list<char*>m_bmplist;
+	list<SPICE_Invalidate*>m_bmplist;
 	QMutex m_mutex;
 	QMutex m_pbufmutex;
 	QMutex m_parrbuffmuext;
@@ -182,7 +180,7 @@ private:
 	
 
 public:
-#ifdef __linux
+#ifdef LINUX
 	UINT16			keymap_win322xtkbd[65536];
 #else
 	UINT16			keymap_win322xtkbd[256];

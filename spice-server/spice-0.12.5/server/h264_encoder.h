@@ -17,7 +17,7 @@
 //add by lcx
 #define BIT_RATE  1024 * 1024 * 2 
 #define BIT_RATE_MAX 1024 * 1024 * 20
-#define FRAME_RATE 11 
+#define FRAME_RATE 25 
 
 //#define RC_BUFFER_SIZE_FF ( (float) (BIT_RATE) / 6000000 * 56 * 1024 * 8) //6M时为56kbytes
 #define RC_BUFFER_SIZE_FF ( (float) (BIT_RATE_MAX) / 6000000 * 56 * 1024 * 8) //6M时为56kbytes

@@ -1319,12 +1319,7 @@ void CMainWindow::isdhcpclicktimerout()
       return;
    }
    QString ip, mask, gateway,mac,dns;
-   readDns(dns);
-   dnsedit->GetEdit()->setText(dns);
    dhcpmode(ip, mask, gateway,mac);
-   if(!ip.isEmpty())	ipaddredit->GetEdit()->setText(ip);
-   if(!mask.isEmpty())	maskedit->GetEdit()->setText(mask);
-   if(!gateway.isEmpty())	gatewayedit->GetEdit()->setText(gateway);
    if(ip.isEmpty() || mask.isEmpty() || gateway.isEmpty() || mac.isEmpty()) return;
    isdhcpclicktimer->stop();
    MyZCLog::Instance().WriteToLog(ZCINFO, QString("isdhcpclicktimerout"));
@@ -1338,9 +1333,11 @@ void CMainWindow::isdhcpclicktimerout()
    savebtn->setStyleSheet("QPushButton#savebtn{border-image: url(:/setsvrurl/nomal);}"
          "QPushButton#savebtn:hover{border-image: url(:/setsvrurl/hover);}"
          "QPushButton#savebtn:pressed{border-image: url(:/net_about/sureclick);}");
+   readDns(dns);
    ipaddredit->GetEdit()->setText(ip);
    maskedit->GetEdit()->setText(mask);
    gatewayedit->GetEdit()->setText(gateway);
+   dnsedit->GetEdit()->setText(dns);
 }
 
 void CMainWindow::usersetclickfunc()

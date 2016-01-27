@@ -1,11 +1,28 @@
 #ifndef RED_THREAD_H
 #define RED_THREAD_H
+/*********************************************************************************************************
+ * 
+ * 说明：线程基类
+ *
+ * 创建人：李陈祥
+ *
+ * 创建时间： 2015-12-01
+ *
+ * 修改及修改时间：
+ *                2015-12-01 :初次创建文件，并实现基本代码
+ *
+ *
+ ********************************************************************************************************/
+
 
 
 #include <pthread.h>
 #include <stdbool.h>
 
 #include "common/log.h"
+
+
+#define WITRE_CLOSE_MSG "close"
 
 #define RED_SPICE_BASE_THREADING_INIT(threading) do{\
    threading->init_spice_base_threading = init_spice_base_threading;\
@@ -16,7 +33,10 @@
    threading->stop_wait_spice_base_threading = stop_wait_spice_base_threading;\
    threading->set_spice_base_threading_close = set_spice_base_threading_close;\
    threading->get_spice_base_threading_close = get_spice_base_threading_close;\
+   threading->get_spice_base_threading_status = get_spice_base_threading_status;\
 }while(0)
+
+
 
 
 typedef enum {
@@ -38,6 +58,7 @@ typedef struct RedBaseThreading
    void (*init_spice_base_threading)(RedBaseThreading * basethreading,void* (*start_rtn)(void*));
    void (*init_spice_base_threading_data)(RedBaseThreading* basethreading,void* thread_data);
    void (*set_spice_base_threading_status)(RedBaseThreading * basethreading,RedBaseThreadingStatus status);
+   RedBaseThreadingStatus (*get_spice_base_threading_status)(RedBaseThreading * basethreading);
    void (*set_spice_base_threading_run)(RedBaseThreading* basethreading,void* (*start_rtn)(void*));
    int (*start_spice_base_threading)(RedBaseThreading* basethreading);
    void (*stop_wait_spice_base_threading)(RedBaseThreading * basethreading);
@@ -53,6 +74,7 @@ void spice_base_threading_delete(RedBaseThreading * basethreading);
 void init_spice_base_threading(RedBaseThreading * basethreading,void* (*start_rtn)(void*));
 void init_spice_base_threading_data(RedBaseThreading* basethreading,void* thread_data);
 void set_spice_base_threading_status(RedBaseThreading * basethreading,RedBaseThreadingStatus status);
+RedBaseThreadingStatus get_spice_base_threading_status(RedBaseThreading * basethreading);
 void set_spice_base_threading_run(RedBaseThreading* basethreading,void* (*start_rtn)(void*));
 int start_spice_base_threading(RedBaseThreading* basethreading);
 void stop_wait_spice_base_threading(RedBaseThreading * basethreading);

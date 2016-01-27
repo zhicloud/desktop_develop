@@ -98,15 +98,16 @@
 
 #define RED_STREAM_FULL_H264_CODE 
 
-#include "red_decoding_data.h"
+#include "red_encoding_threading.h"
 
 #endif
 
 
-#define RED_STREAM_FULL_H264_CODE_TIMER
+//#define RED_STREAM_FULL_H264_CODE_TIMER
+#define RED_STREAM_FULL_H264_CODE_THREADING
 
 
-
+#include "red_encoding_dispatcher.h"
 
 
 
@@ -162,7 +163,7 @@
 
 #ifdef RED_STREAM_FULL_H264_CODE
 
-#define RED_GLOBAL_H264_STREAM_ID 1 
+#define RED_GLOBAL_H264_STREAM_ID (NUM_STREAMS + 100) 
 
 //#define RED_GLOBAL_STREAM_TIMOUT (FRAME_RATE * 10)
 #define RED_GLOBAL_STREAM_TIMOUT (35 * 1000 * 1000)
@@ -350,6 +351,7 @@ enum {
     PIPE_ITEM_TYPE_STREAM_ACTIVATE_REPORT,
 #ifdef RED_STREAM_FULL_H264_CODE 
     PIPE_ITEM_TYPE_STREAM_TIMOUT,
+    PIPE_ITEM_TYPE_STREAM_THREADING, 
 #endif
 };
 
@@ -473,6 +475,17 @@ typedef struct ImageItem {
     int can_lossy;
     uint8_t data[0];
 } ImageItem;
+
+
+typedef struct TimOutItem {
+    PipeItem link;
+    int refs;
+}TimOutItem;
+
+typedef struct H264ThreadingItem {
+    PipeItem link;
+    int refs;
+}H264ThreadingItem;
 
 typedef struct Drawable Drawable;
 
@@ -1047,14 +1060,16 @@ typedef struct RedWorker {
     //add by lcx for h264
     //int streaming_h264_video;
 #ifdef RED_STREAM_FULL_H264_CODE
+/*
     PipeItem g_create_item;
     PipeItem g_destroy_item;
     PipeItem g_stream_timout_item;
+    */
     H264Encoder *g_h264_encoder;
     
     SpiceTimer *flush_frame_timer;
 
-    RedDecodingThreading * threading;
+    RedEncodingThreading * threading;
 #endif
     //add by lcx 
     int stream_video_h264_all_fps;
@@ -1787,7 +1802,12 @@ static void destroy_client_stream_global(RedWorker *worker)
     DisplayChannelClient *dcc;
     RingItem *item, *next;
     WORKER_FOREACH_DCC_SAFE(worker, item, next, dcc) {
-        red_channel_client_pipe_add(&dcc->common.base, &worker->g_destroy_item);
+
+        PipeItem * t_destroy_item= malloc(sizeof(PipeItem));
+        red_channel_pipe_item_init(dcc, (PipeItem * )t_destroy_item, PIPE_ITEM_TYPE_STREAM_DESTROY);
+        red_channel_client_pipe_add(&dcc->common.base, t_destroy_item);
+        
+        //red_channel_client_pipe_add(&dcc->common.base, &worker->g_destroy_item);
     }
 }
 #endif
@@ -1817,11 +1837,22 @@ static inline void red_destroy_surface(RedWorker *worker, uint32_t surface_id)
                 }
                 h264_encoder_delete(worker->g_h264_encoder);
                 worker->g_h264_encoder = NULL;
+
                 if (worker->flush_frame_timer != NULL)
                 {
                     spice_timer_remove(worker->flush_frame_timer);
                 }
                 worker->flush_frame_timer = NULL;
+
+#ifdef RED_STREAM_FULL_H264_CODE_THREADING 
+                if (worker->threading->get_spice_encoding_threading_status(worker->threading) == RED_THREADING_RUNNING)
+                {
+                    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : beging to stop_wait_spice_encoding_threading",__FILE__,__FUNCTION__,__LINE__);
+                    worker->threading->stop_wait_spice_encoding_threading(worker->threading);
+                    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : end to stop_wait_spice_encoding_threading",__FILE__,__FUNCTION__,__LINE__);
+                }
+#endif 
+
             }
 #endif
         }
@@ -2057,7 +2088,6 @@ static inline void current_remove(RedWorker *worker, TreeItem *item)
 
         if (now->type == TREE_ITEM_TYPE_DRAWABLE) {
             ring_item = now->siblings_link.prev;
-        //spice_debug("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
             remove_drawable(worker, SPICE_CONTAINEROF(now, Drawable, tree_item));
         } else {
             Container *container = (Container *)now;
@@ -3822,7 +3852,6 @@ static inline int red_current_add_equal(RedWorker *worker, DrawItem *item, TreeI
     case QXL_EFFECT_OPAQUE_BRUSH:
         if (is_same_geometry(worker, drawable, other_drawable)) {
             __current_add_drawable(worker, drawable, &other->siblings_link);
-            //spice_debug("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
             remove_drawable(worker, other_drawable);
             red_pipes_add_drawable(worker, drawable);
             return TRUE;
@@ -4517,6 +4546,20 @@ static inline void red_process_drawable(RedWorker *worker, RedDrawable *red_draw
         if (worker->streaming_video_compression == SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL)
         {
             surface_flush(worker, drawable->surface_id, &red_drawable->bbox);
+#ifdef RED_STREAM_FULL_H264_CODE_THREADING
+            if (worker->threading->get_spice_encoding_threading_status(worker->threading) == RED_THREADING_RUNNING)
+            {
+                SpiceRect area;
+
+                area.top = area.left = 0;
+                area.right = worker->surfaces[0].context.width;
+                area.bottom = worker->surfaces[0].context.height;
+                worker->threading->read_bits_with_cb_to_encoding_threading( worker->threading,&area);
+
+            }
+
+#endif 
+
         }
 #endif 
 
@@ -4532,11 +4575,11 @@ cleanup:
 }
 
 static inline void red_create_surface(RedWorker *worker, uint32_t surface_id,uint32_t width,
-                                      uint32_t height, int32_t stride, uint32_t format,
-                                      void *line_0, int data_is_valid, int send_client);
+        uint32_t height, int32_t stride, uint32_t format,
+        void *line_0, int data_is_valid, int send_client);
 
 static inline void red_process_surface(RedWorker *worker, RedSurfaceCmd *surface,
-                                       uint32_t group_id, int loadvm)
+        uint32_t group_id, int loadvm)
 {
     int surface_id;
     RedSurface *red_surface;
@@ -4548,43 +4591,43 @@ static inline void red_process_surface(RedWorker *worker, RedSurfaceCmd *surface
     red_surface = &worker->surfaces[surface_id];
 
     switch (surface->type) {
-    case QXL_SURFACE_CMD_CREATE: {
-        uint32_t height = surface->u.surface_create.height;
-        int32_t stride = surface->u.surface_create.stride;
-        int reloaded_surface = loadvm || (surface->flags & QXL_SURF_FLAG_KEEP_DATA);
+        case QXL_SURFACE_CMD_CREATE: {
+                                         uint32_t height = surface->u.surface_create.height;
+                                         int32_t stride = surface->u.surface_create.stride;
+                                         int reloaded_surface = loadvm || (surface->flags & QXL_SURF_FLAG_KEEP_DATA);
 
-        data = surface->u.surface_create.data;
-        if (stride < 0) {
-            data -= (int32_t)(stride * (height - 1));
-        }
-        red_create_surface(worker, surface_id, surface->u.surface_create.width,
-                           height, stride, surface->u.surface_create.format, data,
-                           reloaded_surface,
-                           // reloaded surfaces will be sent on demand
-                           !reloaded_surface);
-        set_surface_release_info(worker, surface_id, 1, surface->release_info, group_id);
-        break;
-    }
-    case QXL_SURFACE_CMD_DESTROY:
-        spice_warn_if(!red_surface->context.canvas);
-        set_surface_release_info(worker, surface_id, 0, surface->release_info, group_id);
-        red_handle_depends_on_target_surface(worker, surface_id);
-        /* note that red_handle_depends_on_target_surface must be called before red_current_clear.
-           otherwise "current" will hold items that other drawables may depend on, and then
-           red_current_clear will remove them from the pipe. */
-        red_current_clear(worker, surface_id);
-        red_clear_surface_drawables_from_pipes(worker, surface_id, FALSE);
-        red_destroy_surface(worker, surface_id);
-        break;
-    default:
-            spice_error("unknown surface command");
+                                         data = surface->u.surface_create.data;
+                                         if (stride < 0) {
+                                             data -= (int32_t)(stride * (height - 1));
+                                         }
+                                         red_create_surface(worker, surface_id, surface->u.surface_create.width,
+                                                 height, stride, surface->u.surface_create.format, data,
+                                                 reloaded_surface,
+                                                 // reloaded surfaces will be sent on demand
+                                                 !reloaded_surface);
+                                         set_surface_release_info(worker, surface_id, 1, surface->release_info, group_id);
+                                         break;
+                                     }
+        case QXL_SURFACE_CMD_DESTROY:
+                                     spice_warn_if(!red_surface->context.canvas);
+                                     set_surface_release_info(worker, surface_id, 0, surface->release_info, group_id);
+                                     red_handle_depends_on_target_surface(worker, surface_id);
+                                     /* note that red_handle_depends_on_target_surface must be called before red_current_clear.
+                                        otherwise "current" will hold items that other drawables may depend on, and then
+                                        red_current_clear will remove them from the pipe. */
+                                     red_current_clear(worker, surface_id);
+                                     red_clear_surface_drawables_from_pipes(worker, surface_id, FALSE);
+                                     red_destroy_surface(worker, surface_id);
+                                     break;
+        default:
+                                     spice_error("unknown surface command");
     };
     red_put_surface_cmd(surface);
     free(surface);
 }
 
 static SpiceCanvas *image_surfaces_get(SpiceImageSurfaces *surfaces,
-                                       uint32_t surface_id)
+        uint32_t surface_id)
 {
     RedWorker *worker;
 
@@ -9681,6 +9724,75 @@ static inline void marshall_qxl_drawable_stream_full(RedChannelClient *rcc,
 #endif
 
 #ifdef  RED_STREAM_FULL_H264_CODE
+
+static inline void marshall_qxl_h264_global(RedChannelClient *rcc,
+        SpiceMarshaller *m)
+{
+    //add by lcx for h264
+    uint32_t frame_mm_time;
+    int n;
+    int width, height;
+    int ret;
+    size_t outbuf_size;
+    int stride;
+    int bpp;
+    size_t size1;
+
+    DisplayChannelClient *dcc = RCC_TO_DCC(rcc);
+    DisplayChannel *display_channel = SPICE_CONTAINEROF(rcc->channel, DisplayChannel, common.base);
+    spice_assert(display_channel && rcc);
+    RedWorker *worker = dcc->common.worker;
+    RedSurface *surface = &worker->surfaces[0];
+
+    worker = display_channel->common.worker;
+
+    if(worker->threading->get_spice_encoding_threading_status(worker->threading) != RED_THREADING_RUNNING)
+    {
+        return;
+    }
+
+    outbuf_size = dcc->send_data.stream_outbuf_size;
+    if(outbuf_size < OUTPUT_BUF_SIZE_H264)
+    {
+        if(dcc->send_data.stream_outbuf)
+        {
+            free(dcc->send_data.stream_outbuf);
+            dcc->send_data.stream_outbuf = NULL;
+        }
+    }
+
+    if (dcc->send_data.stream_outbuf == NULL || outbuf_size == 0) {
+        /* Allocate initial buffer */
+        dcc->send_data.stream_outbuf = malloc(OUTPUT_BUF_SIZE_H264);
+        if (dcc->send_data.stream_outbuf == NULL)
+        {
+            spice_debug("dcc->send_data.stream_outbuf malloc error");
+        }
+        outbuf_size = OUTPUT_BUF_SIZE_H264;
+    }
+
+    uint64_t time_now = red_now();
+    
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %ld.%ld  ",__FILE__,__FUNCTION__,__LINE__,time_now / (1000 * 1000 * 1000), time_now % (1000 * 1000 * 1000));
+    
+    H264DataItem * h264_data_item = worker->threading->remove_h264_slice_from_encoding_threading(worker->threading);
+    if (h264_data_item)
+    {
+        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ?? %ld.%ld ?? \n\n ",__FILE__,__FUNCTION__,__LINE__,time_now / (1000 * 1000 * 1000), time_now % (1000 * 1000 * 1000));
+        n = h264_data_item->size;
+        memcpy(dcc->send_data.stream_outbuf,h264_data_item->slice,h264_data_item->size);
+        SpiceMsgDisplayStreamData stream_data;
+        red_channel_client_init_send_data(rcc, SPICE_MSG_DISPLAY_STREAM_DATA, NULL);
+        stream_data.base.id = RED_GLOBAL_H264_STREAM_ID;
+        stream_data.base.multi_media_time = frame_mm_time;
+        stream_data.data_size = n;
+        spice_marshall_msg_display_stream_data(m, &stream_data);
+        spice_marshaller_add_ref(m,dcc->send_data.stream_outbuf, n);
+        free_h264_data_item(h264_data_item);
+    }
+    return ;
+}
+
 static inline void marshall_qxl_drawable_global(RedChannelClient *rcc,
         SpiceMarshaller *m)
 {
@@ -9705,7 +9817,7 @@ static inline void marshall_qxl_drawable_global(RedChannelClient *rcc,
     RedSurface *surface = &worker->surfaces[0];
 
 
-    
+
     uint64_t time_now = red_now();
     static int init_flags = 0;
     static uint64_t last_send_time = 0;
@@ -9723,13 +9835,14 @@ static inline void marshall_qxl_drawable_global(RedChannelClient *rcc,
         if (worker->flush_frame_timer)
         {
             //spice_timer_set(worker->flush_frame_timer,RED_GLOBAL_STREAM_TIMOUT);
-            spice_timer_set(worker->flush_frame_timer,1000 /  worker->stream_video_h264_all_fps);
+            //spice_timer_set(worker->flush_frame_timer,(1000 /  worker->stream_video_h264_all_fps) - (time_now - last_send_time));
+            spice_timer_set(worker->flush_frame_timer,1000 /  worker->stream_video_h264_all_fps );
         }
         return ;
     }
 
-    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] :  why ?????????????????????",__FILE__,__FUNCTION__,__LINE__);
 #endif
+    spice_printerr("=================  %ld.%ld ========================",time_now / (1000*1000*1000),time_now % (1000*1000*1000));
 
 
     worker = display_channel->common.worker;
@@ -9801,7 +9914,8 @@ static inline void marshall_qxl_drawable_global(RedChannelClient *rcc,
             spice_printerr("H264_NOT_GET_SLICE");
 #ifndef RED_STREAM_FULL_H264_CODE_TIMER
             //spice_timer_set(worker->flush_frame_timer,RED_GLOBAL_STREAM_TIMOUT);
-            spice_timer_set(worker->flush_frame_timer,1000 /  worker->stream_video_h264_all_fps);
+            //spice_timer_set(worker->flush_frame_timer,1000 /  worker->stream_video_h264_all_fps);
+            spice_timer_set(worker->flush_frame_timer,  1);
 #endif
         }
 
@@ -10490,9 +10604,15 @@ static void display_channel_send_item(RedChannelClient *rcc, PipeItem *pipe_item
     red_display_reset_send_data(dcc);
     switch (pipe_item->type) {
 #ifdef  RED_STREAM_FULL_H264_CODE
-    case PIPE_ITEM_TYPE_STREAM_TIMOUT: {
-            spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ",__FILE__,__FUNCTION__,__LINE__);
+    case PIPE_ITEM_TYPE_STREAM_TIMOUT: 
+    {
+            //spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ",__FILE__,__FUNCTION__,__LINE__);
             marshall_qxl_drawable_global(rcc, m);
+    }
+    break;
+    case PIPE_ITEM_TYPE_STREAM_THREADING:{
+            //spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : come send PIPE_ITEM_TYPE_STREAM_THREADING",__FILE__,__FUNCTION__,__LINE__);
+            marshall_qxl_h264_global(rcc, m);
     }
     break;
 #endif
@@ -10514,8 +10634,12 @@ static void display_channel_send_item(RedChannelClient *rcc, PipeItem *pipe_item
             if (worker->streaming_video_compression == SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL)
             {
 #ifndef RED_STREAM_FULL_H264_CODE_TIMER
-                spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] :  why !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",__FILE__,__FUNCTION__,__LINE__);
+#ifndef RED_STREAM_FULL_H264_CODE_THREADING
+                spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,
+                        "wocaocoacaocaocaocaocaocaocaocao ");
+
                 marshall_qxl_drawable_global(rcc, m);
+#endif
 #endif
                 /*
                 spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %s",__FILE__,__FUNCTION__,__LINE__,
@@ -10813,7 +10937,7 @@ static void display_channel_client_on_disconnect(RedChannelClient *rcc)
     if (!rcc) {
         return;
     }
-    spice_info(NULL);
+    spice_printerr("lcx info");
     common = SPICE_CONTAINEROF(rcc->channel, CommonChannel, base);
     worker = common->worker;
     display_channel = (DisplayChannel *)rcc->channel;
@@ -10829,13 +10953,43 @@ static void display_channel_client_on_disconnect(RedChannelClient *rcc)
     free(dcc->send_data.free_list.res);
     red_display_destroy_streams_agents(dcc);
 
+#ifdef RED_STREAM_FULL_H264_CODE
+
+    if (worker->streaming_video_compression == SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL)
+    {
+        spice_printerr("begin to free worker->streaming_video_compression!!!");
+        if (worker->g_h264_encoder != NULL)
+        {
+            h264_encoder_uninit(worker->g_h264_encoder);
+        }
+        h264_encoder_delete(worker->g_h264_encoder);
+        worker->g_h264_encoder = NULL;
+
+        if (worker->flush_frame_timer != NULL)
+        {
+            spice_timer_remove(worker->flush_frame_timer);
+        }
+        worker->flush_frame_timer = NULL;
+
+#ifdef RED_STREAM_FULL_H264_CODE_THREADING 
+        if (worker->threading->get_spice_encoding_threading_status(worker->threading) == RED_THREADING_RUNNING)
+        {
+            spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : beging to stop_wait_spice_encoding_threading",__FILE__,__FUNCTION__,__LINE__);
+            worker->threading->stop_wait_spice_encoding_threading(worker->threading);
+            spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : end to stop_wait_spice_encoding_threading",__FILE__,__FUNCTION__,__LINE__);
+        }
+#endif 
+
+    }
+#endif
+
     // this was the last channel client
     if (!red_channel_is_connected(rcc->channel)) {
         red_display_destroy_compress_bufs(display_channel);
     }
     spice_debug("#draw=%d, #red_draw=%d, #glz_draw=%d",
-                worker->drawable_count, worker->red_drawable_count,
-                worker->glz_drawable_count);
+            worker->drawable_count, worker->red_drawable_count,
+            worker->glz_drawable_count);
 }
 
 void red_disconnect_all_display_TODO_remove_me(RedChannel *channel)
@@ -10882,13 +11036,13 @@ static void red_migrate_display(RedWorker *worker, RedChannelClient *rcc)
 
 #ifdef USE_OPENGL
 static SpiceCanvas *create_ogl_context_common(RedWorker *worker, OGLCtx *ctx, uint32_t width,
-                                              uint32_t height, int32_t stride, uint8_t depth)
+        uint32_t height, int32_t stride, uint8_t depth)
 {
     SpiceCanvas *canvas;
 
     oglctx_make_current(ctx);
     if (!(canvas = gl_canvas_create(width, height, depth, &worker->image_cache.base,
-                                    &worker->image_surfaces, NULL, NULL, NULL))) {
+                    &worker->image_surfaces, NULL, NULL, NULL))) {
         return NULL;
     }
 
@@ -10997,9 +11151,13 @@ static void create_client_stream_global(RedWorker *worker)
     DisplayChannelClient *dcc;
     RingItem *item, *next;
     WORKER_FOREACH_DCC_SAFE(worker, item, next, dcc) {
-        red_channel_client_pipe_add(&dcc->common.base, &worker->g_create_item);
+        PipeItem * t_create_item= malloc(sizeof(PipeItem));
+        red_channel_pipe_item_init(dcc, (PipeItem * )t_create_item, PIPE_ITEM_TYPE_STREAM_CREATE);
+        red_channel_client_pipe_add(&dcc->common.base, t_create_item);
+        //red_channel_client_pipe_add(&dcc->common.base, &worker->g_create_item);
     }
 }
+
 static void red_create_h264_stream_global(DisplayChannelClient *dcc, H264Encoder** h264_encoder)
 {
     spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : %d === %d",__FILE__,__FUNCTION__,__LINE__,
@@ -11066,54 +11224,25 @@ static void red_client_stream_timout_global(RedWorker *worker)
     //spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ",__FILE__,__FUNCTION__,__LINE__);
     DisplayChannelClient *dcc;
     RingItem *item, *next;
-    int i = 0;
     WORKER_FOREACH_DCC_SAFE(worker, item, next, dcc) {
-
-        if (i > 0)
-        {
-            spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] prev = 0x%x  , netx = 0x%x:  == %d ==",
-                    __FILE__,__FUNCTION__,__LINE__,
-                    worker->g_stream_timout_item.link.prev,
-                    worker->g_stream_timout_item.link.next,
-                    i);
-        }
-        i++;
-        /*
-        if (worker->g_stream_timout_item.link.prev && worker->g_stream_timout_item.link.next)
-        {
-            spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] prev = 0x%x  , netx = 0x%x: lao wai bu kao pu",
-                    __FILE__,__FUNCTION__,__LINE__,
-                    worker->g_stream_timout_item.link.prev,
-                    worker->g_stream_timout_item.link.next);
-            RingItem *link;
-            RingItem *next0;
-            RedChannelClient *rcc = dcc->common.base;
-
-            RING_FOREACH_SAFE(link, next0, &rcc->pipe) {
-                if (link == &worker->g_stream_timout_item.link)
-                {
-                    red_channel_client_pipe_remove(rcc, link);
-                }
-            }
-        }
-        else if ((worker->g_stream_timout_item.link.prev == NULL && worker->g_stream_timout_item.link.next ) ||
-                (worker->g_stream_timout_item.link.prev && worker->g_stream_timout_item.link.next == NULL))
-        {
-            RedChannel *channel = dcc->common.base.channel;
-            red_channel_pipe_item_init(channel, &worker->g_stream_timout_item, PIPE_ITEM_TYPE_STREAM_TIMOUT);
-        }
-        */
+       /* 
         if (worker->g_stream_timout_item.link.prev || worker->g_stream_timout_item.link.next)
         {
-            spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] prev = 0x%x  , netx = 0x%x:  == %d == ??",
+            spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] prev = 0x%x  , netx = 0x%x:  ==  == ??",
                     __FILE__,__FUNCTION__,__LINE__,
                     worker->g_stream_timout_item.link.prev,
-                    worker->g_stream_timout_item.link.next,
-                    i);
+                    worker->g_stream_timout_item.link.next
+                    );
+            RedChannelClient *rcc = &dcc->common.base;
+            rcc->pipe_size--;
+            ring_remove(&worker->g_stream_timout_item.link);
 
-            return;
         }
-        red_channel_client_pipe_add(&dcc->common.base, &worker->g_stream_timout_item);
+*/
+        TimOutItem *stream_timout_item = malloc(sizeof(TimOutItem));
+        red_channel_pipe_item_init(dcc, (PipeItem * )stream_timout_item , PIPE_ITEM_TYPE_STREAM_TIMOUT);
+        //red_channel_client_pipe_add(&dcc->common.base, &worker->g_stream_timout_item);
+        red_channel_client_pipe_add(&dcc->common.base, stream_timout_item);
     }
 }
 
@@ -11137,13 +11266,40 @@ static inline void red_handle_streams_timout_global(void *args)
         }
 #ifdef RED_STREAM_FULL_H264_CODE_TIMER
         last_time = now;
+        /*
         spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] :  =      === %d   ===== %lld",__FILE__,__FUNCTION__,__LINE__,
-                1000 / worker->stream_video_h264_all_fps,now);
+                1000 / worker->stream_video_h264_all_fps,now);*/
     }
 #endif
 }
 #endif
 
+
+static void* encoding_cb(void* ctx,void * ud)    
+{
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : begin",__FILE__,__FUNCTION__,__LINE__);
+    
+    encoding_dispatcher_data_ready_event(1);
+}
+
+static void* encoding_read_bits_cb(void* ctx,void * ud)    
+{
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : begin",__FILE__,__FUNCTION__,__LINE__);
+    
+    RedWorker *worker = (RedWorker *)ctx;
+    if (worker->threading->get_spice_encoding_threading_status(worker->threading) == RED_THREADING_RUNNING)
+    {
+        VedioDataItem *vedio_data = (VedioDataItem *)ud;
+        red_get_primary_surface_bits(worker,  vedio_data->bits);
+    }
+}
+
+static void* encoding_get_surface_cb(void* ctx,void * ud)    
+{
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : begin",__FILE__,__FUNCTION__,__LINE__);
+    
+    encoding_dispatcher_get_surface_event(1);
+}
 
 static inline void red_create_surface_item(DisplayChannelClient *dcc, int surface_id)
 {
@@ -11173,11 +11329,49 @@ static inline void red_create_surface_item(DisplayChannelClient *dcc, int surfac
             create_client_stream_global(worker);
             //        red_channel_push(&worker->display_channel->common.base);
             red_create_h264_stream_global(dcc,&worker->g_h264_encoder);
+
             if (worker->flush_frame_timer)
             {
                 spice_timer_remove(worker->flush_frame_timer);
             }
             worker->flush_frame_timer = spice_timer_queue_add(red_handle_streams_timout_global, worker);
+
+
+#ifdef RED_STREAM_FULL_H264_CODE_THREADING 
+            if (worker->threading->get_spice_encoding_threading_status(worker->threading) == RED_THREADING_RUNNING)
+            {
+                spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : 111111111111 beging to stop_wait_spice_encoding_threading",__FILE__,__FUNCTION__,__LINE__);
+                worker->threading->stop_wait_spice_encoding_threading(worker->threading);
+                spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : 22222222222222 end to stop_wait_spice_encoding_threading",__FILE__,__FUNCTION__,__LINE__);
+            }
+            int bpp = 0;
+            GET_FORMAT_BYTES(AV_PIX_FMT_BGRA,bpp) ;
+            LCXCALLBACK call_sending;
+            call_sending._cb = encoding_cb;
+            call_sending._ctx = worker;
+           
+            LCXCALLBACK encoding_read_bits;
+            encoding_read_bits._cb = encoding_read_bits_cb;
+            encoding_read_bits._ctx = worker;
+
+            LCXCALLBACK encoding_get_surface;
+            encoding_get_surface._cb = encoding_get_surface_cb;
+            encoding_get_surface._ctx = worker;
+            
+            SpiceRect bbox = {0,0,worker->surfaces[0].context.width,worker->surfaces[0].context.height};
+            worker->threading->init_spice_encoding_threading(worker->threading,
+                    worker->surfaces[0].context.width * worker->surfaces[0].context.height * bpp ,
+                    &bbox,
+                    &call_sending,
+                    &encoding_read_bits,
+                    &encoding_get_surface,
+                    AV_PIX_FMT_BGRA,
+                    dcc->stream_video_h264_all_fps,
+                    dcc->stream_video_h264_all_bit_rate);
+            worker->threading->start_spice_encoding_threading(worker->threading);
+#endif 
+
+
             /*
                spice_timer_set(worker->flush_frame_timer,RED_GLOBAL_STREAM_TIMOUT);
                */
@@ -11979,6 +12173,39 @@ static SpiceWatch *worker_watch_add(int fd, int event_mask, SpiceWatchFunc func,
     return &worker->watches[i];
 }
 
+static SpiceWatch *encoding_worker_watch_add(int fd, int event_mask, SpiceWatchFunc func, void *opaque)
+{
+    /* Since we are a channel core implementation, we always get called from
+       red_channel_client_create(), so opaque always is our rcc */
+    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : begin",__FILE__,__FUNCTION__,__LINE__);
+    struct RedWorker *worker = (struct RedWorker * )opaque;
+    int i;
+
+    /* Since we are called from red_channel_client_create()
+       CommonChannelClient->worker has not been set yet! */
+
+    /* Search for a free slot in our poll_fds & watches arrays */
+    for (i = 0; i < MAX_EVENT_SOURCES; i++) {
+        if (worker->poll_fds[i].fd == -1) {
+            break;
+        }
+    }
+    if (i == MAX_EVENT_SOURCES) {
+        spice_warning("could not add a watch for channel type ============== lcx");
+        return NULL;
+    }
+
+    worker->poll_fds[i].fd = fd;
+    worker->watches[i].worker = worker;
+    worker->watches[i].watch_func = func;
+    worker->watches[i].watch_func_opaque = opaque;
+    worker_watch_update_mask(&worker->watches[i], event_mask);
+
+    return &worker->watches[i];
+}
+
+
+
 static void worker_watch_remove(SpiceWatch *watch)
 {
     if (!watch) {
@@ -12003,6 +12230,17 @@ SpiceCoreInterface worker_core = {
 
     .watch_update_mask = worker_watch_update_mask,
     .watch_add = worker_watch_add,
+    .watch_remove = worker_watch_remove,
+};
+
+SpiceCoreInterface encoding_worker_core = {
+    .timer_add = spice_timer_queue_add,
+    .timer_start = spice_timer_set,
+    .timer_cancel = spice_timer_cancel,
+    .timer_remove = spice_timer_remove,
+
+    .watch_update_mask = worker_watch_update_mask,
+    .watch_add = encoding_worker_watch_add,
     .watch_remove = worker_watch_remove,
 };
 
@@ -12169,6 +12407,14 @@ static void display_channel_client_release_item_after_push(DisplayChannelClient 
     case PIPE_ITEM_TYPE_VERB:
         free(item);
         break;
+#ifdef RED_STREAM_FULL_H264_CODE 
+    case PIPE_ITEM_TYPE_STREAM_TIMOUT:
+        free(item);
+        break;
+    case PIPE_ITEM_TYPE_STREAM_THREADING:
+        free(item);
+        break;
+#endif
     case PIPE_ITEM_TYPE_MONITORS_CONFIG: {
         MonitorsConfigItem *monconf_item = SPICE_CONTAINEROF(item,
                                                              MonitorsConfigItem, pipe_item);
@@ -12192,8 +12438,12 @@ static void display_channel_client_release_item_before_push(DisplayChannelClient
     switch (item->type) {
 #ifdef  RED_STREAM_FULL_H264_CODE
     case PIPE_ITEM_TYPE_STREAM_TIMOUT: {
+        free(item);
     }
-    break;
+        break;
+    case PIPE_ITEM_TYPE_STREAM_THREADING:
+        free(item);
+        break;
 #endif
 
     case PIPE_ITEM_TYPE_DRAW: {
@@ -12211,7 +12461,7 @@ static void display_channel_client_release_item_before_push(DisplayChannelClient
         
         if (worker->streaming_video_compression == SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL)
         {
-        
+            free(item);
         }
         else
         {
@@ -12234,6 +12484,7 @@ static void display_channel_client_release_item_before_push(DisplayChannelClient
         //TODO
         if (worker->streaming_video_compression == SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL)
         {
+            free(item);
         
         }
         else
@@ -12396,7 +12647,7 @@ static void guest_set_client_capabilities(RedWorker *worker)
     worker->set_client_capabilities_pending = 0;
 }
 
-
+#if 0
 #ifdef RED_STREAM_FULL_H264_CODE
 
 static void new_global_stream_msg_item(DisplayChannelClient *dcc)
@@ -12408,6 +12659,7 @@ static void new_global_stream_msg_item(DisplayChannelClient *dcc)
     red_channel_pipe_item_init(channel, &worker->g_destroy_item, PIPE_ITEM_TYPE_STREAM_DESTROY);
 }
 
+
 static void new_global_stream_draw_timout_item(DisplayChannelClient *dcc)
 {
     spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ",__FILE__,__FUNCTION__,__LINE__);
@@ -12416,6 +12668,7 @@ static void new_global_stream_draw_timout_item(DisplayChannelClient *dcc)
     red_channel_pipe_item_init(channel, &worker->g_stream_timout_item, PIPE_ITEM_TYPE_STREAM_TIMOUT);
 }
 
+#endif
 #endif
 
 static void handle_new_display_channel(RedWorker *worker, RedClient *client, RedsStream *stream,
@@ -12484,6 +12737,7 @@ static void handle_new_display_channel(RedWorker *worker, RedClient *client, Red
             dcc->stream_video_h264_all_bit_rate);
     red_display_client_init_streams(dcc);
 
+#if 0
 #ifdef RED_STREAM_FULL_H264_CODE
     
     if (worker->streaming_video_compression == SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL)
@@ -12491,7 +12745,9 @@ static void handle_new_display_channel(RedWorker *worker, RedClient *client, Red
         new_global_stream_msg_item(dcc);
         new_global_stream_draw_timout_item(dcc);
     }
+#endif
 #endif 
+
     on_new_display_channel_client(dcc);
 
 }
@@ -13305,7 +13561,7 @@ void handle_dev_display_disconnect(void *opaque, void *payload)
     RedChannelClient *rcc = msg->rcc;
     RedWorker *worker = opaque;
 
-    spice_info("disconnect display client");
+    spice_printerr("disconnect display client");
     spice_assert(rcc);
 
     guest_set_client_capabilities(worker);
@@ -13881,6 +14137,54 @@ static void red_display_cc_free_glz_drawables(RedChannelClient *rcc)
     red_display_handle_glz_drawables_to_free(dcc);
 }
 
+static void red_client_stream_h264_threading_global(RedWorker *worker)
+{
+    //spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : ",__FILE__,__FUNCTION__,__LINE__);
+    DisplayChannelClient *dcc;
+    RingItem *item, *next;
+    //TODO
+
+    //remove_h264_slice_from_encoding_threading
+    WORKER_FOREACH_DCC_SAFE(worker, item, next, dcc) {
+        H264ThreadingItem *h264_item = malloc(sizeof(H264ThreadingItem)); 
+        red_channel_pipe_item_init(dcc, (PipeItem * )h264_item, PIPE_ITEM_TYPE_STREAM_THREADING);
+        red_channel_client_pipe_add(&dcc->common.base, h264_item);
+    }
+}
+
+
+void* encoding_dispatcher_cb(void* ctx,void * ud)
+{
+
+    RedWorker *worker = (RedWorker* )ctx;
+    //TODO
+    if(worker->threading->get_spice_encoding_threading_status(worker->threading) == RED_THREADING_RUNNING)
+    {
+        red_client_stream_h264_threading_global(worker);
+        red_channel_push(&worker->display_channel->common.base);
+    }
+}
+
+
+void* encoding_dispatcher_get_surface_cb(void* ctx,void * ud)
+{
+//    spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] : begin",__FILE__,__FUNCTION__,__LINE__);
+
+    RedWorker *worker = (RedWorker* )ctx;
+    //TODO
+    if (worker->threading->get_spice_encoding_threading_status(worker->threading) == RED_THREADING_RUNNING)
+    {
+        int bpp = 0;
+        GET_FORMAT_BYTES(AV_PIX_FMT_BGRA,bpp) ;
+        char * bits = spice_new(char ,worker->surfaces[0].context.width * worker->surfaces[0].context.height * bpp);
+        red_get_primary_surface_bits(worker,bits);
+        worker->threading->insert_vedio_data_in_encoding_threading(worker->threading,bits);
+    }
+}
+
+
+
+
 SPICE_GNUC_NORETURN void *red_worker_main(void *arg)
 {
     RedWorker *worker = spice_malloc(sizeof(RedWorker));
@@ -13902,13 +14206,35 @@ SPICE_GNUC_NORETURN void *red_worker_main(void *arg)
     //add by lcx for h264 i forget can delete this
     red_init_more_video_compress(worker);
 
-#ifdef RED_STREAM_FULL_H264_CODE
+
+#ifdef RED_STREAM_FULL_H264_CODE_THREADING
     if (worker->streaming_video_compression == SPICE_STREAM_VIDEO_COMPRESSION_H264_FULL)
     {
         worker->g_h264_encoder = NULL;
-        worker->threading = decoding_threading_new();
+        worker->threading = NULL;
+        worker->threading = encoding_threading_new();
+        if (!worker->threading)
+        {
+            spice_error("encoding_threading_new");
+        }
     }
+
+    LCXCALLBACK dis_cb[ENCODING_DISPATCHER_CB_NUM];
+    memset(dis_cb,0,sizeof(LCXCALLBACK) * ENCODING_DISPATCHER_CB_NUM);
+    dis_cb[ENCODING_DISPATCHER_DATA_READY_CB]._cb = encoding_dispatcher_cb;
+    dis_cb[ENCODING_DISPATCHER_DATA_READY_CB]._ctx = (void *)worker;
+
+    dis_cb[ENCODING_DISPATCHER_GET_SURFACE_CB]._cb = encoding_dispatcher_get_surface_cb;
+    dis_cb[ENCODING_DISPATCHER_GET_SURFACE_CB]._ctx = (void *)worker->threading;
+    encoding_dispatcher_init(&encoding_worker_core,dis_cb,worker);
+    
 #endif 
+
+
+
+#ifdef RED_STREAM_FULL_H264_CODE
+    int streams_time_out_all = 0;
+#endif
 
     worker->event_timeout = INF_EVENT_WAIT;
     for (;;) {
@@ -13921,7 +14247,9 @@ SPICE_GNUC_NORETURN void *red_worker_main(void *arg)
 #ifdef RED_STREAM_FULL_H264_CODE
 
 #ifdef RED_STREAM_FULL_H264_CODE_TIMER
-        unsigned int streams_time_out_all = 1000 / worker->stream_video_h264_all_fps;
+        struct timespec time;
+        clock_gettime(CLOCK_MONOTONIC, &time);
+        red_time_t now = timespec_to_red_time(&time);
         worker->event_timeout = MIN(streams_time_out_all, worker->event_timeout);
 #endif 
 
@@ -13931,16 +14259,20 @@ SPICE_GNUC_NORETURN void *red_worker_main(void *arg)
                 worker->event_timeout,
                 1000 / worker->stream_video_h264_all_fps);
 */
+
         num_events = poll(worker->poll_fds, MAX_EVENT_SOURCES, worker->event_timeout);
 
         red_handle_streams_timout(worker);
 #ifdef RED_STREAM_FULL_H264_CODE
 
 #ifdef RED_STREAM_FULL_H264_CODE_TIMER
-        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] :  =   %d   === %d ",__FILE__,__FUNCTION__,__LINE__,
-                worker->event_timeout,
-                1000 / worker->stream_video_h264_all_fps);
-        red_handle_streams_timout_global(worker);
+//        spice_printerr("[FILE : %s][FUNCTION : %s][LINE : %d] :  =   %d   === %d ",__FILE__,__FUNCTION__,__LINE__,
+//                worker->event_timeout,
+//                1000 / worker->stream_video_h264_all_fps);
+        if (worker->g_h264_encoder)
+        {
+            red_handle_streams_timout_global(worker);
+        }
 #endif 
 
 #endif
@@ -14001,6 +14333,15 @@ SPICE_GNUC_NORETURN void *red_worker_main(void *arg)
             red_process_commands(worker, MAX_PIPE_SIZE, &ring_is_empty);
         }
         red_push(worker);
+#ifdef RED_STREAM_FULL_H264_CODE_TIMER
+        clock_gettime(CLOCK_MONOTONIC, &time);
+        streams_time_out_all = 1000 / worker->stream_video_h264_all_fps - (timespec_to_red_time(&time) - now);
+        if(streams_time_out_all <= 0)
+        {
+            streams_time_out_all = 0;
+        }
+#endif 
+
     }
     abort();
 }

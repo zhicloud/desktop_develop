@@ -6,6 +6,8 @@
 #include <common/log.h>
 
 
+
+
 static void *start_run(void * args)
 {
     RedBaseThreading* basethreading = (RedBaseThreading*)args;
@@ -23,8 +25,15 @@ void init_spice_base_threading(RedBaseThreading * basethreading,void* (*start_rt
 
 void set_spice_base_threading_status(RedBaseThreading * basethreading,RedBaseThreadingStatus status)
 {
-    basethreading->status = RED_THREADING_STOPPING;
+    basethreading->status = status;
 }
+
+RedBaseThreadingStatus get_spice_base_threading_status(RedBaseThreading * basethreading)
+{
+    return basethreading->status;
+}
+
+
 
 void set_spice_base_threading_run(RedBaseThreading* basethreading,void* (*start_rtn)(void*))
 {
@@ -35,7 +44,7 @@ int start_spice_base_threading(RedBaseThreading* basethreading)
 {
     int r;
     if ((r = pthread_create(&basethreading->g_base_thread, NULL, start_run, basethreading))) {
-        spice_printerr("create thread base failed %d", r);
+        spice_error("create thread base failed %d", r);
         return r;
     }
     set_spice_base_threading_status(basethreading,RED_THREADING_RUNNING);

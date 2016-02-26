@@ -1246,8 +1246,6 @@ void CMainWindow::usersetmode(const QString& ipaddr, const QString& mask, const 
       settings->sync();
    }
    QProcess::startDetached(QString("/home/network"), QStringList());
-
-
 }
 
 void CMainWindow::dhcpclickfunc()
@@ -4338,18 +4336,7 @@ void CMainWindow::customEvent(QEvent *event)
 
 void CMainWindow::changesetsave()
 {
-
    this->setCursor(Qt::BusyCursor);
-   // 	QString cmd_tmp = "echo %1 > /etc/resolv.conf";
-   // 	QString dns = dnsedit->GetEdit()->text();
-   // 	qDebug() << dns << endl;
-   // 	cmd_tmp = cmd_tmp.arg(dns);
-   // 	QByteArray para = cmd_tmp.toLatin1();
-   // 	system(para.data());
-   // 	cmd_tmp = "resolvconf -u";
-   // 	para = cmd_tmp.toLatin1();
-   // 	system(para.data());
-   //ip operate:
    hasonceclick = false;
 
    QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
@@ -4359,25 +4346,35 @@ void CMainWindow::changesetsave()
    {
       svrurl = settings->value("server/url").toString();
       isdhcp = settings->value("network/dhcp").toString();
-
    }
-   QString sip = ipaddredit->GetEdit()->text();
-   QString mask = maskedit->GetEdit()->text();
-   QString gateway = gatewayedit->GetEdit()->text();
+
    if (!ipaddredit->GetEdit()->isReadOnly())
    {
-      isKillNetMgr = 1;
-      usersetmode(sip, mask, gateway);
-      QString cmd_tmp = "echo nameserver %1 > /etc/resolv.conf";
+      QString ip = ipaddredit->GetEdit()->text();
+      QString mask = maskedit->GetEdit()->text();
+      QString gateway = gatewayedit->GetEdit()->text();
       QString dns = dnsedit->GetEdit()->text();
+      
+      isKillNetMgr = 1;
+      usersetmode(ip, mask, gateway);
       if (settings)
       {
          settings->setValue("network/dns", dns);
       }
-      //qDebug() << dns << endl;
-      cmd_tmp = cmd_tmp.arg(dns);
+
+#ifndef OS_X86     
+      QString cmd_tmp = QString("echo nameserver %1 > /etc/resolv.conf").arg(dns);
       QByteArray para = cmd_tmp.toLatin1();
       system(para.data());
+#else
+      //qDebug()<<"[info]"<<"IP:"<<ip<<"Mask:"<<mask<<"Gateway:"<<gateway<<"DNS:"<<dns;
+
+      QStringList qstrSubStringList = ip.split('.');
+      QString broadcast = QString("%1.%2.%3.255").arg(qstrSubStringList[0]).arg(qstrSubStringList[1]).arg(qstrSubStringList[2]);
+      QString exec_cmdline = QString("seadee-network-config -t static -s --address=%1 --netmask=%2 --gateway=%3 --dns=%4 --broadcast=%5")
+                              .arg(ip).arg(mask).arg(gateway).arg(dns).arg(broadcast);
+      system(exec_cmdline.toStdString().c_str());
+#endif   
    }
    else if (QString("y") == isdhcp)
    {
@@ -4385,9 +4382,13 @@ void CMainWindow::changesetsave()
       {
          settings->setValue("network/dhcp", QString("x"));
       }
-   }
-   //url
 
+#ifdef OS_X86
+   system("seadee-network-config -t dhcp -s");
+#endif
+   }
+   
+   //url
    QString strip = uuuurledit->GetEdit()->text();
    QString strport = pppportedit->GetEdit()->text();
    QString newstr = strip + ":" + strport;
@@ -4404,7 +4405,6 @@ void CMainWindow::changesetsave()
       getmaskAddress(ip,mask,mac);
       MyZCLog::Instance().WriteToLog(ZCERROR, QString("changesetsave Auth   newwsvrurl = %1!!!!!!!!!!!!!!ip=%2,mac=%3").arg(newwsvrurl).arg(ip).arg(mac));
    }
-
 }
 
 bool CMainWindow::CheckNeedUpgrade()

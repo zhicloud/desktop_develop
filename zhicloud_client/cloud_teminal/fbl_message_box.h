@@ -32,6 +32,7 @@ public:
 	void setFontColor(FBLMSGFONTCOLOR color);
 	void setText(QString text);
 	void setCmd(QString str);
+   void setCmd(int nCurSelIndex);
 public:
 	bool acceptBox();
 private:
@@ -41,6 +42,7 @@ private:
 	bool isAccept;
 	QString m_strCmd;
 	QTimer *m_timer;
+   int m_nSelIndex;
 
 private slots :
 	void closeDialogSlot();

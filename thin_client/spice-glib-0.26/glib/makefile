@@ -4,8 +4,8 @@ vpath %.o . ./glib ./spice-common/common ./win32/
 
 APPS=libspice_without_gtk.a
 CC=gcc
-OBJS:=bio-gio.o glib-compat.o spice-audio.o spice-util.o spice-option.o spice-client.o spice-session.o spice-channel.o gio-coroutine.o channel-base.o channel-webdav.o channel-cursor.o channel-display.o channel-display-mjpeg.o channel-display-h264.o channel-inputs.o channel-main.o channel-playback.o channel-port.o channel-record.o channel-smartcard.o channel-usbredir.o smartcard-manager.o spice-uri.o usb-device-manager.o usbutil.o vmcstream.o decode-glz.o decode-jpeg.o decode-zlib.o client_sw_canvas.o wocky-http-proxy.o spice-pulse.o continuation.o  spice-glib-enums.o spice-marshal.o h264_decoder.o coroutine_gthread.o
-CFLAGS = -std=gnu99
+OBJS:=bio-gio.o glib-compat.o spice-audio.o spice-util.o spice-option.o spice-client.o spice-session.o spice-channel.o gio-coroutine.o channel-base.o channel-webdav.o channel-cursor.o channel-display.o channel-display-mjpeg.o channel-display-h264.o  channel-inputs.o channel-main.o channel-playback.o channel-port.o channel-record.o channel-smartcard.o channel-usbredir.o smartcard-manager.o spice-uri.o usb-device-manager.o usbutil.o vmcstream.o decode-glz.o decode-jpeg.o decode-zlib.o client_sw_canvas.o wocky-http-proxy.o spice-pulse.o continuation.o coroutine_ucontext.o spice-glib-enums.o spice-marshal.o spice-gstaudio.o h264_decoder.o
+CFLAGS = -std=gnu99 
 
 ifeq ($(SPICE_DEBUG), y)
 	CFLAGS += -g
@@ -23,8 +23,7 @@ INC_PATH= -I../ \
 			 -I/usr/include/soprano/ \
 			 -I/usr/include/libxml2/ \
 			 -I/usr/include/libusb-1.0/ \
-			 `pkg-config --cflags gobject-2.0`\
-			 -I/home/lichenxiang/opt/include
+			 `pkg-config --cflags gobject-2.0`
 
 DEFS = -DHAVE_CONFIG_H -DUSB_IDS=\""$(USB_IDS)"\"
 USB_IDS = /var/lib/usbutils/usb.ids
@@ -39,7 +38,7 @@ $(APPS):$(OBJS)
 	ar rcs $@ $(OBJS)
 
 %.o:%.c
-	$(CC) $(DEFS) -static -c $< $(CFLAGS) $(CPPFLAGS) -o $@ $(INC_PATH) 
+	$(CC) $(DEFS) -static -c $< $(CFLAGS) $(CPPFLAGS)  -o $@  $(INC_PATH) 
 
 clean:	
-	$(RM) $(OBJS)  $(APPS) *.o 
+	$(RM) $(OBJS)  $(APPS) *.o

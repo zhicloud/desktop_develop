@@ -79,7 +79,8 @@ void fbl_message_box::closeDialogSlot()
 
 void fbl_message_box::okBtnClickSlot()
 {
-	setText(QStringLiteral("正在设置,请稍候..."));
+#ifndef OS_X86
+   setText(QStringLiteral("正在设置,请稍候..."));
 	setCursor(Qt::BusyCursor);
 	printf("chmod 777 /tmp/resolution_fifo\n");
 	QByteArray para = m_strCmd.toLatin1();
@@ -88,6 +89,34 @@ void fbl_message_box::okBtnClickSlot()
 	int ret = system(para.data());
 	printf("return value is %d\n", ret);
 	m_timer->start(8000);
+#else
+
+   QString qstrExcCmdLine("seadee-display-config -r ");
+   switch(m_nSelIndex)
+   {
+      case 17://800x600
+         qstrExcCmdLine += QString("800x600");
+         break;
+      case 31://1024x768
+         qstrExcCmdLine += QString("1024x768");
+         break;
+      case 4://1280x720
+         qstrExcCmdLine += QString("1280x720");
+         break;
+      case 2://1366x768
+         qstrExcCmdLine += QString("1366x768");
+         break;
+      case 16://1920x1080
+         qstrExcCmdLine += QString("1920x1080");
+         break;
+      default:
+         qstrExcCmdLine += QString("1920x1080");
+         break;
+   }
+
+   system(qstrExcCmdLine.toStdString().c_str());
+   system("reboot");
+#endif
 }
 
 bool fbl_message_box::acceptBox()
@@ -134,6 +163,11 @@ void fbl_message_box::setText(QString text)
 void fbl_message_box::setCmd(QString str)
 {
 	m_strCmd = str;
+}
+
+void fbl_message_box::setCmd(int index)
+{
+   m_nSelIndex = index;
 }
 
 void fbl_message_box::rebootSlot()

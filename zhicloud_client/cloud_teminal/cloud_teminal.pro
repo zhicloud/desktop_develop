@@ -7,6 +7,7 @@ QT += core gui widgets network
 TEMPLATE = app
 TARGET = cloud_teminal
 INCLUDEPATH += .
+DEFINES += OS_X86
 #DEFINES += ZS
 
 # Input

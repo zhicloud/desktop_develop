@@ -122,6 +122,7 @@ void InitKeyCode(UINT16 keyCode[])
   keyCode[0xff55] = 0x149;    /* 65365 (XK_Page_Up) => 329 via 104 (KEY_PAGEUP) */
   keyCode[0xff56] = 0x151;    /* 65366 (XK_Page_Down) => 337 via 109 (KEY_PAGEDOWN) */
   keyCode[0xff57] = 0x14f;    /* 65367 (XK_End) => 335 via 107 (KEY_END) */
+  keyCode[0xff61] = 0x54;    /* 65367 (XK_End) => 335 via 107 (KEY_END) */
   keyCode[0xff63] = 0x152;    /* 65379 (XK_Insert) => 338 via 110 (KEY_INSERT) */
   keyCode[0xff6a] = 0x175;    /* 65386 (XK_Help) => 373 via 138 (KEY_HELP) */
   keyCode[0xff7f] = 0x45;     /* 65407 (XK_Num_Lock) => 69 via 69 (KEY_NUMLOCK) */

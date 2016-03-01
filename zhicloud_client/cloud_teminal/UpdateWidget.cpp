@@ -261,26 +261,26 @@ void CUpdateWidget::httpFinished()
 	system("cp /home/download_ext/upgrade.tgz /home/download");
 
 	
-	if (!_version.isEmpty())
+	/*if (!_version.isEmpty())
 	{
 		QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
 		if (settings)
 		{
 			settings->setValue("version/ver", _version);
 		}
-	}
+	}*/
 	m_ptimer->start(4000);
 }
 
 void CUpdateWidget::httpReadyRead()
 {
-	if (!isSizeSet)
+	/*if (!isSizeSet)
 	{
 		QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
 		int file_Size = _reply->header(QNetworkRequest::ContentLengthHeader).toInt();
 		settings->setValue("version/size", file_Size);
 		isSizeSet = true;
-	}
+	}*/
 	if (!isDownloadding)
 	{
 		isDownloadding = 1;

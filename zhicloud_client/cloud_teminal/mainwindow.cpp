@@ -30,6 +30,12 @@
 #define SPICE_RECONNECT QEvent::User+109
 #define ERROR_IO_SHOW_WIDGET QEvent::User+120
 
+
+const QString main_version = "1.2.0";
+const QString cpu_architecture = "ARM";//or X86
+const QString hardware_company = "XH";
+const QString os_version = "Ubuntu Linaro 13.09";
+
    CMainWindow::CMainWindow(QWidget *parent)
 : QMainWindow(parent)
 {
@@ -2050,23 +2056,13 @@ void CMainWindow::createAboutWidget()
    QLabel* softwareversion = new QLabel;
    softwareversion->setFixedSize(150, 30);
    softwareversion->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+   softwareversion->setText(QStringLiteral("软件版本: ") + main_version);
 
-   QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
-   QString version = "V0.1";
-   if (settings)
-   {
-      version = settings->value("version/ver").toString();
-   }
-   if(version.size() != 0)
-   {
-      softwareversion->setText(QStringLiteral("软件版本: ") + version);
-   }
-   else
-   {
-      version = "1.0.1";
-      softwareversion->setText(QStringLiteral("软件版本: ") + version);
-      settings->setValue(("version/ver"),version);
-   }
+   QLabel* os = new QLabel;
+   os->setFixedSize(300, 30);
+   os->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+   os->setText(QStringLiteral("Host Require: ") + os_version + "_" + hardware_company+ "_" + cpu_architecture);
+   
    QLabel* uuidd = new QLabel;
    uuidd->setFixedSize(300, 30);
    uuidd->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
@@ -2093,6 +2089,10 @@ void CMainWindow::createAboutWidget()
    hversionlayout->setAlignment(Qt::AlignCenter);
    hversionlayout->addWidget(hardwareverson);
    hversionlayout->addWidget(softwareversion);
+   
+   QHBoxLayout* hoslayout = new QHBoxLayout;
+   hoslayout->setAlignment(Qt::AlignCenter);
+   hoslayout->addWidget(os);
 
    QHBoxLayout* uuidlayout = new QHBoxLayout;
    uuidlayout->setAlignment(Qt::AlignCenter);
@@ -2108,6 +2108,7 @@ void CMainWindow::createAboutWidget()
    main_layout->setAlignment(Qt::AlignLeft);
    main_layout->addLayout(hpiclayout);
    main_layout->addLayout(hversionlayout);
+   main_layout->addLayout(hoslayout);
    main_layout->addLayout(uuidlayout);
    main_layout->addLayout(maclayout);
 
@@ -4410,14 +4411,16 @@ void CMainWindow::changesetsave()
 bool CMainWindow::CheckNeedUpgrade()
 {
    QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
-   QString version = "0.0.0.0";
+   //QString version = "0.0.0.0";
    QString svrurl;
-   int filesize;
+   //int filesize;
    if (settings)
    {
       svrurl = settings->value("server/url").toString();
-      version = settings->value("version/ver").toString();
-      filesize = settings->value("version/size").toInt();
+      //version = settings->value("version/ver").toString();
+      //filesize = settings->value("version/size").toInt();
+   }else{
+   	  return false;
    }
    //	m_isAppComplete = checkComplete(filesize);
    //	if (version.isEmpty() || !m_isAppComplete)
@@ -4425,13 +4428,13 @@ bool CMainWindow::CheckNeedUpgrade()
    //		version = "0.0.0.0";
    //	}
 
-   if (version.isEmpty())
+   /*if (version.isEmpty())
    {
       version = "0.0.0.0";
-   }	
+   }*/	
    m_cmd = UpdateHostInfo;
-   QString fmt = "version?version_number=%1";
-   QString str = fmt.arg(version);
+   QString fmt = "version?version_number=%1&platform_type=%2&os_type=%3&hardware_company=%4";
+   QString str = fmt.arg(main_version).arg(cpu_architecture).arg(os_version).arg(hardware_company);
    svrurl.replace("connect", str);
    MyZCLog::Instance().WriteToLog(ZCINFO, svrurl);
    //qDebug() << svrurl;

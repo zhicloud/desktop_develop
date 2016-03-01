@@ -471,7 +471,7 @@ void fblSetWidget::initView()
         {
 		i = 31;
         }
-	if(currentScreenWidth == 1366)
+	if(currentScreenWidth == 1366 || currentScreenWidth == 1368)
         {
 		i = 2;
         }
@@ -502,7 +502,7 @@ void fblSetWidget::initView()
 #else
 	int currentScreenWidth = QApplication::desktop()->width();
     int currentScreenHeight = QApplication::desktop()->height();
-	printf("currentScreenWidth = %d\n",currentScreenWidth);
+//	printf("currentScreenWidth = %d\n",currentScreenWidth);
 	int i = 17;
 	if(currentScreenWidth == 800)
 	{
@@ -516,7 +516,7 @@ void fblSetWidget::initView()
         {
 		i = 4;
         }
-	if(currentScreenWidth == 1366)
+	if(currentScreenWidth == 1366 || currentScreenWidth == 1368)
         {
 		i = 2;
         }
@@ -525,7 +525,7 @@ void fblSetWidget::initView()
                 i = 16;
         }
 	
-	printf("i = %d............\n",i);
+//	printf("i = %d............\n",i);
 	switch (i)
 	{
 	case 17:

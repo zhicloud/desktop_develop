@@ -31,10 +31,26 @@
 #define ERROR_IO_SHOW_WIDGET QEvent::User+120
 
 
-const QString main_version = "1.2.0";
-const QString cpu_architecture = "ARM";//or X86
+
+#ifndef OS_X86  
+const QString cpu_architecture = "ARM";
+#ifndef ZS
+const QString main_version = "1.1.2";
+#else
+const QString main_version = "1.1.6";
+#endif
+#else
+const QString cpu_architecture = "X86";
+const QString main_version = "1.0.5";
+#endif
+
+
 const QString hardware_company = "XH";
+#ifndef OS_X86 
 const QString os_version = "Ubuntu Linaro 13.09";
+#else
+const QString os_version = "Ubuntu 4.8.2-19";
+#endif
 
    CMainWindow::CMainWindow(QWidget *parent)
 : QMainWindow(parent)
@@ -2056,7 +2072,11 @@ void CMainWindow::createAboutWidget()
    QLabel* softwareversion = new QLabel;
    softwareversion->setFixedSize(150, 30);
    softwareversion->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-   softwareversion->setText(QStringLiteral("软件版本: ") + main_version);
+#ifndef ZS
+   softwareversion->setText(QStringLiteral("软件版本: TC_") + main_version);
+#else
+   softwareversion->setText(QStringLiteral("软件版本: ZS_") + main_version);
+#endif
 
    QLabel* os = new QLabel;
    os->setFixedSize(300, 30);

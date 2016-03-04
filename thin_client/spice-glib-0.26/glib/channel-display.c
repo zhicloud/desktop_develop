@@ -1448,14 +1448,24 @@ static void display_handle_stream_data(SpiceChannel *channel, SpiceMsgIn *in)
  //   strftime(tmp, sizeof(tmp), "%Y/%m/%d %H:%M:%S", localtime(&t));
  //   printf("[%s] [%s][%d] [%s] queue length is %d!\n", tmp, __FILE__, __LINE__, __FUNCTION__, g_queue_get_length(st->g_queue_msg)); 
     
-    if(MAX_CACHE_FRAME > g_queue_get_length(st->g_queue_msg))
+    if (st->codec == SPICE_VIDEO_CODEC_TYPE_MJPEG)
     {
-       spice_msg_in_ref(in);
-      
-       g_rec_mutex_lock(&st->g_queue_rec_mutex);
-     	 g_queue_push_tail(st->g_queue_msg, in);
-    	 g_cond_signal(&st->g_queue_cond);
-    	 g_rec_mutex_unlock(&st->g_queue_rec_mutex);	
+        spice_msg_in_ref(in);
+        spice_display_decoding(st, in);
+    
+    }
+    else
+    {
+
+        if(MAX_CACHE_FRAME > g_queue_get_length(st->g_queue_msg))
+        {
+            spice_msg_in_ref(in);
+
+            g_rec_mutex_lock(&st->g_queue_rec_mutex);
+            g_queue_push_tail(st->g_queue_msg, in);
+            g_cond_signal(&st->g_queue_cond);
+            g_rec_mutex_unlock(&st->g_queue_rec_mutex);	
+        }
     }
     return;
 }

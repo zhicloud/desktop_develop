@@ -41,7 +41,7 @@ const QString main_version = "1.1.6";
 #endif
 #else
 const QString cpu_architecture = "X86";
-const QString main_version = "1.0.5";
+const QString main_version = "1.0.6";
 #endif
 
 

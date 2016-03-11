@@ -90,7 +90,7 @@ void fbl_message_box::okBtnClickSlot()
 	printf("return value is %d\n", ret);
 	m_timer->start(8000);
 #else
-
+#ifndef XH 
    QString qstrExcCmdLine("seadee-display-config -r ");
    switch(m_nSelIndex)
    {
@@ -113,9 +113,19 @@ void fbl_message_box::okBtnClickSlot()
          qstrExcCmdLine += QString("1920x1080");
          break;
    }
-
    system(qstrExcCmdLine.toStdString().c_str());
    system("reboot");
+#else
+  setText(QStringLiteral("正在设置,请稍候..."));
+  setCursor(Qt::BusyCursor); 
+  QByteArray para = m_strCmd.toLatin1();
+  system("chmod 777 /tmp/resolution_fifo");
+  system(para.data());
+  qDebug() << m_strCmd << endl;
+  //system("reboot");
+  //m_timer->start(8000);
+#endif
+   
 #endif
 }
 

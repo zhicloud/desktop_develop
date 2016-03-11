@@ -386,7 +386,7 @@ void fblSetWidget::chooseFbl()
 	case 2:
 		fblBtn->setStyleSheet("QPushButton#fblBtn{border-image: url(:/sysset_res/1336X768-down);}");
 		str_Tmp = str_Tmp.arg(2);
-		str_Fbl = "1336X768";
+		str_Fbl = "1366X768";
 		i_fbl = 2;
 		break;
 	default:
@@ -397,7 +397,11 @@ void fblSetWidget::chooseFbl()
 #ifndef OS_X86	
    msg_box->setCmd(str_Tmp);
 #else
+#ifndef XH 
    msg_box->setCmd(i_fbl);
+#else
+   msg_box->setCmd(str_Tmp);
+#endif
 #endif
    msg_box->show();
 #else
@@ -434,7 +438,7 @@ void fblSetWidget::chooseFbl()
 	case 3:
 		fblBtn->setStyleSheet("QPushButton#fblBtn{border-image: url(:/sysset_res/1336X768-down);}");
 		str_Tmp = str_Tmp.arg(2);
-		str_Fbl = "1336X768";
+		str_Fbl = "1366X768";
 		i_fbl = 2;
 		break;
 	case 4:
@@ -451,7 +455,12 @@ void fblSetWidget::chooseFbl()
 #ifndef OS_X86  
    msg_box->setCmd(str_Tmp);
 #else
-   msg_box->setCmd(i_fbl);
+#ifndef XH 
+	  msg_box->setCmd(i_fbl);
+#else
+	  msg_box->setCmd(str_Tmp);
+#endif
+
 #endif
 	msg_box->show();
 #endif

@@ -41,15 +41,26 @@ const QString main_version = "1.1.6";
 #endif
 #else
 const QString cpu_architecture = "X86";
-const QString main_version = "1.0.6";
+const QString main_version = "1.0.7";
 #endif
 
-
+#ifndef XH 
+const QString hardware_company = "SD";
+#else
 const QString hardware_company = "XH";
+#endif
+
 #ifndef OS_X86 
 const QString os_version = "Ubuntu Linaro 13.09";
 #else
 const QString os_version = "Ubuntu 4.8.2-19";
+#endif
+
+#ifndef ZS
+const QString custom_type = "TC";
+#else
+const QString custom_type = "ZS";
+
 #endif
 
    CMainWindow::CMainWindow(QWidget *parent)
@@ -2072,16 +2083,14 @@ void CMainWindow::createAboutWidget()
    QLabel* softwareversion = new QLabel;
    softwareversion->setFixedSize(150, 30);
    softwareversion->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-#ifndef ZS
-   softwareversion->setText(QStringLiteral("软件版本: TC_") + main_version);
-#else
-   softwareversion->setText(QStringLiteral("软件版本: ZS_") + main_version);
-#endif
+   softwareversion->setText(QStringLiteral("软件版本: ") + custom_type + "_" +main_version);
+
+
 
    QLabel* os = new QLabel;
    os->setFixedSize(300, 30);
    os->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
-   os->setText(QStringLiteral("Host Require: ") + os_version + "_" + hardware_company+ "_" + cpu_architecture);
+   os->setText(QStringLiteral("Host Require: ") + os_version + "_" + cpu_architecture+ "_" + hardware_company);
    
    QLabel* uuidd = new QLabel;
    uuidd->setFixedSize(300, 30);
@@ -2180,7 +2189,7 @@ void CMainWindow::saveFbl()
          break;
       case 4:
          str_Tmp = str_Tmp.arg(2);
-         msgbox = new ZCMessageBox(QStringLiteral("分辨率1336X768,即将重启"), this, NULL);
+         msgbox = new ZCMessageBox(QStringLiteral("分辨率1366X768,即将重启"), this, NULL);
          break;
       case 5:
          str_Tmp = str_Tmp.arg(16);
@@ -4382,19 +4391,25 @@ void CMainWindow::changesetsave()
       {
          settings->setValue("network/dns", dns);
       }
-
+//dns && ip set
 #ifndef OS_X86     
       QString cmd_tmp = QString("echo nameserver %1 > /etc/resolv.conf").arg(dns);
       QByteArray para = cmd_tmp.toLatin1();
       system(para.data());
 #else
       //qDebug()<<"[info]"<<"IP:"<<ip<<"Mask:"<<mask<<"Gateway:"<<gateway<<"DNS:"<<dns;
+#ifndef XH 
 
       QStringList qstrSubStringList = ip.split('.');
       QString broadcast = QString("%1.%2.%3.255").arg(qstrSubStringList[0]).arg(qstrSubStringList[1]).arg(qstrSubStringList[2]);
       QString exec_cmdline = QString("seadee-network-config -t static -s --address=%1 --netmask=%2 --gateway=%3 --dns=%4 --broadcast=%5")
                               .arg(ip).arg(mask).arg(gateway).arg(dns).arg(broadcast);
       system(exec_cmdline.toStdString().c_str());
+#else
+	 QString cmd_tmp = QString("echo nameserver %1 > /etc/resolv.conf").arg(dns);
+     QByteArray para = cmd_tmp.toLatin1();
+     system(para.data());
+#endif
 #endif   
    }
    else if (QString("y") == isdhcp)
@@ -4405,7 +4420,9 @@ void CMainWindow::changesetsave()
       }
 
 #ifdef OS_X86
+#ifndef XH 
    system("seadee-network-config -t dhcp -s");
+#endif
 #endif
    }
    
@@ -4453,11 +4470,11 @@ bool CMainWindow::CheckNeedUpgrade()
       version = "0.0.0.0";
    }*/	
    m_cmd = UpdateHostInfo;
-   QString fmt = "version?version_number=%1&platform_type=%2&os_type=%3&hardware_company=%4";
-   QString str = fmt.arg(main_version).arg(cpu_architecture).arg(os_version).arg(hardware_company);
+   QString fmt = "version?version_number=%1_%2_%3_%4&platform_type=%5&os_type=%6&hardware_company=%7";
+   QString str = fmt.arg(custom_type).arg(main_version).arg(hardware_company).arg(cpu_architecture).arg(cpu_architecture).arg(os_version).arg(hardware_company);
    svrurl.replace("connect", str);
    MyZCLog::Instance().WriteToLog(ZCINFO, svrurl);
-   //qDebug() << svrurl;
+   qDebug() << svrurl;
    doHttpGet(m_cmd, svrurl);
    QString ip,mac,mask;
    getmaskAddress(ip,mask,mac);

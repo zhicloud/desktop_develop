@@ -210,76 +210,93 @@ void CMailBoxWidget::closebtnfunc()
 
 void CMailBoxWidget::ShowMail()
 {
-	QSettings* msgfile = new QSettings(MSGFILE, QSettings::IniFormat);
-	if (msgfile)
-	{
-		msgfile->beginReadArray("messages");
-		QStringList keys = msgfile->allKeys();
-		int unreadsize = 0;
-		int size = keys.size();
-		if (size >= 1)
-		{
-			size = size - 1;
-		}
-		for (int i = 0; i < size;i++)
-		{
-			QString val = msgfile->value(keys.at(i)).toString();
-			QStringList list = val.split(",");
-			if (list[3] == "unread")
-			{
-				unreadsize++;
-			}
-		}
-		
-		recvlabel->setText(QStringLiteral("收件箱(%1)").arg(size));
-		unreadlabel->setText(QStringLiteral("未读信息(%1)").arg(unreadsize));
+   QSettings* msgfile = new QSettings(MSGFILE, QSettings::IniFormat);
+   if (msgfile)
+   {
+      msgfile->beginReadArray("messages");
+      QStringList keys = msgfile->allKeys();
+      int unreadsize = 0;
+      keys.removeOne("lasttime");
+      int size = keys.size();
+      /*
+      if (size >= 1)
+      {
+         size = size - 1;
+      }
+      */
+      for (int i = 0; i < size;i++)
+      {
+         QString val = msgfile->value(keys.at(i)).toString();
+         qDebug() << "====" << val ;
+         QStringList list = val.split(",");
+         if (list.size() >= 4)
+         {
+            if (list[3] == "unread")
+            {
+               unreadsize++;
+            }
+         }
+      }
+
+      recvlabel->setText(QStringLiteral("收件箱(%1)").arg(size - 1));
+      unreadlabel->setText(QStringLiteral("未读信息(%1)").arg(unreadsize));
 
 
-		if (size > 6)
-		{
-			if (size - pagenumber*6 >= 0)
-			{
-				for (int i = 0; i < 6;i++)
-				{
-					QString val = msgfile->value(keys.at(i+6*(pagenumber - 1))).toString();
-					QStringList list = val.split(",");
-					itemarray[i]->setInfo(list[0], list[1], list[2],list[3]);
-					itemarray[i]->mshow();
-				}
-			}
-			else
-			{
-				int row = size % 6;
-				for (int i = 0; i < row;i++)
-				{
-					QString val = msgfile->value(keys.at(i + 6 * (pagenumber - 1))).toString();
-					QStringList list = val.split(",");
-					itemarray[i]->setInfo(list[0], list[1], list[2],list[3]);
-					itemarray[i]->mshow();
-				}
-				for (int i = row; i < 6;i++)
-				{
-					itemarray[i]->mhide();
-				}
-			}
-		}
-		else
-		{
-			int i = 0;
-			for (; i < size;i++)
-			{
-				QString val = msgfile->value(keys.at(i)).toString();
-				QStringList list = val.split(",");
-				itemarray[i]->setInfo(list[0],list[1],list[2],list[3]);
-				itemarray[i]->mshow();
-			}
-			for (; i < 6;i++)
-			{
-				itemarray[i]->mhide();
-			}
-			
-		}
-	}
+      if (size > 6)
+      {
+         if (size - pagenumber*6 >= 0)
+         {
+            for (int i = 0; i < 6;i++)
+            {
+               QString val = msgfile->value(keys.at(i+6*(pagenumber - 1))).toString();
+               QStringList list = val.split(",");
+               if (list.size() >= 4)
+               {
+                  itemarray[i]->setInfo(list[0], list[1], list[2],list[3]);
+                  itemarray[i]->mshow();
+               }
+            }
+         }
+         else
+         {
+            int row = size % 6;
+            for (int i = 0; i < row;i++)
+            {
+               QString val = msgfile->value(keys.at(i + 6 * (pagenumber - 1))).toString();
+               QStringList list = val.split(",");
+            
+               if (list.size() >= 4)
+               {
+                  itemarray[i]->setInfo(list[0], list[1], list[2],list[3]);
+                  itemarray[i]->mshow();
+               }
+            }
+            for (int i = row; i < 6;i++)
+            {
+               itemarray[i]->mhide();
+            }
+         }
+      }
+      else
+      {
+         int i = 0;
+         for (; i < size;i++)
+         {
+            QString val = msgfile->value(keys.at(i)).toString();
+            QStringList list = val.split(",");
+            if (list.size() >= 4)
+            {
+               itemarray[i]->setInfo(list[0],list[1],list[2],list[3]);
+               itemarray[i]->mshow();
+            }
+         }
+         for (; i < 6;i++)
+         {
+            itemarray[i]->mhide();
+         }
+
+      }
+   }
 }
 
 void CMailBoxWidget::AddMail(QString keytime, QString val)

@@ -106,23 +106,27 @@ void CMailItemWidget::openmail()
 		msgfile1->setValue(QString("messages/%1").arg(stime), QString("%1,%2,%3,%4").arg(stheme).arg(content).arg(stime).arg("readed"));
 	}
 
-	QSettings* msgfile = new QSettings(MSGFILE, QSettings::IniFormat);
-	if (msgfile)
-	{
-		msgfile->beginReadArray("messages");
-		QStringList keys = msgfile->allKeys();
-		int unreadsize = 0;
-		int size = keys.size();
-		size = size - 1;
-		for (int i = 0; i < size; i++)
-		{
-			QString val = msgfile->value(keys.at(i)).toString();
-			QStringList list = val.split(",");
-			if (list[3] == "unread")
-			{
-				unreadsize++;
-			}
-		}
+   QSettings* msgfile = new QSettings(MSGFILE, QSettings::IniFormat);
+   if (msgfile)
+   {
+      msgfile->beginReadArray("messages");
+      QStringList keys = msgfile->allKeys();
+      int unreadsize = 0;
+      keys.removeOne("lasttime");
+      int size = keys.size();
+      //size = size - 1;
+      for (int i = 0; i < size; i++)
+      {
+         QString val = msgfile->value(keys.at(i)).toString();
+         QStringList list = val.split(",");
+         if (list.size() >= 4)
+         {
+            if (list[3] == "unread")
+            {
+               unreadsize++;
+            }
+         }
+      }
 
 		m_mail->recvlabel->setText(QStringLiteral("收件箱(%1)").arg(size));
 		m_mail->unreadlabel->setText(QStringLiteral("未读信息(%1)").arg(unreadsize));

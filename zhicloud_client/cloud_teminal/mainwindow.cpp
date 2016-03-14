@@ -1253,7 +1253,9 @@ void CMainWindow::createAbout_NetSettingWidget()
 
 void CMainWindow::dhcpmode(QString& ipaddr, QString& mask, QString& gateway,QString& mac)
 {
+#ifndef OS_X86	
    system("service network-manager start");	
+#endif
    getmaskAddress(ipaddr, mask,mac);
    char buff[256], ifName[12];
    bzero(buff, sizeof(buff));
@@ -2311,7 +2313,9 @@ void CMainWindow::changesetting()
       usersetbtn->setIcon(QIcon(QString(":/net_about/select")));
       dhcpbutton->setIcon(QIcon(QString(":/net_about/unselect")));
       QProcess::startDetached(QString("/home/network"), QStringList());
+#ifndef OS_X86	
       system("/etc/init.d/network-manager stop"); 
+#endif
       netsetreadonly(false);
    }
    else/* if (QString("x") == isdhcp)*/
@@ -4403,14 +4407,8 @@ void CMainWindow::changesetsave()
       //qDebug()<<"[info]"<<"IP:"<<ip<<"Mask:"<<mask<<"Gateway:"<<gateway<<"DNS:"<<dns;
       QStringList qstrSubStringList = ip.split('.');
       QString broadcast = QString("%1.%2.%3.255").arg(qstrSubStringList[0]).arg(qstrSubStringList[1]).arg(qstrSubStringList[2]);
-#ifndef XH      
-      QString exec_cmdline = QString("seadee-network-config -t static -s --address=%1 --netmask=%2 --gateway=%3 --dns=%4 --broadcast=%5")
-                              .arg(ip).arg(mask).arg(gateway).arg(dns).arg(broadcast);
-      system(exec_cmdline.toStdString().c_str());
-#else
-	ConfigNetwork("static",ip,mask,gateway,broadcast,dns);
 
-#endif
+	  ConfigNetwork("static",ip,mask,gateway,broadcast,dns);
 #endif   
    }
    else if (QString("y") == isdhcp)
@@ -4421,14 +4419,21 @@ void CMainWindow::changesetsave()
       }
 
 #ifdef OS_X86
-#ifndef XH 
-   system("seadee-network-config -t dhcp -s");
-#else
    ConfigNetwork("dhcp");
 #endif
-#endif
    }
+
+   if(m_manager){
+
+	disconnect(m_manager, SIGNAL(finished(QNetworkReply*)),
+			this, SLOT(replyFinished(QNetworkReply*)));
+	
+	delete m_manager;
+   	m_manager = new QNetworkAccessManager(this);
    
+   	connect(m_manager, SIGNAL(finished(QNetworkReply*)),
+			this, SLOT(replyFinished(QNetworkReply*)));
+   }
    //url
    QString strip = uuuurledit->GetEdit()->text();
    QString strport = pppportedit->GetEdit()->text();

@@ -296,7 +296,7 @@ bool ConfigNetwork(QString type,QString ip,QString netmask,QString gateway,QStri
 		 QByteArray dns_para = cmd_network.toLatin1();
 		 system(dns_para.data());
 	 }
-	 system("/etc/init.d/networking restart");
+	 system("ifdown eth0 && ifup eth0");
 	 return true;
  }
 

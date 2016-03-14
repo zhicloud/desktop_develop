@@ -1265,8 +1265,10 @@ void CMainWindow::dhcpmode(QString& ipaddr, QString& mask, QString& gateway,QStr
 
 void CMainWindow::usersetmode(const QString& ipaddr, const QString& mask, const QString& gateway)
 {
+#ifndef OS_X86	
    //set ip
    system("service network-manager start");
+#endif
 
    QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
    if (settings)
@@ -4384,8 +4386,9 @@ void CMainWindow::changesetsave()
       QString mask = maskedit->GetEdit()->text();
       QString gateway = gatewayedit->GetEdit()->text();
       QString dns = dnsedit->GetEdit()->text();
-      
+ #ifndef OS_X86        
       isKillNetMgr = 1;
+ #endif
       usersetmode(ip, mask, gateway);
       if (settings)
       {
@@ -4398,17 +4401,15 @@ void CMainWindow::changesetsave()
       system(para.data());
 #else
       //qDebug()<<"[info]"<<"IP:"<<ip<<"Mask:"<<mask<<"Gateway:"<<gateway<<"DNS:"<<dns;
-#ifndef XH 
-
       QStringList qstrSubStringList = ip.split('.');
       QString broadcast = QString("%1.%2.%3.255").arg(qstrSubStringList[0]).arg(qstrSubStringList[1]).arg(qstrSubStringList[2]);
+#ifndef XH      
       QString exec_cmdline = QString("seadee-network-config -t static -s --address=%1 --netmask=%2 --gateway=%3 --dns=%4 --broadcast=%5")
                               .arg(ip).arg(mask).arg(gateway).arg(dns).arg(broadcast);
       system(exec_cmdline.toStdString().c_str());
 #else
-	 QString cmd_tmp = QString("echo nameserver %1 > /etc/resolv.conf").arg(dns);
-     QByteArray para = cmd_tmp.toLatin1();
-     system(para.data());
+	ConfigNetwork("static",ip,mask,gateway,broadcast,dns);
+
 #endif
 #endif   
    }
@@ -4422,6 +4423,8 @@ void CMainWindow::changesetsave()
 #ifdef OS_X86
 #ifndef XH 
    system("seadee-network-config -t dhcp -s");
+#else
+   ConfigNetwork("dhcp");
 #endif
 #endif
    }

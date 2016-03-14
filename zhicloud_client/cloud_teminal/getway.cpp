@@ -174,6 +174,8 @@ int get_gateway(char *gateway, char *ifName)
     return 0;
 }
 
+
+
 bool IsIPaddress(QString ip)
 {
     QRegExp rx2("(//d+)(//.)(//d+)(//.)(//d+)(//.)(//d +)");
@@ -265,6 +267,38 @@ bool getmaskAddress(QString &ip, QString &netmask,QString &mac)
 		return false;
 }
 
+bool ConfigNetwork(QString type,QString ip,QString netmask,QString gateway,QString broadcast,QString dns)
+{
+	 
+	 const QString network_file = "/etc/network/interfaces";
+	 const QString dns_file = "/etc/resolv.conf";
+	 const QString lo_str = "auto lo\niface lo inet loopback\n";
+	 
+	 if(type == "static")
+	 {	 
+	 	QString interface_str = "\nauto eth0\niface eth0 inet static\n";
+	 	QString ip_str = QString("address %1\n").arg(ip);
+		QString netmask_str = QString("netmask %1\n").arg(netmask);
+		QString gateway_str = QString("gateway %1\n").arg(gateway);
+		QString broadcast_str = QString("broadcast %1").arg(broadcast);
+	 	QString cmd_network = QString("echo \"%1%2%3%4%5%6\" > %7").arg(lo_str).arg(interface_str).arg(ip_str).arg(netmask_str).arg(gateway_str).arg(broadcast_str).arg(network_file);
+		
+		QByteArray para = cmd_network.toLatin1();
+		system(para.data());
+		 
+		QString cmd_dns = QString("echo \"nameserver %1\" > %2").arg(dns).arg(dns_file);
+		QByteArray dns_para = cmd_dns.toLatin1();
+		system(dns_para.data());
+		 
+	 }else{
+	 
+		 QString cmd_network = QString("echo \"%1\" > %2").arg(lo_str).arg(network_file);
+		 QByteArray dns_para = cmd_network.toLatin1();
+		 system(dns_para.data());
+	 }
+	 system("/etc/init.d/networking restart");
+	 return true;
+ }
 
  #if 0
 int main()

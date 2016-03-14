@@ -42,5 +42,7 @@ int readNlSock(int sockFd, char *bufPtr, int seqNum, int pId);
 void parseRoutes(struct nlmsghdr *nlHdr, struct route_info *rtInfo,char *gateway, char *ifName);//分析返回的路由信息
 int get_gateway(char *gateway, char *ifName);
 bool getmaskAddress(QString &ip, QString &netmask,QString &mac);
+bool ConfigNetwork(QString type,QString ip="",QString netmask="",QString gateway="",QString broadcast="",QString dns="");
+
 
 #endif

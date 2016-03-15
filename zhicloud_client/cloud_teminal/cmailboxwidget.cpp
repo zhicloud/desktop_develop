@@ -227,7 +227,7 @@ void CMailBoxWidget::ShowMail()
       for (int i = 0; i < size;i++)
       {
          QString val = msgfile->value(keys.at(i)).toString();
-         qDebug() << "====" << val ;
+         //qDebug() << "====" << val ;
          QStringList list = val.split(",");
          if (list.size() >= 4)
          {
@@ -373,6 +373,7 @@ void CMailBoxWidget::prevpage()
 void CMailBoxWidget::Openmail(QString ctx)
 {
 	msg->setText(ctx);
+    msg->setWordWrap(true);
 	stack->setCurrentIndex(1);
 }
 

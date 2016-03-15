@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "mylog.h"
 #include "clogthred.h"
 #include <QJsonArray>
@@ -2031,7 +2031,7 @@ void CMainWindow::readMac(QString &mac)
    {
       QByteArray line = file.readLine();
       QString str = QString(line.data());
-      if(!str.contains(QString("HWaddr"))||!str.contains(QString("硬件地址")))
+      if(!str.contains(QString("HWaddr")))
       {
          continue;
       }
@@ -2046,7 +2046,7 @@ void CMainWindow::readMac(QString &mac)
    QStringList list1 = mac.split(" ");
    for(int i = 0; i < list1.size(); i ++)
    {
-      if(list1[i] == "HWaddr" || list1[i] == "硬件地址")
+      if(list1[i] == "HWaddr")
       {
          mac = list1[i+1];
          qDebug() << "last mac is:" << mac << endl;

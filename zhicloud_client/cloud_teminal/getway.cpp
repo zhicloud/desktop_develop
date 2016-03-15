@@ -275,7 +275,7 @@ bool ConfigNetwork(QString type,QString ip,QString netmask,QString gateway,QStri
 	 const QString lo_str = "auto lo\niface lo inet loopback\n";
 	 
 	 if(type == "static")
-	 {	 
+	 {
 	 	QString interface_str = "\nauto eth0\niface eth0 inet static\n";
 	 	QString ip_str = QString("address %1\n").arg(ip);
 		QString netmask_str = QString("netmask %1\n").arg(netmask);

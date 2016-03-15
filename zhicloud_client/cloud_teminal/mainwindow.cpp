@@ -1282,7 +1282,13 @@ void CMainWindow::usersetmode(const QString& ipaddr, const QString& mask, const 
 
       settings->sync();
    }
-   QProcess::startDetached(QString("/home/network"), QStringList());
+   delete settings;
+   settings = NULL;
+   #ifndef OS_X86
+     QProcess::startDetached(QString("/home/network"), QStringList());
+   #endif
+    
+   
 }
 
 void CMainWindow::dhcpclickfunc()
@@ -1869,8 +1875,10 @@ void CMainWindow::createNetSettingWidget()
       ipaddredit->GetEdit()->setReadOnly(false);
       maskedit->GetEdit()->setReadOnly(false);
       gatewayedit->GetEdit()->setReadOnly(false);
-      //printf("111111111111111111111111111111\n");	
-      QProcess::startDetached(QString("/home/network"), QStringList());
+      //printf("111111111111111111111111111111\n");
+      #ifndef OS_X86
+          QProcess::startDetached(QString("/home/network"), QStringList());
+      #endif
 
       QString ip,mac;
       QString netmask;
@@ -2312,8 +2320,8 @@ void CMainWindow::changesetting()
    {
       usersetbtn->setIcon(QIcon(QString(":/net_about/select")));
       dhcpbutton->setIcon(QIcon(QString(":/net_about/unselect")));
-      QProcess::startDetached(QString("/home/network"), QStringList());
 #ifndef OS_X86	
+      QProcess::startDetached(QString("/home/network"), QStringList());
       system("/etc/init.d/network-manager stop"); 
 #endif
       netsetreadonly(false);
@@ -2439,8 +2447,9 @@ void CMainWindow::changesetret()
       ipaddredit->GetEdit()->setReadOnly(false);
       maskedit->GetEdit()->setReadOnly(false);
       gatewayedit->GetEdit()->setReadOnly(false);
-
-      QProcess::startDetached(QString("/home/network"), QStringList());
+       #ifndef OS_X86
+       QProcess::startDetached(QString("/home/network"), QStringList());
+	#endif
    }
 
    if (settings)
@@ -4374,6 +4383,7 @@ void CMainWindow::changesetsave()
 {
    this->setCursor(Qt::BusyCursor);
    hasonceclick = false;
+   
 
    QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
    QString svrurl;
@@ -4383,7 +4393,6 @@ void CMainWindow::changesetsave()
       svrurl = settings->value("server/url").toString();
       isdhcp = settings->value("network/dhcp").toString();
    }
-
    if (!ipaddredit->GetEdit()->isReadOnly())
    {
       QString ip = ipaddredit->GetEdit()->text();
@@ -4404,11 +4413,11 @@ void CMainWindow::changesetsave()
       QByteArray para = cmd_tmp.toLatin1();
       system(para.data());
 #else
+
       //qDebug()<<"[info]"<<"IP:"<<ip<<"Mask:"<<mask<<"Gateway:"<<gateway<<"DNS:"<<dns;
       QStringList qstrSubStringList = ip.split('.');
       QString broadcast = QString("%1.%2.%3.255").arg(qstrSubStringList[0]).arg(qstrSubStringList[1]).arg(qstrSubStringList[2]);
-
-	  ConfigNetwork("static",ip,mask,gateway,broadcast,dns);
+      ConfigNetwork("static",ip,mask,gateway,broadcast,dns);
 #endif   
    }
    else if (QString("y") == isdhcp)
@@ -4417,7 +4426,6 @@ void CMainWindow::changesetsave()
       {
          settings->setValue("network/dhcp", QString("x"));
       }
-
 #ifdef OS_X86
    ConfigNetwork("dhcp");
 #endif
@@ -4450,7 +4458,7 @@ void CMainWindow::changesetsave()
       QString ip,mask,mac;
       getmaskAddress(ip,mask,mac);
       MyZCLog::Instance().WriteToLog(ZCERROR, QString("changesetsave Auth   newwsvrurl = %1!!!!!!!!!!!!!!ip=%2,mac=%3").arg(newwsvrurl).arg(ip).arg(mac));
-   }
+   }   
 }
 
 bool CMainWindow::CheckNeedUpgrade()

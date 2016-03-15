@@ -2031,7 +2031,7 @@ void CMainWindow::readMac(QString &mac)
    {
       QByteArray line = file.readLine();
       QString str = QString(line.data());
-      if(!str.contains(QString("HWaddr"))||!str.contains(QString("硬件地址")))
+      if(!str.contains(QString("HWaddr")) && !str.contains(QString("硬件地址")))
       {
          continue;
       }

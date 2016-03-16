@@ -293,8 +293,8 @@ bool ConfigNetwork(QString type,QString ip,QString netmask,QString gateway,QStri
 	 }else{
 	 
 		 QString cmd_network = QString("echo \"%1\" > %2").arg(lo_str).arg(network_file);
-		 QByteArray dns_para = cmd_network.toLatin1();
-		 system(dns_para.data());
+		 QByteArray network_para = cmd_network.toLatin1();
+		 system(network_para.data());
 	 }
 	 system("ifdown eth0 && ifup eth0");
 	 return true;

@@ -1339,7 +1339,9 @@ void CMainWindow::dhcpclickfunc()
       
 
       QProcess::startDetached(QString("/home/dhcpnetwork"), QStringList());
+#ifndef OS_X86
       system("resolvconf -u");
+#endif
 
       QString ip, mask, gateway, dns;
       ip = mask = gateway = dns = QStringLiteral("正在获取中...");
@@ -2005,6 +2007,7 @@ void CMainWindow::readDns(QString &dns)
    while (!file.atEnd()) {
       QByteArray line = file.readLine();
       QString str_tmp = QString(line.data());
+	  qDebug<< line << endl;
       if (str_tmp.contains('#'))
       {
          continue;

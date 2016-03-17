@@ -41,7 +41,7 @@ const QString main_version = "1.1.6";
 #endif
 #else
 const QString cpu_architecture = "X86";
-const QString main_version = "1.0.7";
+const QString main_version = "1.0.9";
 #endif
 
 #ifndef XH 
@@ -1278,7 +1278,7 @@ void CMainWindow::usersetmode(const QString& ipaddr, const QString& mask, const 
       settings->setValue("network/ip", ipaddr);
       settings->setValue("network/netmask", mask);
       settings->setValue("network/gateway", gateway);
-      settings->setValue("network/dhcp", QString("y"));
+      //settings->setValue("network/dhcp", QString("x"));
 
       settings->sync();
    }
@@ -1293,6 +1293,7 @@ void CMainWindow::usersetmode(const QString& ipaddr, const QString& mask, const 
 
 void CMainWindow::dhcpclickfunc()
 {
+   //qDebug()<<__func__<<":"<<__LINE__ << "isdhcpclick=" <<isdhcpclick;
    usersetbtn->setIcon(QIcon(QString(":/net_about/unselect")));
    dhcpbutton->setIcon(QIcon(QString(":/net_about/select")));
    netsetreadonly(true);
@@ -1300,15 +1301,13 @@ void CMainWindow::dhcpclickfunc()
    QString isdhcp;
    if (settings)
    {
-      isdhcp = settings->value("network/dhcp").toString();
-      delete settings;
-      settings = NULL;
+      isdhcp = settings->value("network/dhcp").toString();      
    }
    //qDebug() << "isdhcpclick:" << isdhcpclick << endl;
    //qDebug() << "isdhcp:" << isdhcp << endl;
-   if ((0 == isdhcpclick) && (QString("x") == isdhcp))
+   if ((0 == isdhcpclick) && (QString("y") == isdhcp))
    {
-      MyZCLog::Instance().WriteToLog(ZCINFO, QString("isdhcp mask is x"));
+      MyZCLog::Instance().WriteToLog(ZCINFO, QString("isdhcp mask is y"));
       QString ip, mask, gateway,mac;
       dhcpmode(ip, mask, gateway,mac);
       ipaddredit->GetEdit()->setText(ip);
@@ -1319,7 +1318,9 @@ void CMainWindow::dhcpclickfunc()
       dnsedit->GetEdit()->setText(dns);
       return;
    }
-
+   settings->setValue("network/dhcp", QString("y"));
+   delete settings;
+   settings = NULL;
    if (0 == isdhcpclick)
    {
       //	printf("========================================  if (0 == isdhcpclick)=========================================\n\n\n");
@@ -1356,7 +1357,7 @@ void CMainWindow::dhcpclickfunc()
 void CMainWindow::isdhcpclicktimerout()
 {
    int i = get_netlink_status("eth0");
-   if(i = 0) 
+   if(0 == i) 
    {  
       printf("***********************************if(i = 0)*********************************\n");
       return;
@@ -1388,6 +1389,7 @@ void CMainWindow::isdhcpclicktimerout()
 
 void CMainWindow::usersetclickfunc()
 {
+  //qDebug()<<__func__<<":"<<__LINE__ << "isdhcpclick=" <<isdhcpclick;
    if (1 == isdhcpclick)
    {
       return;
@@ -1403,6 +1405,7 @@ void CMainWindow::usersetclickfunc()
    }
    if (QString("y") == isdhcp)
    {
+      settings->setValue("network/dhcp", QString("x"));
       QString ip, mask, gateway;
       if (settings)
       {
@@ -1801,7 +1804,7 @@ void CMainWindow::createNetSettingWidget()
    {
       str_Tmpdns = settings->value("network/dns").toString();
       str_Tmpdhcp = settings->value("network/dhcp").toString();
-      if ((str_Tmpdhcp == "y") && (str_Tmpdns != NULL) )
+      if ((str_Tmpdhcp == "x") && (str_Tmpdns != NULL) )
       {
          QString cmd_tmp = "echo nameserver %1 > /etc/resolv.conf";
          cmd_tmp = cmd_tmp.arg(str_Tmpdns);
@@ -1870,7 +1873,7 @@ void CMainWindow::createNetSettingWidget()
       settings = NULL;
    }
 
-   if (QString("y") == isdhcp)
+   if (QString("x") == isdhcp)
    {
       usersetbtn->setIcon(QIcon(QString(":/net_about/select")));
       dhcpbutton->setIcon(QIcon(QString(":/net_about/unselect")));
@@ -2007,7 +2010,6 @@ void CMainWindow::readDns(QString &dns)
    while (!file.atEnd()) {
       QByteArray line = file.readLine();
       QString str_tmp = QString(line.data());
-	  qDebug<< line << endl;
       if (str_tmp.contains('#'))
       {
          continue;
@@ -2319,7 +2321,7 @@ void CMainWindow::changesetting()
       delete settings;
       settings = NULL;
    }
-   if (QString("y") == isdhcp)
+   if (QString("x") == isdhcp)
    {
       usersetbtn->setIcon(QIcon(QString(":/net_about/select")));
       dhcpbutton->setIcon(QIcon(QString(":/net_about/unselect")));
@@ -2329,7 +2331,7 @@ void CMainWindow::changesetting()
 #endif
       netsetreadonly(false);
    }
-   else/* if (QString("x") == isdhcp)*/
+   else/* if (QString("y") == isdhcp)*/
    {
       usersetbtn->setIcon(QIcon(QString(":/net_about/unselect")));
       dhcpbutton->setIcon(QIcon(QString(":/net_about/select")));
@@ -2432,7 +2434,7 @@ void CMainWindow::changesetret()
       gateway = settings->value("network/gateway").toString();
       dns = settings->value("network/dns").toString();
    }
-   if (QString("y") == isdhcp)
+   if (QString("x") == isdhcp)
    {
       ipaddredit->GetEdit()->setText(ip);
       maskedit->GetEdit()->setText(mask);
@@ -2656,7 +2658,6 @@ void CMainWindow::clicklogin()
 
 void CMainWindow::doHttpGet(int cmd, QString strUrl)
 {
-
    QString ip,mac,mask;
    getmaskAddress(ip,mask,mac);
    MyZCLog::Instance().WriteToLog(ZCERROR, QString("doHttpGet strUrl=") + QString("%1,").arg(strUrl) + QString(" ip:") + QString("%1").arg(ip) + QString("mac:%1").arg(mac));
@@ -4386,7 +4387,7 @@ void CMainWindow::changesetsave()
 {
    this->setCursor(Qt::BusyCursor);
    hasonceclick = false;
-   
+   //qDebug()<<__func__<<":"<<__LINE__;
 
    QSettings* settings = new QSettings(INIFILE, QSettings::IniFormat);
    QString svrurl;
@@ -4418,33 +4419,36 @@ void CMainWindow::changesetsave()
 #else
 
       //qDebug()<<"[info]"<<"IP:"<<ip<<"Mask:"<<mask<<"Gateway:"<<gateway<<"DNS:"<<dns;
+#ifndef XH 
+
       QStringList qstrSubStringList = ip.split('.');
       QString broadcast = QString("%1.%2.%3.255").arg(qstrSubStringList[0]).arg(qstrSubStringList[1]).arg(qstrSubStringList[2]);
-      ConfigNetwork("static",ip,mask,gateway,broadcast,dns);
+      QString exec_cmdline = QString("seadee-network-config -t static -s --address=%1 --netmask=%2 --gateway=%3 --dns=%4 --broadcast=%5")
+                              .arg(ip).arg(mask).arg(gateway).arg(dns).arg(broadcast);
+      system(exec_cmdline.toStdString().c_str());
+#else
+	 QString cmd_tmp = QString("echo nameserver %1 > /etc/resolv.conf").arg(dns);
+     QByteArray para = cmd_tmp.toLatin1();
+     system(para.data());
+#endif
 #endif   
    }
-   else if (QString("y") == isdhcp)
+   /*else if (QString("x") == isdhcp)
    {
       if (settings)
       {
-         settings->setValue("network/dhcp", QString("x"));
+         settings->setValue("network/dhcp", QString("y"));
       }
+
 #ifdef OS_X86
-   ConfigNetwork("dhcp");
+#ifndef XH 
+   system("seadee-network-config -t dhcp -s");
 #endif
-   }
-
-   if(m_manager){
-
-	disconnect(m_manager, SIGNAL(finished(QNetworkReply*)),
-			this, SLOT(replyFinished(QNetworkReply*)));
-	
-	delete m_manager;
-   	m_manager = new QNetworkAccessManager(this);
+#endif
+   }*/
    
-   	connect(m_manager, SIGNAL(finished(QNetworkReply*)),
-			this, SLOT(replyFinished(QNetworkReply*)));
-   }
+    delete settings;
+ 
    //url
    QString strip = uuuurledit->GetEdit()->text();
    QString strport = pppportedit->GetEdit()->text();
@@ -4475,6 +4479,7 @@ bool CMainWindow::CheckNeedUpgrade()
       svrurl = settings->value("server/url").toString();
       //version = settings->value("version/ver").toString();
       //filesize = settings->value("version/size").toInt();
+      delete settings;
    }else{
    	  return false;
    }

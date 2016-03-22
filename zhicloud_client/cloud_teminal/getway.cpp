@@ -113,12 +113,11 @@ void parseRoutes(struct nlmsghdr *nlHdr, struct route_info *rtInfo,char *gateway
         gate.s_addr = rtInfo->gateWay;
         sprintf(gateway, "%s", (char *)inet_ntoa(gate));
 //标签：Linux系统 C++ 获取网络接口，以及主机网关IP， 网络,网关,IP
-        //printf("%sn",gateway);
+        //printf("%s\n",gateway);
         gate.s_addr = rtInfo->srcAddr;
-        //printf("src:%sn",(char *)inet_ntoa(gate));
-
+        //printf("src:%s\n",(char *)inet_ntoa(gate));
         gate.s_addr = rtInfo->dstAddr;
-        //printf("dst:%sn",(char *)inet_ntoa(gate));
+        //printf("dst:%s\n",(char *)inet_ntoa(gate));
     }
     free(tempBuf);
     return;
@@ -127,6 +126,7 @@ void parseRoutes(struct nlmsghdr *nlHdr, struct route_info *rtInfo,char *gateway
 int get_gateway(char *gateway, char *ifName)
 //标签：Linux系统 C++ 获取网络接口，以及主机网关IP， 网络,网关,IP
 {
+    //qDebug()<<__func__<<":"<<__LINE__ ;
     struct nlmsghdr *nlMsg;
     struct rtmsg *rtMsg;
     struct route_info *rtInfo;
@@ -155,13 +155,13 @@ int get_gateway(char *gateway, char *ifName)
  
 
     if(send(sock, nlMsg, nlMsg->nlmsg_len, 0) < 0){
-        printf("Write To Socket Failed…n");
+        printf("Write To Socket Failed..\n");
         return -1;
     }
  
 
     if((len = readNlSock(sock, msgBuf, msgSeq, getpid())) < 0) {
-        printf("Read From Socket Failed…n");
+        printf("Read From Socket Failed..\n");
         return -1;
     }
     rtInfo = (struct route_info *)malloc(sizeof(struct route_info));
@@ -269,11 +269,11 @@ bool getmaskAddress(QString &ip, QString &netmask,QString &mac)
 
 bool ConfigNetwork(QString type,QString ip,QString netmask,QString gateway,QString broadcast,QString dns)
 {
-	 
 	 const QString network_file = "/etc/network/interfaces";
 	 const QString dns_file = "/etc/resolv.conf";
 	 const QString lo_str = "auto lo\niface lo inet loopback\n";
 	 
+	 //qDebug()<<__func__<<":"<<__LINE__;
 	 if(type == "static")
 	 {
 	 	QString interface_str = "\nauto eth0\niface eth0 inet static\n";
@@ -291,12 +291,15 @@ bool ConfigNetwork(QString type,QString ip,QString netmask,QString gateway,QStri
 		system(dns_para.data());
 		 
 	 }else{
-	 
-		 QString cmd_network = QString("echo \"%1\" > %2").arg(lo_str).arg(network_file);
+	         const QString dhcp_str = "\nauto eth0\niface eth0 inet dhcp\n";
+		 QString cmd_network = QString("echo \"%1%2\" > %3").arg(lo_str).arg(dhcp_str).arg(network_file);
 		 QByteArray network_para = cmd_network.toLatin1();
 		 system(network_para.data());
 	 }
-	 system("ifdown eth0 && ifup eth0");
+	 system("ifdown eth0");
+	 system("ifup eth0");
+	 //system("ifconfig eth0 down");
+         //system("ifconfig eth0 up");
 	 return true;
  }
 

@@ -169,6 +169,8 @@ void InitKeyCode(UINT16 keyCode[])
   keyCode[0xffc5] = 0x42;     /* 65477 (XK_F8) => 66 via 66 (KEY_F8) */
   keyCode[0xffc6] = 0x43;     /* 65478 (XK_F9) => 67 via 67 (KEY_F9) */
   keyCode[0xffc7] = 0x44;     /* 65479 (XK_F10) => 68 via 68 (KEY_F10) */
+  keyCode[0xffc8] = 0x57;     /* 65479 (XK_F11) => 69 via 69 (KEY_F11) */
+  keyCode[0xffc9] = 0x58;     /* 65479 (XK_F12) => 70 via 70 (KEY_F12) */
   keyCode[0xffe1] = 0x2a;     /* 65505 (XK_Shift_L) => 42 via 42 (KEY_LEFTSHIFT) */
   keyCode[0xffe2] = 0x36;     /* 65506 (XK_Shift_R) => 54 via 54 (KEY_RIGHTSHIFT) */
   keyCode[0xffe3] = 0x1d;     /* 65507 (XK_Control_L) => 29 via 29 (KEY_LEFTCTRL) */

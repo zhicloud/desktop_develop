@@ -296,8 +296,14 @@ bool ConfigNetwork(QString type,QString ip,QString netmask,QString gateway,QStri
 		 QByteArray network_para = cmd_network.toLatin1();
 		 system(network_para.data());
 	 }
-	 system("ifdown eth0");
-	 system("ifup eth0");
+	 
+	 if (0 == fork())
+	 {
+		 execl("/bin/sh", "sh", "-c", "ifdown eth0 && ifup eth0", (char*)0);
+		 _exit(127);
+	 }
+	 //system("ifdown eth0");
+	 //system("ifup eth0");
 	 //system("ifconfig eth0 down");
          //system("ifconfig eth0 up");
 	 return true;

@@ -1348,11 +1348,11 @@ void CMainWindow::dhcpclickfunc()
       maskedit->GetEdit()->setText(mask);
       gatewayedit->GetEdit()->setText(gateway);
       dnsedit->GetEdit()->setText(dns);
-#ifndef XH
-      QProcess::startDetached(QString("/home/dhcpnetwork"), QStringList());
-#else
+//#ifndef XH
+//      QProcess::startDetached(QString("/home/dhcpnetwork"), QStringList());
+//#else
 	 ConfigNetwork("dhcp");
-#endif
+//#endif
 #ifndef OS_X86
       system("resolvconf -u");
 #endif
@@ -1432,10 +1432,13 @@ void CMainWindow::usersetclickfunc()
          usersetbtn->setIcon(QIcon(QString(":/net_about/select")));
          dhcpbutton->setIcon(QIcon(QString(":/net_about/unselect")));
          netsetreadonly(false);
- #ifndef XH
-      QProcess::startDetached(QString("/home/network"), QStringList());
-#else
+ #ifndef OS_X86
+ #else
+ //#ifndef XH
+ //     QProcess::startDetached(QString("/home/network"), QStringList());
+//#else
 	 ConfigNetwork("static",ip,mask,gateway,broadcast,dns);
+//#endif
 #endif
          delete settings;
          settings = NULL;

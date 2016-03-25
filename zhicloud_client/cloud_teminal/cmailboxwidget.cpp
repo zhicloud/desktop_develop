@@ -238,7 +238,7 @@ void CMailBoxWidget::ShowMail()
          }
       }
 
-      recvlabel->setText(QStringLiteral("收件箱(%1)").arg(size - 1));
+      recvlabel->setText(QStringLiteral("收件箱(%1)").arg(size));
       unreadlabel->setText(QStringLiteral("未读信息(%1)").arg(unreadsize));
 
 

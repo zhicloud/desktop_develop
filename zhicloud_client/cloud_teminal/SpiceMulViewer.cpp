@@ -117,6 +117,8 @@ void MyThread::setArgs(void* pThis,char* ip,char* port)
    connect(m_heartbeattimer, SIGNAL(timeout()), this, SLOT(heartbeat()));
    m_heartbeattimer->start(1000/* * 60*/ * 15);
 
+   m_usb = new usbonfig();
+
 }
 
 CSpiceMultVEx::~CSpiceMultVEx()
@@ -169,6 +171,12 @@ CSpiceMultVEx::~CSpiceMultVEx()
       m_pImage = NULL;
    }
    m_height = m_width = 0;
+
+   if(m_usb)
+   {
+     delete m_usb;
+	 m_usb = NULL;
+   }
 }
 
 
@@ -1032,9 +1040,23 @@ int CSpiceMultVEx::SetUsbEnable(int isenable)
    //SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,"0xfe,-1,-1,-1,1|0xef,-1,-1,-1,1|0xe0,-1,-1,-1,1|0xdc,-1,-1,-1,1|0x11,-1,-1,-1,1|0x10,-1,-1,-1,1|0x0f,-1,-1,-1,1|0x0e,-1,-1,-1,1|0x0d,-1,-1,-1,1|0x000b,-1,-1,-1,1|0x000a,-1,-1,-1,1|0x0006,-1,-1,-1,1|0x0005,-1,-1,-1,1|0x0002,-1,-1,-1,1|0x0001,-1,-1,-1,1|0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
    //SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
 
-   SpiceSetUSBFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
-   SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
-
+   //SpiceSetUSBFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
+   //SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
+   if(m_usb){
+   	
+     QString rule;
+     m_usb->read_usb_list();   
+     m_usb->get_usb_rule(rule);
+	 if(rule.length() > 0)
+	 {
+	 	SpiceSetUSBFilterBefore(m_hContext,m_hspice,rule.toLatin1().data());
+		SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,rule.toLatin1().data());
+		printf("rule is %s\n",rule.toLatin1().data());
+	 }else{
+		SpiceSetUSBFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
+		SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
+	 }
+   }
 
    //SpiceSetUSBFilter(m_hContext,m_hspice,"-1,-1,-1,-1,1");
    return 1;
@@ -1116,6 +1138,7 @@ void CSpiceMultVEx::heartbeat()
    palette.setColor(QPalette::Background, QColor(0, 0, 0));
    //palette.setBrush(QPalette::Background, QBrush(QPixmap(":/background.png")));
    setPalette(palette);
+   
 }
 
 SpiceMulViewer::~SpiceMulViewer()
@@ -1126,6 +1149,7 @@ SpiceMulViewer::~SpiceMulViewer()
       m_SpiceViewer = NULL;
    }
 
+   
    //if (m_FullScrBtn)
    //{
    //	delete m_FullScrBtn;

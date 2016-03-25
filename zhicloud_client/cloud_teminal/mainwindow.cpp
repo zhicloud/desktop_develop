@@ -44,7 +44,7 @@ const QString cpu_architecture = "X86";
 #ifndef XH 
 const QString main_version = "1.0.9";
 #else
-const QString main_version = "1.1.0";
+const QString main_version = "1.1.1";
 #endif
 #endif
 

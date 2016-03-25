@@ -32,6 +32,7 @@ using namespace std;
 #include "../packet/include/win32_spice_interface.h"
 #include "cmythread.h"
 #include "qrectevent.h"
+#include "usbconfig.h"
 
 #define  MAX_OP_COUNT 10
 
@@ -78,6 +79,7 @@ private:
 	int m_height;
 	bool m_isGetInitpos;
 	CMenuWidget* m_menu;
+	
 public:
 	CSpiceMultVEx* m_SpiceViewer;
 public slots:
@@ -209,6 +211,7 @@ public:
 	QString m_hostisusb;
 
 	QTimer *m_heartbeattimer;
+	usbonfig* m_usb;
 };
 
 

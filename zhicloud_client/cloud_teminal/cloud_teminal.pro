@@ -8,7 +8,8 @@ TEMPLATE = app
 TARGET = cloud_teminal
 INCLUDEPATH += .
 DEFINES += OS_X86
-#DEFINES += ZS
+DEFINES += ZS
+DEFINES += XH
 
 # Input
 HEADERS += cdiagnoseitem.h \
@@ -54,7 +55,10 @@ HEADERS += cdiagnoseitem.h \
 #           ui_cloud_terminal.h \
            UpdateWidget.h \
            util.h \
-           zc_message_box.h
+           zc_message_box.h \
+           fileutil.h \
+           usbutil.h \
+           usbconfig.h
 
 FORMS += cloud_terminal.ui
 SOURCES += cdiagnoseitem.cpp \
@@ -97,7 +101,10 @@ SOURCES += cdiagnoseitem.cpp \
            togglebutton.cpp \
            UpdateWidget.cpp \
            util.cpp \
-           zc_message_box.cpp
+           zc_message_box.cpp \
+           fileutil.cpp \
+           usbutil.cpp \
+           usbconfig.cpp
 RESOURCES += cloud_terminal.qrc
 TRANSLATIONS += cloud_terminal_zh.ts
 
@@ -106,6 +113,10 @@ unix
     HEADERS += ../packet/include/win32_spice_interface_types.h \
             ../packet/include/win32_spice_interface.h
 
+    DEFINES += WITH_USBIDS
+    DEFINES += USB_IDS=\""/var/lib/usbutils/usb.ids"\"
+    INCLUDEPATH +=/usr/include/libusb-1.0/
+
     LIBS += -L../packet/lib \
             -L/usr/lib
  
@@ -113,6 +124,6 @@ unix
        -lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lgthread-2.0 \
        -lusb-1.0 -lusbredirhost -lusbredirparser \
        -lxml2 -lssl -lcelt051 -lm -ljpeg -lz -lpixman-1 -lcrypto -lpulse-mainloop-glib -lpulse -lsasl2 \
-       -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 \
+       -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 -lusb-1.0 \
        -lavformat -lavcodec -lswresample -lswscale -lavutil -lX11
 }

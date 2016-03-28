@@ -1,6 +1,7 @@
 #include "usbconfig.h"
 
-#define USBFILE "./usb.ini"
+
+#define USBFILE "/home/cloud_teminal/usb.ini"
 
 const QString usbonfig::CLASS_CODE = "class_code";
 const QString usbonfig::USB_VID = "vid";

@@ -1051,7 +1051,8 @@ int CSpiceMultVEx::SetUsbEnable(int isenable)
 	 {
 	 	SpiceSetUSBFilterBefore(m_hContext,m_hspice,rule.toLatin1().data());
 		SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,rule.toLatin1().data());
-		printf("rule is %s\n",rule.toLatin1().data());
+		MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("usb rule is %1").arg(rule));
+		
 	 }else{
 		SpiceSetUSBFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
 		SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");

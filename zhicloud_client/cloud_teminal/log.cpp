@@ -22,15 +22,15 @@ void ZCLog::InitLog()
 	while ((m_logoFile ==NULL) && (0 != count))
 	{
 		count--;
-		m_logoFile = fopen("cloud_client.log", "w");
+		m_logoFile = fopen("/home/cloud_teminal/cloud_client.log", "w");
 	}
 #endif
-	m_logoFile = fopen("cloud_client.log", "w");
+	m_logoFile = fopen("/home/cloud_teminal/cloud_client.log", "w");
 	int count = 5;
 	while ((m_logoFile ==NULL) && (0 != count))
 	{
 		count--;
-		m_logoFile = fopen("cloud_client.log", "w");
+		m_logoFile = fopen("/home/cloud_teminal/cloud_client.log", "w");
 	
 	}
 	if(!m_logoFile)
@@ -48,12 +48,12 @@ void ZCLog::InitLog()
 	if (lines > 100)
 	{
 		fclose(m_logoFile);
-		m_logoFile = fopen("cloud_client.log", "w");
+		m_logoFile = fopen("/home/cloud_teminal/cloud_client.log", "w");
 		int count = 5;
 		while ((m_logoFile == NULL) && (0 != count))
 		{
 			count--;
-			m_logoFile = fopen("cloud_client.log", "w");
+			m_logoFile = fopen("/home/cloud_teminal/cloud_client.log", "w");
 		}
 	}
 }

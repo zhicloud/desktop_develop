@@ -15,6 +15,8 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QStringList>
+#include <QTableView> //by xzg
+#include <QStandardItemModel>//by xzg
 #include "mytextedit.h"
 #include "zc_message_box.h"
 #include "log.h"
@@ -37,6 +39,8 @@
 #include "SpiceMulViewer.h"
 #include "cnetdiswidget.h"
 #include "cdiagnoseitem.h"
+#include "webview.h"  //by xzg
+#include "monitorusbdevthread.h" //by xzg
 #include <QThread>
 #ifdef __linux 
 #include <unistd.h>
@@ -52,6 +56,8 @@ typedef map<QString, QString> K_yType;
 
 class CMenuWidget;
 class SpiceMulViewer;
+class usbonfig; // by xzg
+class UsbDeviceInfo;//by xzg
 
 typedef struct MyStruct
 {
@@ -100,6 +106,9 @@ class CMainWindow : public QMainWindow
       ~CMainWindow();
 
    public:
+#ifdef ZS
+      void createLoginWidget();//by xzg
+#endif
       void createsetsvrurlWidget();
       void createFirstLoginWidget();
       void createSecondLoginWidget();
@@ -132,6 +141,7 @@ class CMainWindow : public QMainWindow
       void someItemOnWidget(QWidget* widget);
       void createAboutWidget();
       void createNetSettingWidget();
+	  void createUsbSettingWidget();//by xzg
       void createNetDiagnoseWidget();
       void createSysSettingWidget();
 
@@ -221,12 +231,21 @@ class CMainWindow : public QMainWindow
       QWidget				*secondLoginWidget;
    private:
       int 				isKillNetMgr;
+#ifdef ZS
+      QWidget				*loginWidget;// by xzg
+#endif
       QWidget				*setsvrurlWidget;
       QWidget				*firstLoginWidget;
       QWidget				*changePswdWidget;
       QWidget				*chostselectWdiget;
       QWidget				*changeuserwidget;
       QWidget				*about_netsetwidget;
+#ifdef ZS
+      myWebView                         *webView; //by xzg
+#endif
+	  MonitorUsbDevThread   *usbMonitorThread;//by xzg
+	  usbonfig 				*m_usbConfig;//by xzg
+	  //list<UsbDeviceInfo>          dev_list;//by xzg
       QStackedLayout		*mainLayout;
       QStackedLayout		*hpiclayout;
       fblSetWidget		*syssetwidget;
@@ -247,7 +266,13 @@ class CMainWindow : public QMainWindow
       CMyTextEdit			*passwordTextEdit;
       QWidget				*main_widget;
       QWidget				*center_widget;
+#ifdef ZS
+      QWidget				*logo_widget;//by xzg
+#endif
       QWidget				*netwidget;
+	  QWidget               *usbsetWidget;//by xzg
+	  QStandardItemModel    *model;//by xzg
+	  QTableView            *tb;//by xzg
       QWidget				*aboutwidget;
       QWidget				*netdiagnosewidget;
       QLabel* netset_ipaddr;
@@ -258,10 +283,14 @@ class CMainWindow : public QMainWindow
       virtual void customEvent(QEvent *event);
       public slots:
          bool eventFilter(QObject *, QEvent *);
+	  void dealUsbHotPlugEvent(bool f);// by xzg
       void netdiaglclickfunc();
       void sysclickfunc();
       void netlclickfunc();
       void aboutlclickfunc();
+      void usbsetlclickfunc();//by xzg
+	  void toLoginFrame();//by xzg
+	  void usbSetTrans();//by xzg
       void netdiagnosefunc();
       void changesetting();
       void changeuser();
@@ -296,6 +325,13 @@ class CMainWindow : public QMainWindow
       void fblBtn4Clicked();
       void fblBtn5Clicked();
       void moresetclickfunc(); //LXL add for DNS
+#ifdef ZS
+	  void showViewer();//by xzg
+	  void showLoginWidget();//by xzg
+	  void showCenterWidget();//by xzg
+	void openWebView();//by xzg
+	void setViewerGrabKeyboard();//by xzg
+#endif
    public:
       int reconnecting;
       int isadduser;

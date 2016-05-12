@@ -2,6 +2,10 @@
 #include "common.h"
 #include <ctime>
 #include <stdarg.h>
+
+#include <QSettings> //by xzg
+#define LXLLOG//by xzg
+
 ZCLog::ZCLog()
 {
 	m_logoFile = NULL;
@@ -25,6 +29,28 @@ void ZCLog::InitLog()
 		m_logoFile = fopen("/home/cloud_teminal/cloud_client.log", "w");
 	}
 #endif
+/***********************by xzg******************************/
+	m_isWriteLog = false;
+	for(int i = 0; i < 5; i++){
+		m_level[i] = 0;
+	}
+	QSettings *log_level_file = new QSettings("/home/cloud_teminal/log.ini", QSettings::IniFormat);
+	if(log_level_file){
+		foreach(QString group, log_level_file->childGroups()){
+			if(group == QString("LOG_LEVEL")){
+				log_level_file->beginGroup(group);
+				m_level[0] = log_level_file->value("ZCFATAL").toInt();	
+				m_level[1] = log_level_file->value("ZCERROR").toInt();	
+				m_level[2] = log_level_file->value("ZCWARN").toInt();	
+				m_level[3] = log_level_file->value("ZCINFO").toInt();	
+				m_level[4] = log_level_file->value("ZCDEBUG").toInt();	
+				log_level_file->endGroup();
+				break;
+			}
+		}
+	}
+	delete log_level_file;
+/***********************by xzg******************************/
 	m_logoFile = fopen("/home/cloud_teminal/cloud_client.log", "w");
 	int count = 5;
 	while ((m_logoFile ==NULL) && (0 != count))
@@ -70,16 +96,39 @@ void ZCLog::UninitLog()
 const char* ZCLog::TypeToString(const LOG_LEVEL type) {
 	switch (type) {
 	case ZCFATAL:
+		//***by xzg***
+		if(m_level[0] == 1)
+			m_isWriteLog = true;
+		else
+			m_isWriteLog = false;
+		//***by xzg***
 		return "FATAL";
 	case ZCERROR:
+		if(m_level[1] == 1)
+			m_isWriteLog = true;
+		else
+			m_isWriteLog = false;
 		return "ERROR";
 	case ZCWARN:
+		if(m_level[2] == 1)
+			m_isWriteLog = true;
+		else
+			m_isWriteLog = false;
 		return "WARN ";
 	case ZCINFO:
+		if(m_level[3] == 1)
+			m_isWriteLog = true;
+		else
+			m_isWriteLog = false;
 		return "INFO ";
 	case ZCDEBUG:
+		if(m_level[4] == 1)
+			m_isWriteLog = true;
+		else
+			m_isWriteLog = false;
 		return "DEBUG";
 	default:
+		m_isWriteLog = false;//***by xzg***
 		break;
 	}
 	return "UNKNOW";
@@ -87,6 +136,8 @@ const char* ZCLog::TypeToString(const LOG_LEVEL type) {
 
 void ZCLog::write(const char* format, ...)
 {
+	if(!m_isWriteLog)
+		return;
 	if(!m_logoFile)
 	{	
 		return;

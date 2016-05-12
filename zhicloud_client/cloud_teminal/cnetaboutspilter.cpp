@@ -23,5 +23,5 @@ CNetAboutSpilter::~CNetAboutSpilter()
 void CNetAboutSpilter::moveSlider(int index)
 {
 
-	slider->setGeometry(0, index*34, 2, 19);
+	slider->setGeometry(0, index*36, 2, 19);
 }

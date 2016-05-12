@@ -74,7 +74,7 @@ void MyThread::setArgs(void* pThis,char* ip,char* port)
    //	this->setFocusPolicy(Qt::StrongFocus);
 
    //****&&&&
-   this->grabKeyboard();//forbidden tab key change focus
+   this->grabKeyboard();//forbidden tab key change focus by xzg
 
 
    m_ptimer = new QTimer(this);
@@ -115,7 +115,7 @@ void MyThread::setArgs(void* pThis,char* ip,char* port)
 
    m_heartbeattimer = new QTimer(this);
    connect(m_heartbeattimer, SIGNAL(timeout()), this, SLOT(heartbeat()));
-   m_heartbeattimer->start(1000/* * 60*/ * 15);
+   m_heartbeattimer->start(1000/* * 60*/ * 15); //by xzg
 
    m_usb = new usbonfig();
 
@@ -179,7 +179,44 @@ CSpiceMultVEx::~CSpiceMultVEx()
    }
 }
 
+/*by xzg
+void CSpiceMultVEx::Spice_SetUsbEnable(bool f)
+{
+   SpiceEnableAutoUSBRedirectBefore(m_hContext,m_hspice,f);
+   if(m_usb){
+     QString rule;   
+     m_usb->get_usb_rule(rule);
+     if(rule.length() > 0) {
+	 	SpiceSetUSBFilterBefore(m_hContext,m_hspice,rule.toLatin1().data());
+		SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,rule.toLatin1().data());
+		MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("usb rule is %1 FILE:%2 LINE:%3").arg(rule).arg(__FILE__).arg(__LINE__));
+		
+     }else{
+		SpiceSetUSBFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
+		SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
+	 }
+    }	
+}
+*/
 
+/*******************by xzg**********************/
+bool CSpiceMultVEx::Spice_SetUsbTrans(QString usbRule)
+{
+	int hspice = SpiceOpen(CSpiceMultVEx::m_hContext);
+	if(hspice < 0)
+			return false;
+	SpiceEnableAutoUSBRedirectBefore(CSpiceMultVEx::m_hContext, hspice, true);
+	if(usbRule.length() > 0){
+		SpiceSetUSBFilterBefore(CSpiceMultVEx::m_hContext, hspice, usbRule.toLatin1().data());
+		SpiceSetUSBRedirOnConnectFilterBefore(CSpiceMultVEx::m_hContext, hspice, usbRule.toLatin1().data());
+	}else{
+		SpiceSetUSBFilterBefore(m_hContext, hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
+		SpiceSetUSBRedirOnConnectFilterBefore(m_hContext, hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
+	}
+	SpiceClose(CSpiceMultVEx::m_hContext, hspice);
+	return true;
+}
+/*******************by xzg**********************/
 bool CSpiceMultVEx::Spice_Init()
 {
    if (m_isInit == true)
@@ -450,7 +487,7 @@ void* CSpiceMultVEx::mainChannel(void* ctx, void *ud)
                   , __LINE__
                   , __FUNCTION__);
 
-            MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====T==========================LCX_SPICE_CHANNEL_CLOSED:=============================="));
+            MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("==LCX_SPICE_CHANNEL_CLOSED:==FILE:%1, LINE:%2").arg(__FILE__).arg(__LINE__));
 
             QEvent *event = new QEvent(QEvent::Type(SPICE_CHANNEL_CLOSED));
             QCoreApplication::postEvent(pThis->GetMainWin(), event);
@@ -547,7 +584,6 @@ void CSpiceMultVEx::timerUpDate()
 
 bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
 {
-
    do 
    {
 
@@ -565,6 +601,7 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
       {
          break;
       }
+
 
       if(ev->type() != QEvent::MouseMove 
             && ev->type() != QEvent::MouseButtonPress 
@@ -595,7 +632,7 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
             m_menushow = true;
             if (!m_menutimer->isActive())
             {
-               MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====TIME START EVENT POS:x=%1,y=%2========").arg(even->pos().x()).arg(even->pos().y()));
+               MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("==TIME START EVENT POS:x=%1,y=%2. FILE:%3 LINE:%4==").arg(even->pos().x()).arg(even->pos().y()).arg(__FILE__).arg(__LINE__));
                if (ev->type() == QEvent::MouseMove)
                {
                   m_menutimer->start(2000);
@@ -769,7 +806,7 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
          QKeyEvent *keyEvent = static_cast<QKeyEvent*>(ev);
          int key = keyEvent->key();
          quint32 virtualKey = keyEvent->nativeVirtualKey();
-         MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY PRESS EVENT -> VIRTUALKEY : %1========").arg(virtualKey));
+         MyZCLog::Instance().WriteToLog(ZCFATAL, QString("==KEY PRESS EVENT -> VIRTUALKEY : %1 FILE:%2 LINE:%3==").arg(keymap_win322xtkbd[virtualKey]).arg(__FILE__).arg(__LINE__));
          if (virtualKey <= 65536)
          {
             /*
@@ -778,12 +815,13 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
             */
             if((Qt::Key_Shift == key) || (Qt::Key_Control == key) || (Qt::Key_Meta == key) || (Qt::Key_Alt == key))
             {
-               SpiceKeyEvent(m_hContext, m_hspice, true, keymap_win322xtkbd[virtualKey], 0 );
+                SpiceKeyEvent(m_hContext, m_hspice, true, keymap_win322xtkbd[virtualKey], 0 );
             }
             else
             {
                SpiceKeyEvent(m_hContext, m_hspice, true, keymap_win322xtkbd[virtualKey], 1);
             }
+			return true;
          }
          //	MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY PRESS EVENT -> WIN32KEY : %1========").arg(keymap_win322xtkbd[virtualKey]));
          //qDebug() << "P===========" << virtualKey;
@@ -802,16 +840,14 @@ bool CSpiceMultVEx::eventFilter(QObject *obj, QEvent *ev)
             //qDebug() << "R.............................." << virtualKey;
             if (virtualKey <= 65536)
             {
-               MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY RELEASE EVENT -> VIRTUALKEY : %1========").arg(virtualKey));
+               MyZCLog::Instance().WriteToLog(ZCFATAL, QString("==KEY RELEASE EVENT -> VIRTUALKEY : %1 FILE:%2 LINE:%3==").arg(virtualKey).arg(__FILE__).arg(__LINE__));
                //SpiceKeyEvent(m_hContext, m_hspice, false, keymap_win322xtkbd[virtualKey]);
                SpiceKeyEvent(m_hContext, m_hspice, false, keymap_win322xtkbd[virtualKey], 0);
+			   return true;
             }
-         }
+		 }
       }
       //		else
-      {
-         //			printf("type = %d\n", ev->type());
-      }
 
    } while (0);
    //	MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====KEY EVENT -> VIRTUALKEY : %1========").arg(virtualKey));
@@ -831,6 +867,12 @@ void CSpiceMultVEx::setMenu(CMenuWidget* menu)
 {
    m_menu = menu; 
    m_menu->setViewer(this);
+   connect(m_menu, SIGNAL(sendF11()), this, SLOT(ieFullScreen()));//xzg
+}
+void CSpiceMultVEx::ieFullScreen()//xzg
+{
+	SpiceKeyEvent(m_hContext, m_hspice, true, keymap_win322xtkbd[0xffc8], 1);
+    MyZCLog::Instance().WriteToLog(ZCFATAL, QString("==###KEY F11 BE RECEIVE m_hspice = %1 win32kdb=%2###==").arg(m_hspice).arg(keymap_win322xtkbd[0x7a]));
 }
 
 void CSpiceMultVEx::SetScrollA(QScrollArea* pScollA)
@@ -938,7 +980,7 @@ void CSpiceMultVEx::menutimerOut()
    //qDebug() << "in the timerout stop .........................." << QString("%1").arg(m_menushow);
    if (m_menushow)
       m_menu->show();
-   MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====m_menu->show();========"));
+   MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("=====m_menu->show(); FILE:%1 LINE:%2======").arg(__FILE__).arg(__LINE__));
 }
 
 void CSpiceMultVEx::setHostUsb(const QString &isusb)
@@ -1051,7 +1093,7 @@ int CSpiceMultVEx::SetUsbEnable(int isenable)
 	 {
 	 	SpiceSetUSBFilterBefore(m_hContext,m_hspice,rule.toLatin1().data());
 		SpiceSetUSBRedirOnConnectFilterBefore(m_hContext,m_hspice,rule.toLatin1().data());
-		MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("usb rule is %1").arg(rule));
+		MyZCLog::Instance().WriteToLog(ZCDEBUG, QString("usb rule is %1 FILE:%2 LINE:%3").arg(rule).arg(__FILE__).arg(__LINE__));
 		
 	 }else{
 		SpiceSetUSBFilterBefore(m_hContext,m_hspice,"0x00ff,-1,-1,-1,1|-1,0x08e2,0x0008,-1,1|-1,7104,32787,-1,1|0x07,-1,-1,-1,1|0x08,-1,-1,-1,1|0x02,-1,-1,-1,1|-1,-1,-1,-1,0");
@@ -1158,7 +1200,10 @@ SpiceMulViewer::~SpiceMulViewer()
    //}
 }
 
-
+bool SpiceMulViewer::Spice_SetUsbTrans(QString usbRule)//by xzg
+{
+	return CSpiceMultVEx::Spice_SetUsbTrans(usbRule);
+}
 bool SpiceMulViewer::Spice_Init()
 {
    return CSpiceMultVEx::Spice_Init();
@@ -1275,4 +1320,8 @@ int SpiceMulViewer::SetUsbEnable(int isenable)
 void SpiceMulViewer::setStartHost(bool istarthost)
 {
    m_SpiceViewer->setStartHost(istarthost);
+}
+void SpiceMulViewer::setGrabKeyboard()//by xzg
+{
+   m_SpiceViewer->grabKeyboard();
 }

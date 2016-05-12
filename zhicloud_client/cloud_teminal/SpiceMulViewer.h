@@ -58,6 +58,7 @@ public:
 	static bool Spice_Init();
 	static bool Spice_Uninit();
 	static bool Spice_IsInit();
+	static bool Spice_SetUsbTrans(QString usbRule);//by xzg
 
 	int OpenSpice(char* szIP, char* port, char* uname = NULL, char* password = NULL, int timeout = 1/*3s*/);//sync
 	bool CloseSpice();
@@ -68,6 +69,8 @@ public:
 	void setViewerSuc();
 	void setHostUsb(const QString &isusb);
 	void setStartHost(bool istarthost);
+public slots:
+	void setGrabKeyboard();// by xzg
 
 private:
 	QScrollArea* m_ScrollA;
@@ -102,6 +105,7 @@ public:
 	static bool Spice_Init();
 	static bool Spice_Uninit();
 	static bool Spice_IsInit(){ return m_isInit; }
+	static bool Spice_SetUsbTrans(QString usbRule);//by xzg
 
 	int OpenSpice(char* szIP, char* port, char* uname = NULL, char* password = NULL, int timeout = 1/*3s*/);//sync
 	bool CloseSpice();
@@ -127,6 +131,7 @@ public:
 	void imageCombined(char* bitmap, int x, int y, int width, int height);
 	void logout();
 
+
 protected:
 	virtual void paintEvent(QPaintEvent *event);
 	virtual void closeEvent(QCloseEvent * event);
@@ -139,6 +144,7 @@ protected:
 	bool eventFilter(QObject *obj, QEvent *ev);
 	void menutimerOut();
 	void heartbeat();
+	void ieFullScreen();//xzg
 public:
 
 
@@ -191,6 +197,7 @@ private:
 	QMutex m_OpMutex[MAX_OP_COUNT];
 	LcxSpiceChannelEvent m_opCode[MAX_OP_COUNT];
 	QMutex  m_updatemutex;
+	
 
 	
 

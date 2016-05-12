@@ -37,6 +37,10 @@ private:
 	//Log4Qt::Logger *m_zclog;
 	FILE *m_logoFile;
 	QMutex m_mutex;
+	
+	bool m_isWriteLog;//by xzg
+	int m_level[5];//by xzg
+
 	void write(const char* format, ...);
 
 	void log(const LOG_LEVEL type, const char* message);

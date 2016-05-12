@@ -4,12 +4,15 @@
 
 QT += core gui widgets network
 
+CONFIG += debug
 TEMPLATE = app
 TARGET = cloud_teminal
 INCLUDEPATH += .
 DEFINES += OS_X86
 DEFINES += ZS
-DEFINES += XH
+DEFINES += SD
+#DEFINES += XH
+QT += webkitwidgets
 
 # Input
 HEADERS += cdiagnoseitem.h \
@@ -58,7 +61,9 @@ HEADERS += cdiagnoseitem.h \
            zc_message_box.h \
            fileutil.h \
            usbutil.h \
-           usbconfig.h
+           usbconfig.h \
+	   webview.h \
+	   monitorusbdevthread.h 
 
 FORMS += cloud_terminal.ui
 SOURCES += cdiagnoseitem.cpp \
@@ -104,7 +109,9 @@ SOURCES += cdiagnoseitem.cpp \
            zc_message_box.cpp \
            fileutil.cpp \
            usbutil.cpp \
-           usbconfig.cpp
+           usbconfig.cpp \
+	   webview.cpp \
+	   monitorusbdevthread.cpp
 RESOURCES += cloud_terminal.qrc
 TRANSLATIONS += cloud_terminal_zh.ts
 
@@ -118,7 +125,8 @@ unix
     INCLUDEPATH +=/usr/include/libusb-1.0/
 
     LIBS += -L../packet/lib \
-            -L/usr/lib
+            -L/usr/lib \
+	    -L/usr/lib/x86_64-linux-gnu
  
     LIBS += -lspice_glib -lspice_without_gtk -lspice-common-client \
        -lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lgthread-2.0 \

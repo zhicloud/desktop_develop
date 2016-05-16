@@ -20,3 +20,42 @@
 兼容性说明：
    无
     
+******************************************************
+版本号：ZS_1.1.2_X86_SD#20160513-2
+修改时间：2016/05/13
+修改人：许志刚
+修改文件：
+   1.SpiceMulViewer.cpp
+   2.cloud_teminal.pro
+   3.SpiceMulViewer.h
+   4.mainwindow.h
+   5.mainwindow.cpp
+   6.cmenuwidget.h
+   7.cmenuwidget.cpp
+   8.ctoolbox.h
+   9.ctoolbox.cpp
+   10.log.h
+   11.log.cpp
+   12.usbconfig.h
+   13.usbconfig.cpp
+   
+新增文件：
+   1.monitorusbdevthread.h
+   2.monitorusbdevthread.cpp
+   3.webview.h
+   4.webview.cpp
+
+删除文件：
+   无
+
+主要变更：
+   针对思叠终端：
+   1.添加主应用界面。
+   2.添加小规模发票登录窗口。
+
+   针对所有终端：
+   3.实现usb透传设置界面及功能。
+   4.修改小键盘点按钮bug。
+
+兼容性说明：
+   无

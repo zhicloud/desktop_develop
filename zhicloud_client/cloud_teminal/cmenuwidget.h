@@ -21,6 +21,7 @@ public:
 	void delBtn();
 	void setViewer(CSpiceMultVEx *viewer);
 signals:
+	void sendF11();//xzg
 
 public slots:
 	void clickmail();

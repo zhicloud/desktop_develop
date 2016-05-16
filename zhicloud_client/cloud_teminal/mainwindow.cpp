@@ -20,6 +20,8 @@
 #include "UpdateWidget.h"
 #include "cmailboxwidget.h"
 #include <QFile>
+//#include <QTableView>//by xzg
+#include <QHeaderView>// by xzg
 
 #define CENTER_WIDGET_W 800
 #define CENTER_WIDGET_H 600
@@ -42,7 +44,7 @@ const QString main_version = "1.1.6";
 #else
 const QString cpu_architecture = "X86";
 #ifndef XH 
-const QString main_version = "1.1.0";
+const QString main_version = "1.1.1";
 #else
 const QString main_version = "1.1.1";
 #endif
@@ -70,6 +72,7 @@ const QString custom_type = "ZS";
    CMainWindow::CMainWindow(QWidget *parent)
 : QMainWindow(parent)
 {
+   bool ret = SpiceMulViewer::Spice_Init();//by xzg
    isKillNetMgr = 0;
    reconnecting = 0;
    adduserretwid = NULL;
@@ -103,10 +106,12 @@ const QString custom_type = "ZS";
    this->setFixedSize(currentScreenWidth, currentScreenHeight);
    userlist = NULL;
 
+
    main_widget = new QWidget();
+   //viewer = new SpiceMulViewer(main_widget, currentScreenWidth, currentScreenHeight);//by xzg
+   //viewer->hide();//by xzg
+   //viewer->OpenSpice(NULL, NULL);//by xzg
    setCentralWidget(main_widget);
-
-
 
    center_widget = new QWidget(main_widget);
    center_widget->setFixedSize(CENTER_WIDGET_W, CENTER_WIDGET_H);
@@ -114,6 +119,7 @@ const QString custom_type = "ZS";
    mainLayout = new QStackedLayout();
    mainLayout->setAlignment(Qt::AlignCenter);
 
+   m_usbConfig = new usbonfig;//by xzg
 
    createsetsvrurlWidget();
    createFirstLoginWidget();
@@ -125,6 +131,15 @@ const QString custom_type = "ZS";
    create1UserWidget();
    create0userWidget();
    createAbout_NetSettingWidget();
+#ifdef ZS
+   createLoginWidget();// by xzg
+   /************by xzg**************/
+   webView = new myWebView(main_widget);
+   connect(webView, SIGNAL(exitWeb()), this, SLOT(setViewerGrabKeyboard()));
+   webView->setFixedSize(currentScreenWidth, currentScreenHeight);
+   webView->hide();
+   /************by xzg**************/
+#endif
 
 
    mainLayout->addWidget(setsvrurlWidget);//0
@@ -194,7 +209,7 @@ const QString custom_type = "ZS";
 
 
 #ifdef ZS
-   QWidget *logo_widget = new QWidget(this);
+   /*QWidget **/logo_widget = new QWidget(this);//by xzg
    logo_widget->setFixedSize(340, 70);
 
 
@@ -248,7 +263,7 @@ const QString custom_type = "ZS";
 #else
    h_layout->addLayout(logolayout);
 #endif
-   h_layout->addStretch();
+   //h_layout->addStretch();
    main_widget->setLayout(h_layout);
 
    this->setWindowTitle(QStringLiteral("致云科技桌面云终端"));
@@ -274,15 +289,67 @@ const QString custom_type = "ZS";
    connect(netchecktimer, SIGNAL(timeout()), this, SLOT(netcheckfunc()));
    netchecktimer->start(2000);
 
-
-
 }
 
 CMainWindow::~CMainWindow()
 {
-
+	if(usbMonitorThread->isRunning()){//by xzg
+		usbMonitorThread->terminate();
+		delete usbMonitorThread;
+		usbMonitorThread = NULL;
+	}
 }
 
+void CMainWindow::dealUsbHotPlugEvent(bool f)//by xzg
+{
+	if(m_usbConfig != NULL){
+		m_usbConfig->setUsbAddOrRemove(f);
+		m_usbConfig->read_usb_list();
+		list<UsbDeviceInfo > dev_list;
+		dev_list.clear();
+		m_usbConfig->readfromfile(dev_list);
+		//qDebug() << "#####usb dev size =======================" << dev_list.size();
+		if(!dev_list.empty()){
+			model->clear();
+			QStringList header;
+			header << QStringLiteral("设备名称") << QStringLiteral("设备类型") << QStringLiteral("透传设置");
+			model->setHorizontalHeaderLabels(header);
+			
+			list<UsbDeviceInfo>::iterator it = dev_list.begin();
+			for(; it != dev_list.end(); it++){
+				QString devName(it->product_name);
+				QStringList devNameType = devName.split(" ");
+				if(devNameType.count() > 1){
+					QString dev;
+					QString name;
+					dev = devNameType.at(0);
+					for(int i = 1; i < devNameType.count(); i++){
+						name.append(devNameType.at(i));
+						name.append(QString(" "));
+					}
+					QStandardItem *item1 = new QStandardItem(dev);
+					QStandardItem *item2 = new QStandardItem(name);
+					QStandardItem *item3 = new QStandardItem(QStringLiteral("透传"));
+					item3->setCheckable(true);
+					item3->setData(it->vid, Qt::UserRole + 1);
+					item3->setData(it->pid, Qt::UserRole + 2);
+					if(!it->enable)
+						item3->setCheckState(Qt::Checked);
+					else
+						item3->setCheckState(Qt::Unchecked);
+					QList<QStandardItem *> itemlist;
+					itemlist.append(item1);
+					itemlist.append(item2);
+					itemlist.append(item3);
+					model->appendRow(itemlist);
+				}
+			}
+			tb->setColumnWidth(0, 125);
+			tb->setColumnWidth(1, 130);
+			tb->setColumnWidth(2, 65);
+		}
+	}
+}
 
 void CMainWindow::createFirstLoginWidget()
 {
@@ -967,6 +1034,194 @@ bool CMainWindow::eventFilter(QObject *obj, QEvent * ev)
    return QMainWindow::eventFilter(obj, ev);
 }
 
+#ifdef ZS
+void CMainWindow::createLoginWidget()//by xzg
+{
+	loginWidget = new QWidget(main_widget);
+	loginWidget->setFixedSize(currentScreenWidth, currentScreenHeight);
+
+	QPushButton *myDesktop = new QPushButton;
+	//myDesktop->setAlignment(Qt::AlignCenter);
+	myDesktop->setStyleSheet("QPushButton{border-image:url(:/login_widget/MyDesktopUp);}"
+							 "QPushButton:pressed{border-image:url(:/login_widget/MyDesktopDown);}");
+	//myDesktop->setStyleSheet("border-image:url(:/login_widget/MyDesktop);");
+	myDesktop->setFixedSize(116, 32);
+	connect(myDesktop, SIGNAL(clicked()), this, SLOT(showViewer()));
+
+	QLabel *serviceCenter = new QLabel;
+	serviceCenter->setAlignment(Qt::AlignCenter);
+	serviceCenter->setStyleSheet("border-image:url(:/login_widget/ServiceCenter);");
+	serviceCenter->setFixedSize(169, 45);
+
+	QLabel *information = new QLabel;
+	information->setAlignment(Qt::AlignCenter);
+	information->setStyleSheet("border-image:url(:/login_widget/Information);");
+	information->setFixedSize(165, 60);
+
+	QLabel *taxInteraction = new QLabel;
+	taxInteraction->setAlignment(Qt::AlignCenter);
+	taxInteraction->setStyleSheet("border-image:url(:/login_widget/TaxInteraction);");
+	taxInteraction->setFixedSize(165, 60);
+	QLabel *tool = new QLabel;
+	tool->setAlignment(Qt::AlignCenter);
+	tool->setStyleSheet("border-image:url(:/login_widget/Tool);");
+	//tool->setStyleSheet("border:1px solid black");
+	tool->setFixedSize(165, 60);
+	QLabel *appCore = new QLabel;
+	appCore->setAlignment(Qt::AlignCenter);
+	appCore->setStyleSheet("border-image:url(:/login_widget/ApplicationCore);");
+	appCore->setFixedSize(165, 60);
+	//appCore->setStyleSheet("border:1px solid black");
+	QLabel *train = new QLabel;
+	train->setAlignment(Qt::AlignCenter);
+	train->setStyleSheet("border-image:url(:/login_widget/Train);");
+	train->setFixedSize(165, 60);
+	//train->setStyleSheet("border:1px solid black");
+
+	QWidget *widget[5];// = new QWidget;
+	for(int i = 0; i < 5; i++){
+		widget[i] = new QWidget;
+		//widget[i]->setStyleSheet(".QWidget{border:1px solid #4F4F4F; border-radius:5px;}");
+		widget[i]->setStyleSheet(".QWidget{border-image:url(:login_widget/Background); border-radius:5px;}");
+		widget[i]->setFixedSize(240, 400);
+	}
+	QLabel *tt[5];
+	for(int i = 0; i < 4; i++){
+		tt[i] = new QLabel(QString::fromLocal8Bit("正在上线"));
+	}
+	QPushButton *generTaxBtn = new QPushButton;
+	generTaxBtn->setFixedSize(65, 60);
+	connect(generTaxBtn, SIGNAL(clicked()), this, SLOT(showViewer()));
+	generTaxBtn->setStyleSheet("QPushButton{border-image:url(:/login_widget/GenerTaxUp);}"
+							   //"QPushButton:hover{border-image:url(:/login_widget/GenerTaxDown);}"
+							   "QPushButton:pressed{border-image:url(:/login_widget/GenerTaxDown);}");
+	QPushButton *smallTaxBtn = new QPushButton;
+	smallTaxBtn->setFixedSize(65, 60);
+	smallTaxBtn->setStyleSheet("QPushButton{border-image:url(:/login_widget/SmallTaxUp);}"
+							   //"QPushButton:hover{border-image:url(:/login_widget/SmallTaxDown);}"
+							   "QPushButton:pressed{border-image:url(:/login_widget/SmallTaxDown);}");
+	connect(smallTaxBtn, SIGNAL(clicked()), this, SLOT(openWebView()));
+
+	QPushButton *billPrintBtn = new QPushButton;
+	billPrintBtn->setFixedSize(65, 60);
+	connect(billPrintBtn, SIGNAL(clicked()), this, SLOT(showViewer()));
+	billPrintBtn->setStyleSheet("QPushButton{border-image:url(:/login_widget/TaxPrintUp);}"
+								//"QPushButton:hover{border-image:url(:/login_widget/TaxPrintDown);}"
+								"QPushButton:pressed{border-image:url(:/login_widget/TaxPrintDown);}");
+	QGridLayout *gridlayout[5];
+	for(int i = 0; i < 5; i++){
+		gridlayout[i] = new QGridLayout;
+		gridlayout[i]->setSpacing(25);
+	}
+	gridlayout[0]->addWidget(tt[0], 0, 0);
+	gridlayout[1]->addWidget(tt[1], 0, 0);
+	gridlayout[2]->addWidget(tt[2], 0, 0);
+	gridlayout[3]->addWidget(generTaxBtn, 0, 0);
+	gridlayout[3]->addWidget(smallTaxBtn, 0, 1);
+	gridlayout[3]->addWidget(billPrintBtn, 1, 0);
+	gridlayout[4]->addWidget(tt[3], 0, 0);
+
+	QVBoxLayout *vboxlayout[5];
+	for(int i = 0; i < 5; i++){
+		vboxlayout[i] = new QVBoxLayout;
+		vboxlayout[i]->setSpacing(25);
+		vboxlayout[i]->setAlignment(Qt::AlignCenter);
+	}
+	vboxlayout[0]->addWidget(information);
+	vboxlayout[1]->addWidget(taxInteraction);
+	vboxlayout[2]->addWidget(tool);
+	vboxlayout[3]->addWidget(appCore);
+	vboxlayout[4]->addWidget(train);
+	for(int i = 0; i < 5; i++){
+		vboxlayout[i]->addLayout(gridlayout[i]);
+		vboxlayout[i]->addStretch();
+	}
+
+	for(int i = 0; i < 5; i++){
+		widget[i]->setLayout(vboxlayout[i]);
+	}
+	QVBoxLayout *mainVlayout[5];
+	for(int i = 0; i < 5; i++){
+		mainVlayout[i] = new QVBoxLayout;
+		mainVlayout[i]->setAlignment(Qt::AlignVCenter);
+		mainVlayout[i]->setSpacing(50);
+		QLabel *labelUp = new QLabel;
+		labelUp->setFixedSize(169, 45);
+		QLabel *labelDown = new QLabel;
+		labelDown->setFixedSize(116, 32);
+		if(i == 0){
+			mainVlayout[i]->addWidget(serviceCenter);
+			delete labelUp;
+			labelUp = NULL;
+		}else{
+			mainVlayout[i]->addWidget(labelUp);
+		}
+		mainVlayout[i]->addWidget(widget[i]);
+		if(i == 4){
+			QHBoxLayout *hlay = new QHBoxLayout;
+			labelDown->setFixedSize(34, 32);
+			hlay->addWidget(labelDown);
+			hlay->addWidget(myDesktop);
+			//mainVlayout[i]->addWidget(myDesktop);
+			mainVlayout[i]->addLayout(hlay);
+		}else{
+			mainVlayout[i]->addWidget(labelDown);
+		}
+	}
+	QHBoxLayout *hboxlayout = new QHBoxLayout;
+	hboxlayout->setSpacing(2);
+	for(int i = 0; i < 5; i++){
+		//hboxlayout->addWidget(widget[i]);
+		hboxlayout->addLayout(mainVlayout[i]);
+	}
+	hboxlayout->setAlignment(Qt::AlignCenter);
+	loginWidget->setLayout(hboxlayout);
+	loginWidget->hide();
+}
+void CMainWindow::setViewerGrabKeyboard()//by xzg
+{
+	if(viewer != NULL){
+		viewer->setGrabKeyboard();
+	}
+	menu->show();
+	logo_widget->show();
+}
+void CMainWindow::openWebView()//by xzg
+{
+	webView->setMainPage();
+	webView->show();
+	menu->hide();
+	logo_widget->hide();
+}
+void CMainWindow::showViewer()//by xzg
+{
+	loginWidget->hide();
+	viewer->show();
+}
+void CMainWindow::showLoginWidget()//by xzg
+{
+	viewer->hide();
+	center_widget->hide();
+	userchangeBtn->hide();
+	changsetBtn->hide();
+	loginWidget->show();
+	menu->show();
+	logo_widget->show();
+}
+void CMainWindow::showCenterWidget()//by xzg
+{
+	if(menu != NULL)
+		menu->hide();
+	if(viewer != NULL)
+		viewer->hide();
+	loginWidget->hide();
+	userchangeBtn->show();
+	changsetBtn->show();
+	center_widget->show();
+	logo_widget->show();
+}
+#endif
+
 void CMainWindow::createsetsvrurlWidget()
 {
    setsvrurlWidget = new QWidget;
@@ -1211,6 +1466,14 @@ void CMainWindow::createAbout_NetSettingWidget()
    aboutlabel->setText(QStringLiteral("关于"));
    connect(aboutlabel, SIGNAL(clicked()), this, SLOT(aboutlclickfunc()));
 
+/***************by xzg****************/
+   MyLabel* usbsetlabel = new MyLabel();
+   usbsetlabel->setFixedSize(100, 30);
+   usbsetlabel->setStyleSheet("background-color:transparent;color:rgb(228,228,228);font-size:12px;border:0px;");
+   usbsetlabel->setText(QStringLiteral("USB透传设置"));
+   connect(usbsetlabel, SIGNAL(clicked()), this, SLOT(usbsetlclickfunc()));
+/***************by xzg****************/
+
 
    spilter = new CNetAboutSpilter;
    spilter->moveSlider(0);
@@ -1221,6 +1484,7 @@ void CMainWindow::createAbout_NetSettingWidget()
    letf_l->addWidget(netdiagnoselabel);
    letf_l->addWidget(syssetLabel);
    letf_l->addWidget(aboutlabel);
+   letf_l->addWidget(usbsetlabel);//by xzg
 
 
 
@@ -1228,6 +1492,7 @@ void CMainWindow::createAbout_NetSettingWidget()
    createAboutWidget();
    createNetDiagnoseWidget();
    createSysSettingWidget();
+   createUsbSettingWidget();//by xzg
 
    QWidget* rightwidget = new QWidget;
    rightwidget->setFixedSize(500, 500);
@@ -1237,6 +1502,7 @@ void CMainWindow::createAbout_NetSettingWidget()
    netrightglayout->addWidget(netdiagnosewidget);
    netrightglayout->addWidget(syssetwidget);
    netrightglayout->addWidget(aboutwidget);
+   netrightglayout->addWidget(usbsetWidget);//by xzg
    netrightglayout->setCurrentIndex(0);
    rightwidget->setLayout(netrightglayout);
 
@@ -1737,6 +2003,119 @@ void CMainWindow::createNetDiagnoseWidget()
 
 }
 
+/***********by xzg******************/
+void CMainWindow::usbSetTrans()
+{
+	int row = model->rowCount();
+	int column = model->columnCount();
+	int pid = 0;
+	int vid = 0;
+	list<UsbDeviceInfo > dev_list;
+	dev_list.clear();
+	m_usbConfig->readfromfile(dev_list);
+	//qDebug() << "MODEL COLUMN COUNT:" << model->columnCount();
+	//qDebug() << "MODEL ROW COUNT:" << model->rowCount();
+	for(int i = 0; i < row; i++){
+		/*for(int j = 0; j < column; j++){
+			qDebug() << "STANDARD_ITEM::" << model->item(i, j)->text();//model->data(model->index(i, j)).toString();
+		}*/
+		vid = model->item(i, column - 1)->data(Qt::UserRole + 1).toInt();	
+		//qDebug() << "VID===" << vid;	
+		pid = model->item(i, column - 1)->data(Qt::UserRole + 2).toInt();	
+		//qDebug() << "PID===" << pid;	
+		list<UsbDeviceInfo>::iterator it = dev_list.begin();
+		for(; it != dev_list.end(); it++){
+		//	qDebug() << "dev_list VID=" << it->vid << "PID = " << it->pid << "rule_key=" << it->usbrule_key;
+			if(vid == it->vid && pid == it->pid){
+				if(model->item(i, column - 1)->checkState() == Qt::Checked)
+					//it->enable = 0;
+					m_usbConfig->modify_usb_enable(0, vid, pid);
+				else
+					//it->enable = 1;
+					m_usbConfig->modify_usb_enable(1, vid, pid);
+				break;
+			}	
+		}
+	}
+	//m_usbConfig->setUsbAddOrRemove(true);
+	//m_usbConfig->writetofile(dev_list);
+	QString rule;
+	m_usbConfig->get_usb_rule(rule);
+	QString message;	
+	if(SpiceMulViewer::Spice_SetUsbTrans(rule)){
+		message = QStringLiteral("透传设置成功");
+	}else{
+		message = QStringLiteral("透传设置失败");
+	}
+	ZCMessageBox msg(message, this, NULL);
+	//qDebug() << "#######RULE =====" << rule;
+	//ZCMessageBox msg(QStringLiteral("透传设置成功"), this, NULL);
+	msg.exec();
+}
+void CMainWindow::toLoginFrame()
+{
+	changesetretbtn->hide();
+	netrightglayout->setCurrentIndex(0);
+	spilter->moveSlider(0);
+	hasonceclick = false;
+	if(prewdiget){
+		changeWidgetTo(prewdiget);
+		prewdiget = NULL;
+	}
+}
+
+void CMainWindow::createUsbSettingWidget()
+{
+		usbsetWidget = new QWidget;
+		usbsetWidget->setFixedSize(350, 380);
+		/*QTableView **/tb = new QTableView(usbsetWidget);
+		QPushButton *usbsetBtn = new QPushButton;
+		QPushButton *returnBtn = new QPushButton;
+   		usbsetBtn->setFixedSize(70, 30);
+   		usbsetBtn->setObjectName("usbsetBtn");
+   		usbsetBtn->setStyleSheet("QPushButton#usbsetBtn{border-image: url(:/setsvrurl/nomal);}"
+        	 "QPushButton#usbsetBtn:hover{border-image: url(:/setsvrurl/hover);}"
+         	 "QPushButton#usbsetBtn:pressed{border-image: url(:/net_about/sureclick);}");
+		connect(usbsetBtn, SIGNAL(clicked()), this, SLOT(usbSetTrans()));
+   		returnBtn->setFixedSize(70, 30);
+   		returnBtn->setObjectName("returnBtn");
+   		returnBtn->setStyleSheet("QPushButton#returnBtn{border-image: url(:/net_about/retnomal);}"
+        	 "QPushButton#returnBtn:hover{border-image: url(:/net_about/rethover);}"
+         	 "QPushButton#returnBtn:pressed{border-image: url(:/net_about/retclick);}");
+		connect(returnBtn, SIGNAL(clicked()), this, SLOT(toLoginFrame()));
+		QHBoxLayout *hlay = new QHBoxLayout;
+		hlay->addWidget(returnBtn);
+		hlay->addWidget(usbsetBtn);
+		QVBoxLayout *vlay = new QVBoxLayout;
+		vlay->addWidget(tb);
+		vlay->addLayout(hlay);
+		
+   		tb->setStyleSheet("QTableView{color:white;background-color:#666666;alternate-background-color:#666666; selection-color:white;selection-background-color:#444444;border:2px groove gray;border-radius:0px;padding:2px 4px;}");
+		
+		tb->verticalHeader()->setVisible(false);
+		/*QStandardItemModel **/model = new QStandardItemModel;
+		QStringList header;
+		header << QStringLiteral("设备名称") << QStringLiteral("设备类型") << QStringLiteral("透传设置");
+		model->setHorizontalHeaderLabels(header);
+		/*
+		*/
+		dealUsbHotPlugEvent(true);
+		tb->setModel(model);
+		tb->setColumnWidth(0, 125);
+		tb->setColumnWidth(1, 130);
+		tb->setColumnWidth(2, 65);
+		/*
+		*/
+		tb->setEditTriggers(QAbstractItemView::NoEditTriggers);
+		usbsetWidget->setLayout(vlay);
+
+		usbMonitorThread = new MonitorUsbDevThread;
+		connect(usbMonitorThread, SIGNAL(sendAddOrRemoveUsbDev(bool)), this, SLOT(dealUsbHotPlugEvent(bool)), Qt::QueuedConnection);
+		usbMonitorThread->start();
+		/*
+		*/
+}
+/***********by xzg******************/
 void CMainWindow::createNetSettingWidget()
 {
    netwidget = new QWidget;
@@ -2322,6 +2701,13 @@ void CMainWindow::aboutlclickfunc()
    netrightglayout->setCurrentIndex(3);
    spilter->moveSlider(3);
 }
+/*******by xzg********/
+void CMainWindow::usbsetlclickfunc()
+{
+   netrightglayout->setCurrentIndex(4);
+   spilter->moveSlider(4);
+}
+/*******by xzg********/
 
 void CMainWindow::changesetting()
 {
@@ -2382,13 +2768,16 @@ void CMainWindow::changesetting()
 
 void CMainWindow::changeuser()
 {
+#ifdef ZS
+   showCenterWidget();//by xzg
+#endif
    if (viewer)
    {
       menu->delBtn();
-      delete viewer; // $$$
-      //viewer->hide();
-      viewer = NULL;
-      menu = NULL;
+      delete viewer; // $$$  xzg usb set
+      //viewer->hide();//xzg usb set
+      viewer = NULL;//xzg usb set
+      menu = NULL;//xzg usb set
       isviewshow = 0;
    }
 
@@ -2667,6 +3056,7 @@ void CMainWindow::clicklogin()
 
       if (viewer)
       {
+		// viewer->hide();//xzg usb set
          delete viewer;
          viewer = NULL;
       }
@@ -3445,6 +3835,7 @@ void CMainWindow::logintohost()
 
       if (viewer)
       {
+		 //viewer->hide();//xzg usb set
          delete viewer;
          viewer = NULL;
       }
@@ -3883,6 +4274,7 @@ int CMainWindow::spicelogin(QString ip, QString port, QString acc, QString pwd)
    {
       if (viewer)
       {
+			//xzg usb set
          delete viewer;
          viewer = NULL;
       }
@@ -3890,7 +4282,8 @@ int CMainWindow::spicelogin(QString ip, QString port, QString acc, QString pwd)
       spiceport = port;
       spicepwd = pwd;	
 
-      viewer = new SpiceMulViewer(main_widget, currentScreenWidth, currentScreenHeight);
+      if(viewer == NULL)
+      	viewer = new SpiceMulViewer(main_widget, currentScreenWidth, currentScreenHeight);
       viewer->setMultVExParent(this);
       viewer->setHostUsb(m_hostisusb);
       viewer->setStartHost(isstarthost);
@@ -4003,12 +4396,14 @@ void CMainWindow::menuexit()
 
    secondwuserpic->setPixmap(path);
    secondwuserpic->setText(nickname);
+#ifdef ZS
+   showCenterWidget();//by xzg
+#endif
    changeWidgetTo(secondLoginWidget);
-
 
    if (viewer)
    {
-      menu->delBtn();
+      menu->delBtn();//xzg usb set
       menu = NULL;
 
       delete viewer; // $$$
@@ -4027,7 +4422,11 @@ void CMainWindow::menureboot()
    {
       svrurl = settings->value("server/url").toString();
    }
-
+#ifdef ZS
+   center_widget->show();//by xzg
+   loginWidget->hide();//by xzg
+   showCenterWidget();//by xzg
+#endif
 
    QString strfmt("hostoperator?cloud_host_id=%1&operator_type=%2");
    // 
@@ -4036,6 +4435,8 @@ void CMainWindow::menureboot()
    m_cmd = RestartHost;
    doHttpGet(RestartHost, svrurl);
    MyZCLog::Instance().WriteToLog(ZCERROR, QString("menureboot RestartHost url = %1").arg(svrurl));
+   
+
    // 	QString url = strfmt.arg(m_uuid).arg(1);
    // 	svrurl.replace("connect", url);
    // 	m_cmd = StartHost;
@@ -4053,6 +4454,9 @@ void CMainWindow::menushutdown()
 
 
    QString strfmt("hostoperator?cloud_host_id=%1&operator_type=%2");
+#ifdef ZS
+   showCenterWidget();//by xzg
+#endif
 
    QString url = strfmt.arg(m_uuid).arg(2);
    svrurl.replace("connect", url);
@@ -4240,12 +4644,22 @@ void CMainWindow::customEvent(QEvent *event)
             viewer->setGeometry(0, 0, screenRect.width(), screenRect.height());
             //viewer->ChangeResolution(screenRect.width(), screenRect.height());
             //	viewer->SetUsbEnable(true);
-            menu = new CMenuWidget(viewer, this);
+#ifdef ZS
+            menu = new CMenuWidget(this/*viewer*/, this);                       //by xzg
+#else
+            menu = new CMenuWidget(viewer, this);                       //by xzg
+#endif
             menu->setInfo(currenthostname, upic);
-            menu->setGeometry((currentScreenWidth - 500) / 2, 0, 500, 52);
-            menu->show();
+            menu->setGeometry((currentScreenWidth - 500) / 2, 0, 500, 52);  //by xzg
+#ifdef ZS	
+			showLoginWidget();          //by xzg
+#else
+            menu->show();             //by xzg
+#endif
             viewer->setMenu(menu);
-            viewer->show();
+#ifndef ZS
+            viewer->show();           //by xzg
+#endif
             isviewshow = 1;
             event->accept();
             break;
@@ -4277,6 +4691,7 @@ void CMainWindow::customEvent(QEvent *event)
 
                delete viewer; // $$$
                viewer = NULL;
+		//	   viewer->hide();//xzg usb set
                isviewshow = 0;
             }
             break;
@@ -4290,6 +4705,7 @@ void CMainWindow::customEvent(QEvent *event)
             {
                delete viewer; // $$$
                viewer = NULL;
+		//		viewer->hide();//xzg usb set
                isviewshow = 0;
             }
             changeWidgetTo(secondLoginWidget);
@@ -4306,6 +4722,7 @@ void CMainWindow::customEvent(QEvent *event)
             {
                delete viewer; // $$$
                viewer = NULL;
+		//		viewer->hide();//xzg usb set
                isviewshow = 0;
             }
             QString ip,mac,mask;

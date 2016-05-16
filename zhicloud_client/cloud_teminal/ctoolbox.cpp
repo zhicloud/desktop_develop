@@ -1,5 +1,4 @@
-﻿
-#include "ctoolbox.h"
+﻿#include "ctoolbox.h"
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QLabel>

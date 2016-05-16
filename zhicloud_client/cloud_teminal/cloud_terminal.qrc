@@ -290,4 +290,23 @@
         <file alias="toolboxclick">Resources/toolbox/toolboxclick.png</file>
         <file alias="toolboxnomal">Resources/toolbox/toolboxnomal.png</file>
     </qresource>
+    <qresource prefix="/login_widget">
+        <file alias="ApplicationCore">Resources/login_widget/ApplicationCore.png</file>
+        <file alias="GenerTaxDown">Resources/login_widget/GenerTaxDown.png</file>
+        <file alias="GenerTaxUp">Resources/login_widget/GenerTaxUp.png</file>
+        <file alias="Information">Resources/login_widget/Information.png</file>
+        <file alias="MyDesktopUp">Resources/login_widget/MyDesktopUp.png</file>
+        <file alias="MyDesktopDown">Resources/login_widget/MyDesktopDown.png</file>
+        <file alias="SmallTaxDown">Resources/login_widget/SmallTaxDown.png</file>
+        <file alias="SmallTaxUp">Resources/login_widget/SmallTaxUp.png</file>
+        <file alias="TaxInteraction">Resources/login_widget/TaxInteraction.png</file>
+        <file alias="TaxPrintUp">Resources/login_widget/TaxPrintUp.png</file>
+        <file alias="TaxPrintDown">Resources/login_widget/TaxPrintDown.png</file>
+        <file alias="Tool">Resources/login_widget/Tool.png</file>
+        <file alias="Train">Resources/login_widget/Train.png</file>
+        <file alias="TurnLoginWidgetDown">Resources/login_widget/TurnLoginWidgetDown.png</file>
+        <file alias="TurnLoginWidgetUp">Resources/login_widget/TurnLoginWidgetUp.png</file>
+        <file alias="Background">Resources/login_widget/Background.png</file>
+        <file alias="ServiceCenter">Resources/login_widget/ServiceCenter.png</file>
+    </qresource>
 </RCC>

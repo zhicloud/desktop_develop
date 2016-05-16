@@ -31,6 +31,9 @@ CMenuWidget::CMenuWidget(QWidget *parent, CMainWindow* main_win)
 
 	mail = new QPushButton;
 	QPushButton* toolbox = new QPushButton;
+#ifdef ZS
+	QPushButton* appBtn = new QPushButton;//by xzg
+#endif
 
 	QPushButton* changeuser = new QPushButton;
 	QPushButton* reboot = new QPushButton;
@@ -38,6 +41,9 @@ CMenuWidget::CMenuWidget(QWidget *parent, CMainWindow* main_win)
 	QPushButton* exit = new QPushButton;
 	mail->setToolTip(QStringLiteral("邮件"));
 	toolbox->setToolTip(QStringLiteral("工具箱"));
+#ifdef ZS
+	appBtn->setToolTip(QStringLiteral("应用"));//by xzg 1
+#endif
 	changeuser->setToolTip(QStringLiteral("切换用户"));
 	reboot->setToolTip(QStringLiteral("重启"));
 	shutd->setToolTip(QStringLiteral("关机"));
@@ -76,6 +82,17 @@ CMenuWidget::CMenuWidget(QWidget *parent, CMainWindow* main_win)
 		"QPushButton#toolbox:hover{border-image: url(:/toolbox/toolboxnomal);}"
 		"QPushButton#toolbox:pressed{border-image: url(:/toolbox/toolboxclick);}");
 	connect(toolbox, SIGNAL(clicked()), this, SLOT(clicktoolbox()));
+#ifdef ZS
+	/********************by xzg***********************/
+	appBtn->setFixedSize(15, 11);
+	appBtn->setObjectName("appBtn");
+	appBtn->setStyleSheet("QPushButton#appBtn{border-image: url(:/login_widget/TurnLoginWidgetUp);}"
+	    //"QPushButton#appBtn:hover{border-image: url(:/login_widget/TurnLoginWidgetDown);}"
+		"QPushButton#appBtn:pressed{border-image: url(:/login_widget/TurnLoginWidgetDown);}");
+	connect(appBtn, SIGNAL(clicked()), main_w, SLOT(showLoginWidget()));
+	//main_w->showLoginWidget();
+	/********************by xzg***********************/
+#endif
 
 	changeuser->setFixedSize(66, 12);
 	changeuser->setObjectName("changeuser");
@@ -118,6 +135,10 @@ CMenuWidget::CMenuWidget(QWidget *parent, CMainWindow* main_win)
 	main_layout->addWidget(mail);
 	main_layout->addSpacing(20);
 	main_layout->addWidget(toolbox);
+	main_layout->addSpacing(20);
+#ifdef ZS
+	main_layout->addWidget(appBtn);//by xzg
+#endif
 	main_layout->addStretch();
 	main_layout->addWidget(changeuser);
 	main_layout->addSpacing(20);
@@ -196,6 +217,7 @@ void CMenuWidget::clicktoolbox()
 {
 	
 
+	//emit sendF11();//xzg
 	if (!toolbox)
 	{
 		toolbox = new CToolBox(main_w);

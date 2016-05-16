@@ -496,6 +496,7 @@ void usbutils::usbutils_listdevs()
       tmp.class_code = desc.bDeviceClass > LIBUSB_CLASS_PER_INTERFACE ? desc.bDeviceClass : tmp.interface_class ;
       usbutils_device_get_description(tmp);      
 	  sprintf(tmp.usbrule_key,"0x%02x_0x%04x_0x%04x",tmp.class_code,tmp.vid,tmp.pid);
+	  //tmp.enable = true;//by xzg
 	  dev_list.push_back(tmp);
 #ifdef DEBUG
       printf("[%s] [%s] [%s] at %d-%d\n",tmp.vendor_name,tmp.product_name,tmp.usbrule_key,tmp.busnum,tmp.devaddr);

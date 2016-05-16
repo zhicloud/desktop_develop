@@ -132,6 +132,5 @@ unix
        -lglib-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lgthread-2.0 \
        -lusb-1.0 -lusbredirhost -lusbredirparser \
        -lxml2 -lssl -lcelt051 -lm -ljpeg -lz -lpixman-1 -lcrypto -lpulse-mainloop-glib -lpulse -lsasl2 \
-       -lgstapp-0.10 -lgstaudio-0.10 -lgstbase-0.10 -lgstinterfaces-0.10 -lgstreamer-0.10 -lusb-1.0 \
-       -lavformat -lavcodec -lswresample -lswscale -lavutil -lX11
+       -lusb-1.0 -lavformat -lavcodec -lswresample -lswscale -lavutil -lX11
 }

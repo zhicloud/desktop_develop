@@ -44,7 +44,7 @@ const QString main_version = "1.1.6";
 #else
 const QString cpu_architecture = "X86";
 #ifndef XH 
-const QString main_version = "1.1.1";
+const QString main_version = "1.1.2";
 #else
 const QString main_version = "1.1.1";
 #endif
@@ -318,15 +318,18 @@ void CMainWindow::dealUsbHotPlugEvent(bool f)//by xzg
 			list<UsbDeviceInfo>::iterator it = dev_list.begin();
 			for(; it != dev_list.end(); it++){
 				QString devName(it->product_name);
-				QStringList devNameType = devName.split(" ");
-				if(devNameType.count() > 1){
+				if(devName.count() > 3){
+					QString devNameType = devName.left(3);//devName.split(" ");
+				//if(devNameType.count() > 1){
 					QString dev;
 					QString name;
-					dev = devNameType.at(0);
+					dev = devNameType;
+					name = devName;
+					/*
 					for(int i = 1; i < devNameType.count(); i++){
 						name.append(devNameType.at(i));
 						name.append(QString(" "));
-					}
+					}*/
 					QStandardItem *item1 = new QStandardItem(dev);
 					QStandardItem *item2 = new QStandardItem(name);
 					QStandardItem *item3 = new QStandardItem(QStringLiteral("透传"));
@@ -344,8 +347,8 @@ void CMainWindow::dealUsbHotPlugEvent(bool f)//by xzg
 					model->appendRow(itemlist);
 				}
 			}
-			tb->setColumnWidth(0, 125);
-			tb->setColumnWidth(1, 130);
+			tb->setColumnWidth(0, 105);
+			tb->setColumnWidth(1, 150);
 			tb->setColumnWidth(2, 65);
 		}
 	}

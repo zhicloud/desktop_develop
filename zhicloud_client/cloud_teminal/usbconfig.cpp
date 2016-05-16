@@ -95,9 +95,10 @@ void usbonfig::init_default(list<UsbDeviceInfo >& dev_list)
 bool usbonfig::usbredirfilter_verify(list<UsbDeviceInfo >& dev_list,UsbDeviceInfo& dev)
 {	
     list<UsbDeviceInfo>::iterator iter;
- 	for(iter = dev_list.begin();iter!=dev_list.end();iter++)  
- 	{
- 		if ((iter->class_code == -1 ||
+   //qDebug() << "AAAAAAAAAAAAAA::::" << dev.product_name;
+    for(iter = dev_list.begin();iter!=dev_list.end();iter++)  
+    {
+ 	if ((iter->class_code == -1 ||
                 iter->class_code == dev.class_code) &&
             (iter->vid == -1 ||
                 iter->vid == dev.vid) &&
@@ -106,7 +107,7 @@ bool usbonfig::usbredirfilter_verify(list<UsbDeviceInfo >& dev_list,UsbDeviceInf
             /* Found a match ! */
             return iter->enable ? true : false;
         }
- 	}
+    }
     return false;
 }
 
@@ -137,8 +138,9 @@ void usbonfig::readfromfile(list<UsbDeviceInfo >& dev_list)
 			usb_file->endGroup();
 			//printf("[%s] [%s] [0x%02x_0x%04x_0x%04x] [%d]\n",tmp.vendor_name,tmp.product_name,tmp.class_code,tmp.vid,tmp.pid,tmp.enable);
 
-			if(!usbredirfilter_verify(dev_list,tmp))
+		//	if(!usbredirfilter_verify(dev_list,tmp)){
 				dev_list.push_back(tmp);
+		//	}
  		}
 	}
 	delete usb_file;

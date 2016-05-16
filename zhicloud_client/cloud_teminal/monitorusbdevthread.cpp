@@ -1,3 +1,4 @@
+#include <QStringList>
 #include "monitorusbdevthread.h"
 
 MonitorUsbDevThread::MonitorUsbDevThread()

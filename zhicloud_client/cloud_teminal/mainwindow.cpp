@@ -325,6 +325,11 @@ void CMainWindow::dealUsbHotPlugEvent(bool f)//by xzg
 					QString name;
 					dev = devNameType;
 					name = devName;
+					
+					int keyindex = name.indexOf("KEYBOARD", 0, Qt::CaseInsensitive);
+					int mouseindex = name.indexOf("MOUSE", 0, Qt::CaseInsensitive);
+					if(keyindex != -1 || mouseindex != -1)
+						continue;//qDebug() << "nothing*****************";
 					/*
 					for(int i = 1; i < devNameType.count(); i++){
 						name.append(devNameType.at(i));

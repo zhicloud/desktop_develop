@@ -392,10 +392,11 @@ void* CSpiceMultVEx::changeSetting(void* ctx, void *ud)
          free(pThis->m_pImage);
          pThis->m_pImage = NULL;
       }
-      pThis->m_pImage = (char*)malloc(sc->width * sc->height * 4);
-
+      int buffer_size =  sc->width * sc->height * 4;
+      pThis->m_pImage = (char*)malloc(buffer_size);
       pThis->m_width = sc->width;
       pThis->m_height = sc->height;
+      memset(pThis->m_pImage, 0, buffer_size);
       pThis->m_ResChange = true;
       pThis->m_pbufmutex.unlock();
    }

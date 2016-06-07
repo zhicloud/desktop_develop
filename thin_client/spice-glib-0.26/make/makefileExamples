@@ -4,8 +4,8 @@ LIB_PATH=-L../glib \
 			-L../spice-common/common \
 			-L../win32 \
 			-L/usr/local/lib \
-			-L/usr/lib\
-                        -L/home/lichenxiang/opt/lib
+			-L/usr/lib \
+			-L/usr/lib64 
 
 CFLAGS = -std=gnu99
 
@@ -27,7 +27,7 @@ LIBS=-lspice_glib -lspice_without_gtk -lspice-common-client \
 	  -lglib-2.0 -lgmodule-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lgthread-2.0 \
 	  -lusb-1.0 -lusbredirhost -lusbredirparser \
 	  -lxml2 -lssl -lcelt051 -lm -ljpeg -lz -lpixman-1 -lcrypto -lpulse-mainloop-glib -lpulse -lsasl2 \
-	  -lavformat -lavcodec -lswresample -lswscale -lavutil -lX11
+	  -lavformat -lavcodec -lswresample -lswscale -lavutil -lX11 -pthread
 all:test_bmp
 
 

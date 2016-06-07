@@ -39,7 +39,11 @@
 #include "SpiceMulViewer.h"
 #include "cnetdiswidget.h"
 #include "cdiagnoseitem.h"
+
+#ifdef ZS
 #include "webview.h"  //by xzg
+#endif
+
 #include "monitorusbdevthread.h" //by xzg
 #include <QThread>
 #ifdef __linux 

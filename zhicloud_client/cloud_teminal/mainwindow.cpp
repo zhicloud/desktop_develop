@@ -32,7 +32,7 @@
 #define SPICE_RECONNECT QEvent::User+109
 #define ERROR_IO_SHOW_WIDGET QEvent::User+120
 
-const QString main_version = "1.1.3";
+const QString main_version = "1.1.4";
 
 #ifndef OS_X86  
 const QString cpu_architecture = "ARM";

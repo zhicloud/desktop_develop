@@ -1,17 +1,27 @@
 ******************************************************
-°æ±¾ºÅ£ºTC1.0.5#20160112-2
+ç‰ˆæœ¬å·ï¼š1.3.0
+ä¿®æ”¹æ—¶é—´ï¼š2016/6/7
 
-Ö÷Òª±ä¸ü£º
-   1 Ôö¼ÓH264È«¾Ö»æÍ¼¡£
-   2 É¾³ıchannel-display-h264.cÖĞÒôÊÓÆµÍ¬²½²¿·Ö¡£
-   3 ĞŞ¸Äglib£¬ example£¬ win32µÄmakfile£¬ Ö§³ÖpulseºÍgstreamerÁ½ÖÖÒôÆµ²¥·Å¸ñÊ½(Ğè×¢²áPULSE=y»·¾³±äÁ¿)
+ä¸»è¦å˜æ›´ï¼š
+1ã€é»˜è®¤ä½¿ç”¨pulseå¼€å…³ç¼–è¯‘
 
-»·¾³´î½¨ËµÃ÷
-   1.°²×°ÏµÍ³±ØÒªµÄÒÀÀµ¹¤¾ß
+å…¼å®¹æ€§è¯´æ˜ï¼š
+æ— 
+
+******************************************************
+ç‰ˆæœ¬å·ï¼šTC1.0.5#20160112-2
+
+ä¸»è¦å˜æ›´ï¼š
+   1 å¢åŠ H264å…¨å±€ç»˜å›¾ã€‚
+   2 åˆ é™¤channel-display-h264.cä¸­éŸ³è§†é¢‘åŒæ­¥éƒ¨åˆ†ã€‚
+   3 ä¿®æ”¹glibï¼Œ exampleï¼Œ win32çš„makfileï¼Œ æ”¯æŒpulseå’Œgstreamerä¸¤ç§éŸ³é¢‘æ’­æ”¾æ ¼å¼(éœ€æ³¨å†ŒPULSE=yç¯å¢ƒå˜é‡)
+
+ç¯å¢ƒæ­å»ºè¯´æ˜
+   1.å®‰è£…ç³»ç»Ÿå¿…è¦çš„ä¾èµ–å·¥å…·
       1.1 sudo apt-get update
       1.2 sudo apt-get install libtool liblog4cpp5-dev libavcodec-dev libssl-dev xlibmesa-glu-dev libasound-dev libpng12-dev libfreetype6-dev libfontconfig1-dev libogg-dev libxrandr-dev kvm libgcrypt-dev libsdl-dev libnss3-dev libpixman-1-dev libxfixes-dev libjpeg8-dev libsasl2-dev python-pyparsing libusb-1.0-0 libusb-1.0-0-dev libgudev-1.0-dev python-gtk2-dev
    
-   2.°²×°celt(²»Òª°²×°×îĞÂ°æ±¾)
+   2.å®‰è£…celt(ä¸è¦å®‰è£…æœ€æ–°ç‰ˆæœ¬)
       2.1 tar xvzf celt-0.5.1.3.tar.gz
       2.2 cd celt-0.5.1.3/
       2.3 ./configure  --enable-shared=yes --enable-static=no
@@ -19,7 +29,7 @@
       2.5 sudo make install
       2.6 cd ..
 
-   3.°²×°usbredir
+   3.å®‰è£…usbredir
       3.1 tar xjvf usbredir-0.6.tar.bz2 
       3.2 cd usbredir-0.6 
       3.3 ./configure --enable-shared=yes --enable-static=no
@@ -27,10 +37,10 @@
       3.5 sudo make install
       3.6 cd ..
 
-   4.°²×°gstreamer
+   4.å®‰è£…gstreamer
       4.1 sudo apt-get install gstreamer*
 
-   5.°²×°ffmpeg
+   5.å®‰è£…ffmpeg
       5.1 sudo apt-get update
       5.2 sudo apt-get -y --force-yes install autoconf automake build-essential libass-dev libfreetype6-dev \
           libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev \
@@ -53,11 +63,11 @@
       5.8 PATH="/usr/bin:$PATH" make -j4
       5.9 sudo make install
    
-   6.±àÒëspice-glib-0.26
+   6.ç¼–è¯‘spice-glib-0.26
       6.1 cd ../spice-glib-0.26
       6.2 make -j4
       6.3 make install
 
-¼æÈİĞÔËµÃ÷£º
-   1.celt±ØĞëÊ¹ÓÃ0.5.1.3°æ±¾¸ü¸ß°æ±¾²»Ö§³Ö
-   2.usbredir½¨ÒéÊ¹ÓÃ0.6b°æ±¾
+å…¼å®¹æ€§è¯´æ˜ï¼š
+   1.celtå¿…é¡»ä½¿ç”¨0.5.1.3ç‰ˆæœ¬æ›´é«˜ç‰ˆæœ¬ä¸æ”¯æŒ
+   2.usbredirå»ºè®®ä½¿ç”¨0.6bç‰ˆæœ¬
